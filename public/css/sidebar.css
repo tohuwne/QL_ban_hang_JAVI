@@ -1,0 +1,247 @@
+:root {
+  /* Khai báo biến cục bộ cho Sidebar đồng bộ với bộ màu thương hiệu */
+  --javi-black: #000000;
+  --javi-yellow: #ffd700;
+  --javi-sidebar-width: 250px;
+  --javi-sidebar-collapsed-width: 80px;
+}
+
+/* KHẮC PHỤC GIẬT SIDEBAR: Tạm thời tắt hiệu ứng chuyển động khi trang vừa load */
+.preload-transitions * {
+  transition: none !important;
+}
+
+/* 1. Kích thước & Vị trí Sidebar */
+.sidebar {
+  transition: width 0.3s ease;
+  overflow-x: hidden;
+  white-space: nowrap;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--javi-sidebar-collapsed-width); /* Mặc định thu gọn */
+  height: 100vh;
+  background-color: #111111;
+  border-right: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  padding-top: 30px;
+  z-index: 1000; /* Đảm bảo menu luôn nổi lên trên cùng */
+}
+
+/* Mở rộng khi Hover */
+.sidebar:hover {
+  width: var(--javi-sidebar-width);
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.5); /* Bóng đổ khi đè lên nội dung */
+}
+
+/* Ẩn/hiện nội dung mượt mà */
+.sidebar .sidebar-brand p,
+.sidebar .menu-text {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease;
+}
+
+.sidebar:hover .sidebar-brand p,
+.sidebar:hover .menu-text {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease 0.1s; /* Độ trễ nhẹ để khung mở ra trước */
+}
+
+/* Logic hiển thị Logo */
+.sidebar .full-text {
+  display: none;
+}
+.sidebar .short-text {
+  display: inline;
+  font-size: 28px;
+}
+.sidebar:hover .full-text {
+  display: inline;
+  font-size: 24px;
+}
+.sidebar:hover .short-text {
+  display: none;
+}
+
+/* Phần nhận diện thương hiệu trong Sidebar */
+.sidebar-brand {
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 0 20px;
+}
+
+.sidebar-brand h2 {
+  color: var(--javi-yellow);
+  font-size: 24px;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.sidebar-brand p {
+  color: #999999;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+/* Vùng nội dung chính tự động thụt lề */
+.main-content {
+  /* Cố định margin theo kích thước thu gọn để không giật layout */
+  margin-left: var(--javi-sidebar-collapsed-width);
+  padding: 30px;
+  min-height: 100vh;
+}
+
+/* 2. Cấu trúc danh sách Menu */
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px; /* Khoảng cách nhỏ giữa các mục */
+}
+
+.sidebar-menu li {
+  width: 100%;
+}
+
+/* 3. Chữ và Icon mặc định (Trắng/Xám nhẹ) */
+.sidebar-menu a {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  margin: 0 10px;
+  border-radius: 8px;
+  color: #999999;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  overflow: hidden; /* Ngăn text giãn ra ngoài khung */
+}
+
+.sidebar-menu a i {
+  margin-right: 15px;
+  font-size: 20px;
+}
+
+/* 4. Hiệu ứng Hover và Trạng thái Active */
+.sidebar-menu a:hover,
+.sidebar-menu a.active {
+  background-color: rgba(255, 215, 0, 0.1);
+  color: var(--javi-yellow);
+  box-shadow: inset 4px 0 0 var(--javi-yellow);
+}
+
+/* 5. Cải thiện hiển thị Submenu */
+/* Ẩn hoàn toàn các mục con khi Sidebar thu gọn để tránh phá vỡ bố cục 80px */
+.sidebar:not(:hover) .submenu {
+  display: none !important;
+}
+
+/* Hiệu ứng trượt xuống mượt mà khi mở mục con */
+.sidebar-menu .submenu {
+  animation: submenuSlideDown 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes submenuSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1200px) {
+  .sidebar {
+    width: 220px;
+  }
+
+  .sidebar .sidebar-brand p,
+  .sidebar .menu-text {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .sidebar .full-text {
+    display: inline;
+  }
+
+  .sidebar .short-text {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: auto;
+    padding: 20px 15px 15px;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .sidebar:not(:hover) .submenu {
+    display: none;
+  }
+
+  .sidebar:hover {
+    width: 100%;
+    box-shadow: none;
+  }
+
+  .sidebar-brand {
+    margin-bottom: 20px;
+  }
+
+  .sidebar-menu {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .sidebar-menu li {
+    width: calc(50% - 10px);
+  }
+
+  .sidebar-menu a {
+    padding: 12px 10px;
+    font-size: 14px;
+  }
+
+  .sidebar-menu a i {
+    margin-right: 10px;
+  }
+
+  .main-content {
+    margin-left: 0;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 650px) {
+  .sidebar-menu li {
+    width: 100%;
+  }
+
+  .sidebar-menu a {
+    justify-content: flex-start;
+  }
+
+  .sidebar-menu a i {
+    min-width: 24px;
+  }
+
+  .main-content {
+    padding: 15px;
+  }
+}

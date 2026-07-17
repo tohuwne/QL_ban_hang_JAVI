@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Lý Sản Phẩm - JAVI COFFEE</title>
+
+    <!-- Nhúng CSS đồng bộ -->
+    <link rel="stylesheet" href="/css/global.css" />
+    <link rel="stylesheet" href="/css/sidebar.css" />
+    <link rel="stylesheet" href="/css/san-pham.css" />
+
+    <!-- Nhúng FontAwesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script src="/js/auth.js"></script>
+  </head>
+  <body>
+    <!-- 1. SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-brand">
+        <h2>JAVI COFFEE</h2>
+        <p>Năng lượng khai sáng</p>
+      </div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="dashboard.html"><i class="fas fa-home"></i> Tổng Quan</a>
+        </li>
+        <!-- Cài đặt Active ở phân hệ Sản phẩm -->
+        <li>
+          <a href="san-pham.html" class="active"
+            ><i class="fas fa-coffee"></i> Sản Phẩm</a
+          >
+        </li>
+        <li>
+          <a href="nhap-kho.html"><i class="fas fa-boxes"></i> Nhập Kho</a>
+        </li>
+        <li>
+          <a href="xuat-kho.html"
+            ><i class="fas fa-truck-loading"></i> Xuất Kho</a
+          >
+        </li>
+        <li>
+          <a href="don-hang.html"
+            ><i class="fas fa-shopping-cart"></i> Bán Hàng</a
+          >
+        </li>
+        <li>
+          <a href="hoa-don.html"><i class="fas fa-file-invoice"></i> Hóa Đơn</a>
+        </li>
+        <li>
+          <a href="cong-no.html"
+            ><i class="fas fa-hand-holding-usd"></i> Công Nợ</a
+          >
+        </li>
+        <li>
+          <a href="phieu-thu.html"><i class="fas fa-receipt"></i> Phiếu Thu</a>
+        </li>
+        <li>
+          <a href="phieu-chi.html"
+            ><i class="fas fa-money-bill-wave"></i> Phiếu Chi</a
+          >
+        </li>
+        <li>
+          <a href="nha-cung-cap.html"
+            ><i class="fas fa-building"></i> Nhà Cung Cấp</a
+          >
+        </li>
+        <li>
+          <a href="khach-hang.html"><i class="fas fa-users"></i> Khách Hàng</a>
+        </li>
+        <li>
+          <a href="nhan-vien.html"><i class="fas fa-user-tie"></i> Nhân Viên</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 2. MAIN CONTENT -->
+    <div class="main-content">
+      <div class="page-header">
+        <h2><i class="fas fa-coffee"></i> QUẢN LÝ DANH MỤC SẢN PHẨM</h2>
+        <button class="btn" onclick="openModal()">
+          <i class="fas fa-plus"></i> Thêm Sản Phẩm Mới
+        </button>
+      </div>
+
+      <!-- Thanh Bộ Lọc -->
+      <div class="filter-bar">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Tìm kiếm tên sản phẩm..."
+          onkeyup="filterProducts()"
+        />
+        <select id="categoryFilter" onchange="filterProducts()">
+          <option value="">-- Tất cả loại sản phẩm --</option>
+          <!-- Sẽ được load tự động từ Database -->
+        </select>
+      </div>
+
+      <!-- Bảng Dữ Liệu -->
+      <div class="table-responsive">
+        <table id="productTable">
+          <thead>
+            <tr>
+              <th>Mã SP</th>
+              <th>Tên Sản Phẩm</th>
+              <th>Loại</th>
+              <th>ĐVT</th>
+              <th>Trọng Lượng</th>
+              <th>Giá Bán</th>
+              <th>Tồn Kho</th>
+              <th>Số Lượng KD</th>
+              <th>Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="9" class="text-center">Đang tải dữ liệu...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 3. KHUNG MODAL ẨN ĐỂ THÊM/SỬA SẢN PHẨM -->
+    <div class="modal-overlay" id="productModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-plus-circle"></i> Thêm Sản Phẩm Mới</h3>
+          <button class="close-btn" onclick="closeModal()">&times;</button>
+        </div>
+        <form id="productForm">
+          <div class="form-row">
+            <div class="form-group" style="flex: 0.4">
+              <label>Mã SP <span style="color: red">*</span></label>
+              <input type="text" id="maSP" placeholder="VD: CFH99" required />
+            </div>
+            <div class="form-group" style="flex: 1">
+              <label>Tên Sản Phẩm <span style="color: red">*</span></label>
+              <input
+                type="text"
+                id="tenSP"
+                placeholder="Nhập tên sản phẩm..."
+                required
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Loại Sản Phẩm <span style="color: red">*</span></label>
+              <select id="loaiSP" required>
+                <!-- Sẽ được load tự động từ Database -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Đơn Vị Tính <span style="color: red">*</span></label>
+              <input
+                type="text"
+                id="dvt"
+                placeholder="Ví dụ: Kg, Máy, Lít..."
+                required
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Trọng Lượng (Kg)</label>
+              <input
+                type="number"
+                step="0.01"
+                id="trongLuong"
+                placeholder="0.00"
+              />
+            </div>
+            <div class="form-group">
+              <label>Giá Bán (VNĐ) <span style="color: red">*</span></label>
+              <input type="number" id="giaBan" placeholder="0" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Ghi Chú</label>
+            <textarea
+              id="ghiChu"
+              rows="3"
+              placeholder="Nhập ghi chú thêm nếu có..."
+            ></textarea>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn"
+              style="background-color: #333; color: #fff"
+              onclick="closeModal()"
+            >
+              Hủy Bỏ
+            </button>
+            <button type="submit" class="btn">Lưu Sản Phẩm</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- 4. LOGIC JAVASCRIPT -->
+    <script>
+      // =========================================================================
+      // KIỂM TRA MÔI TRƯỜNG: CHẶN LỖI 404 DO DÙNG LIVE SERVER (CỔNG KHÁC 3000)
+      // =========================================================================
+      if (window.location.port !== "" && window.location.port !== "3000") {
+        document.body.innerHTML = `
+          <div style="padding: 50px; text-align: center; color: white; background: #1a1a1a; min-height: 100vh; font-family: sans-serif;">
+            <h1 style="color: #ff4d4d; font-size: 32px;"><i class="fas fa-exclamation-triangle"></i> PHÁT HIỆN NGUYÊN NHÂN LỖI 404</h1>
+            <p style="font-size: 18px; line-height: 1.6;">Bạn đang chạy giao diện ở cổng <b>${window.location.port}</b> (Có thể do bấm Live Server).<br>Vì API của Node.js chỉ hoạt động ở cổng <b>3000</b>, nên trình duyệt đã gọi sai chỗ và báo lỗi 404!</p>
+            <a href="http://localhost:3000/san-pham.html" style="display: inline-block; margin-top: 30px; padding: 15px 30px; background: #28a745; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 18px;">👉 BẤM VÀO ĐÂY ĐỂ VÀO ĐÚNG ĐƯỜNG DẪN</a>
+          </div>
+        `;
+        throw new Error("Dừng chạy code vì mở sai cổng mạng!");
+      }
+
+      let listData = [];
+      let editId = null;
+
+      // Đóng mở modal
+      const modal = document.getElementById("productModal");
+      function openModal() {
+        document.getElementById("productForm").reset();
+        document.getElementById("maSP").readOnly = false;
+        editId = null;
+        document.querySelector(".modal-header h3").innerHTML =
+          '<i class="fas fa-plus-circle"></i> Thêm Sản Phẩm Mới';
+        modal.style.display = "flex";
+      }
+      function closeModal() {
+        modal.style.display = "none";
+      }
+
+      // Gọi Dữ liệu đổ lên Form Sửa
+      function editProduct(id) {
+        const item = listData.find(
+          (x) => x.MaSP && x.MaSP.trim() === id.trim(),
+        );
+        if (!item) return;
+        editId = id.trim();
+
+        document.getElementById("maSP").value = item.MaSP
+          ? item.MaSP.trim()
+          : "";
+        document.getElementById("maSP").readOnly = true;
+        document.getElementById("tenSP").value = item.TenSP || "";
+        document.getElementById("loaiSP").value = item.MaLoaiSP
+          ? item.MaLoaiSP.trim()
+          : "";
+        document.getElementById("dvt").value = item.DonViTinh || "";
+        document.getElementById("trongLuong").value =
+          item.TrongLuong != null ? item.TrongLuong : "";
+        document.getElementById("giaBan").value = item.GiaBan || 0;
+        document.getElementById("ghiChu").value = item.GhiChu || "";
+
+        document.querySelector(".modal-header h3").innerHTML =
+          '<i class="fas fa-edit"></i> Cập Nhật Sản Phẩm';
+        modal.style.display = "flex";
+      }
+
+      // Chức năng Bấm nút Xóa
+      async function deleteProduct(id) {
+        const confirmed = await javiConfirm(`Hành động nguy hiểm: Bạn có chắc chắn muốn xóa sản phẩm ${id} không?`);
+        if (!confirmed)
+          return;
+
+        // Tự động kiểm tra API bản cũ hay mới
+        let baseUrl = "/api/san-pham";
+        try {
+          const checkRes = await fetch("/api/san-pham");
+          if (checkRes.status === 404) baseUrl = "/api/products";
+        } catch (e) {}
+
+        try {
+          const res = await fetch(baseUrl + "/" + id.trim(), {
+            method: "DELETE",
+          });
+          const data = await res.json();
+          if (data.success) {
+            alert(data.message);
+            loadProducts();
+          } else alert("Lỗi: " + data.message);
+        } catch (e) {
+          alert("Lỗi kết nối server");
+        }
+      }
+
+      // Bộ lọc dữ liệu bảng
+      function filterProducts() {
+        const searchName = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+        const categoryFilter = document.getElementById("categoryFilter").value;
+
+        const rows = document.querySelectorAll("#productTable tbody tr");
+        rows.forEach((row) => {
+          if (row.cells.length < 9) return;
+          const name = row.cells[1].textContent.toLowerCase();
+          const category = row.cells[2].textContent;
+
+          const matchName = name.includes(searchName);
+          const matchCategory =
+            categoryFilter === "" || category.includes(categoryFilter);
+
+          row.style.display = matchName && matchCategory ? "" : "none";
+        });
+      }
+
+      // Gọi API lấy danh sách Loại SP để đổ vào các ô Select
+      async function loadCategories() {
+        try {
+          const response = await fetch("/api/loai-sp", { cache: "no-store" });
+          const data = await response.json();
+          if (data.success) {
+            const filterSelect = document.getElementById("categoryFilter");
+            const formSelect = document.getElementById("loaiSP");
+
+            filterSelect.innerHTML =
+              '<option value="">-- Tất cả loại sản phẩm --</option>';
+            formSelect.innerHTML = "";
+
+            data.data.forEach((item) => {
+              if (item.MaLoaiSP && item.TenLoaiSP) {
+                filterSelect.innerHTML += `<option value="${item.TenLoaiSP}">${item.TenLoaiSP}</option>`;
+                formSelect.innerHTML += `<option value="${item.MaLoaiSP.trim()}">${item.TenLoaiSP}</option>`;
+              }
+            });
+          }
+        } catch (error) {
+          console.error("Lỗi load danh mục:", error);
+        }
+      }
+
+      // Gọi API lấy danh sách khi trang tải xong (Chuẩn bị kết nối Node.js)
+      async function loadProducts() {
+        const tbody = document.querySelector("#productTable tbody");
+        tbody.innerHTML =
+          '<tr><td colspan="9" class="text-center">Đang tải dữ liệu...</td></tr>';
+
+        try {
+          let response = await fetch("/api/san-pham", { cache: "no-store" });
+
+          // NẾU BỊ 404 DO QUÊN RESET SERVER, TỰ ĐỘNG GỌI ĐƯỜNG DẪN CŨ
+          if (response.status === 404) {
+            console.warn(
+              "Tự động fallback về /api/products do Server chưa cập nhật.",
+            );
+            response = await fetch("/api/products", { cache: "no-store" });
+          }
+
+          if (!response.ok) {
+            throw new Error(
+              "Lỗi HTTP: " +
+                response.status +
+                " - Vui lòng tắt bật lại Server (Ctrl+C)!",
+            );
+          }
+
+          const data = await response.json();
+          if (!data.success) {
+            throw new Error(data.message || "Lỗi từ server");
+          }
+
+          listData = data.data || [];
+
+          if (listData.length === 0) {
+            tbody.innerHTML =
+              '<tr><td colspan="9" class="text-center">Chưa có dữ liệu sản phẩm</td></tr>';
+            return;
+          }
+
+          let html = "";
+          listData.forEach((item) => {
+            const maSP = item.MaSP ? String(item.MaSP).trim() : "";
+            const tenSP = item.TenSP || "";
+            const tenLoai = item.TenLoaiSP || "";
+            const dvt = item.DonViTinh || "";
+            const trongLuong = item.TrongLuong != null ? item.TrongLuong : "-";
+            const giaBan = item.GiaBan || 0;
+            const slTon = Number(item.SoLuongTon) || 0;
+            const slKD = Number(item.SoLuongKD) || 0;
+
+            const slTonUI =
+              slTon <= 5
+                ? `<span class="text-danger"><i class="fas fa-exclamation-triangle"></i> ${slTon}</span>`
+                : slTon;
+            const slKDUI =
+              slKD <= 5 ? `<span class="text-danger">${slKD}</span>` : slKD;
+
+            html += `<tr>
+              <td><strong>${maSP}</strong></td>
+              <td>${tenSP}</td>
+              <td>${tenLoai}</td>
+              <td>${dvt}</td>
+              <td>${trongLuong}</td>
+              <td style="color: var(--color-primary); font-weight: bold;">${new Intl.NumberFormat("vi-VN").format(giaBan)} đ</td>
+              <td>${slTonUI}</td>
+              <td>${slKDUI}</td>
+              <td>
+                <button class="action-btn btn-edit" onclick="editProduct('${maSP}')" title="Sửa"><i class="fas fa-edit"></i> Sửa</button>
+                <button class="action-btn btn-delete" style="background-color: #dc3545;" onclick="deleteProduct('${maSP}')" title="Xóa"><i class="fas fa-trash"></i> Xóa</button>
+              </td>
+            </tr>`;
+          });
+          tbody.innerHTML = html;
+        } catch (error) {
+          console.error("Lỗi lấy dữ liệu:", error);
+          tbody.innerHTML = `<tr><td colspan="9" class="text-center text-danger"><strong>Có lỗi xảy ra:</strong> ${error.message}</td></tr>`;
+        }
+      }
+
+      // Lắng nghe sự kiện
+      document.addEventListener("DOMContentLoaded", () => {
+        loadCategories();
+        loadProducts();
+      });
+
+      // Bắt sự kiện submit form Thêm sản phẩm
+      document
+        .getElementById("productForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          // Tự động kiểm tra API bản cũ hay mới
+          let baseUrl = "/api/san-pham";
+          try {
+            const checkRes = await fetch("/api/san-pham");
+            if (checkRes.status === 404) baseUrl = "/api/products";
+          } catch (e) {}
+
+          const payload = {
+            maSP: document.getElementById("maSP").value.trim(),
+            tenSP: document.getElementById("tenSP").value.trim(),
+            loaiSP: document.getElementById("loaiSP").value.trim(),
+            dvt: document.getElementById("dvt").value.trim(),
+            trongLuong: document.getElementById("trongLuong").value
+              ? Number(document.getElementById("trongLuong").value)
+              : null,
+            giaBan: Number(document.getElementById("giaBan").value),
+            ghiChu: document.getElementById("ghiChu").value.trim(),
+          };
+          try {
+            const url = editId ? baseUrl + "/" + editId : baseUrl;
+            const method = editId ? "PUT" : "POST";
+            const res = await fetch(url, {
+              method: method,
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+            const data = await res.json();
+            if (data.success) {
+              alert(data.message);
+              closeModal();
+              loadProducts();
+            } else alert("Lỗi: " + data.message);
+          } catch (err) {
+            alert("Lỗi Server!");
+          }
+        });
+    </script>
+  </body>
+</html>

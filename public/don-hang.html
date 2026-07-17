@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Lý Đơn Hàng - JAVI COFFEE</title>
+
+    <!-- Nhúng CSS -->
+    <link rel="stylesheet" href="/css/global.css" />
+    <link rel="stylesheet" href="/css/sidebar.css" />
+    <link rel="stylesheet" href="/css/don-hang.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script src="/js/auth.js"></script>
+  </head>
+  <body>
+    <!-- 1. SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-brand">
+        <h2>JAVI COFFEE</h2>
+        <p>Năng lượng khai sáng</p>
+      </div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="dashboard.html"><i class="fas fa-home"></i> Tổng Quan</a>
+        </li>
+        <li>
+          <a href="san-pham.html"><i class="fas fa-coffee"></i> Sản Phẩm</a>
+        </li>
+        <li>
+          <a href="nhap-kho.html"><i class="fas fa-boxes"></i> Nhập Kho</a>
+        </li>
+        <li>
+          <a href="xuat-kho.html"
+            ><i class="fas fa-truck-loading"></i> Xuất Kho</a
+          >
+        </li>
+        <!-- Cập nhật lại tên và gắn active -->
+        <li>
+          <a href="don-hang.html" class="active"
+            ><i class="fas fa-shopping-cart"></i> Bán Hàng</a
+          >
+        </li>
+        <li>
+          <a href="hoa-don.html"><i class="fas fa-file-invoice"></i> Hóa Đơn</a>
+        </li>
+        <li>
+          <a href="hoa-don.html"
+            ><i class="fas fa-hand-holding-usd"></i> Công Nợ</a
+          >
+        </li>
+        <li>
+          <a href="hoa-don.html"><i class="fas fa-receipt"></i> Phiếu Thu</a>
+        </li>
+        <li>
+          <a href="nha-cung-cap.html"
+            ><i class="fas fa-building"></i> Nhà Cung Cấp</a
+          >
+        </li>
+        <li>
+          <a href="khach-hang.html"><i class="fas fa-users"></i> Khách Hàng</a>
+        </li>
+        <li>
+          <a href="nhan-vien.html"><i class="fas fa-user-tie"></i> Nhân Viên</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 2. MAIN CONTENT -->
+    <div class="main-content">
+      <div class="page-header">
+        <h2><i class="fas fa-shopping-basket"></i> QUẢN LÝ BÁN HÀNG</h2>
+        <button class="btn" onclick="window.location.href = 'ban-hang.html'">
+          <i class="fas fa-plus"></i> Lên Đơn Hàng Mới
+        </button>
+      </div>
+
+      <!-- THANH TÌM KIẾM -->
+      <div class="filter-bar" style="margin-bottom: 15px; display: flex">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Tìm kiếm theo Mã ĐH, Mã KH, Mã NV..."
+          onkeyup="filterTable(null, null)"
+          style="
+            flex: 1;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #333;
+            background: #222;
+            color: #fff;
+          "
+        />
+      </div>
+
+      <!-- KHU VỰC 1: Thanh Lọc Trạng Thái -->
+      <div class="filter-section">
+        <button class="filter-btn active" onclick="filterTable('Tất cả', this)">
+          Tất cả
+        </button>
+        <button class="filter-btn" onclick="filterTable('Hoàn thành', this)">
+          Hoàn thành
+        </button>
+        <button class="filter-btn" onclick="filterTable('Chờ giao', this)">
+          Chờ giao
+        </button>
+        <button
+          class="filter-btn"
+          onclick="filterTable('Không hoàn thành', this)"
+        >
+          Không hoàn thành
+        </button>
+      </div>
+
+      <!-- KHU VỰC 2: Bảng Dữ Liệu -->
+      <div class="table-responsive">
+        <table id="orderTable">
+          <thead>
+            <tr>
+              <th>Mã ĐH</th>
+              <th>Ngày Đặt</th>
+              <th>Mã KH</th>
+              <th>Mã NV</th>
+              <th>Tổng Tiền</th>
+              <th>Giảm Giá</th>
+              <th>Sau Giảm</th>
+              <th>Trạng Thái</th>
+              <th>Thanh toán</th>
+              <th>Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="9" style="text-align: center">
+                Đang tải dữ liệu...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- MODAL CHI TIẾT ĐƠN HÀNG & XUẤT PDF -->
+    <div class="modal-overlay" id="orderDetailModal">
+      <div
+        class="modal-content"
+        style="max-width: 500px; max-height: 95vh; overflow-y: auto"
+      >
+        <div class="modal-header">
+          <h3><i class="fas fa-file-alt"></i> Chi Tiết Đơn Hàng</h3>
+          <button
+            class="close-btn"
+            onclick="
+              document.getElementById('orderDetailModal').style.display = 'none'
+            "
+          >
+            &times;
+          </button>
+        </div>
+        <div class="detail-body">
+          <div style="line-height: 1.8; margin-bottom: 20px">
+            <div><strong>Mã Đơn:</strong> <span id="v-maDH"></span></div>
+            <div><strong>Khách Hàng:</strong> <span id="v-maKH"></span></div>
+            <div>
+              <strong>Tổng Tiền Gốc:</strong> <span id="v-tongTien"></span>
+            </div>
+            <div><strong>Giảm Giá:</strong> <span id="v-giamGia"></span></div>
+            <div style="font-size: 18px; margin-top: 10px">
+              <strong>Thanh Toán:</strong>
+              <span
+                id="v-thanhToan"
+                style="font-weight: bold"
+              ></span>
+            </div>
+          </div>
+          <div
+            class="section-title"
+            style="
+              margin-top: 20px;
+              font-weight: bold;
+              border-bottom: 1px solid #333;
+              padding-bottom: 5px;
+            "
+          >
+            Sản Phẩm Trong Đơn
+          </div>
+          <div
+            class="table-responsive"
+            style="margin-bottom: 20px; max-height: 40vh; overflow-y: auto"
+          >
+            <table style="font-size: 13px">
+              <thead>
+                <tr>
+                  <th>Sản Phẩm</th>
+                  <th>SL</th>
+                  <th>Đơn Giá</th>
+                  <th>Giảm Giá</th>
+                  <th>Thành Tiền</th>
+                </tr>
+              </thead>
+              <tbody id="v-chiTietBody"></tbody>
+            </table>
+          </div>
+          <div style="display: flex; justify-content: flex-end; gap: 10px">
+            <button
+              class="btn"
+              style="background-color: #333; color: white"
+              onclick="
+                document.getElementById('orderDetailModal').style.display =
+                  'none'
+              "
+            >
+              Đóng
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. LOGIC JAVASCRIPT -->
+    <script>
+      function filterTable(status, btnElement) {
+        if (btnElement) {
+          document
+            .querySelectorAll(".filter-btn")
+            .forEach((btn) => btn.classList.remove("active"));
+          btnElement.classList.add("active");
+        }
+
+        const activeStatus = document
+          .querySelector(".filter-btn.active")
+          .textContent.trim();
+        const searchVal = document.getElementById("searchInput")
+          ? document.getElementById("searchInput").value.toLowerCase()
+          : "";
+
+        const rows = document.querySelectorAll("#orderTable tbody tr");
+        rows.forEach((row) => {
+          if (row.cells.length < 10) return;
+          const rowStatus = row.cells[7].textContent.trim();
+          const textContent = row.textContent.toLowerCase();
+
+          let matchStatus =
+            activeStatus === "Tất cả" || rowStatus === activeStatus;
+          if (
+            activeStatus === "Không hoàn thành" &&
+            rowStatus === "Không thành công"
+          )
+            matchStatus = true;
+          const matchSearch = textContent.includes(searchVal);
+
+          row.style.display = matchStatus && matchSearch ? "" : "none";
+        });
+      }
+
+      // XEM CHI TIẾT
+      async function viewOrder(maDH, maKH, tongTien, giamGia, tongSauGiam, trangThaiTT) {
+        document.getElementById("v-maDH").textContent = maDH;
+        document.getElementById("v-maKH").textContent = maKH;
+        document.getElementById("v-tongTien").textContent =
+          new Intl.NumberFormat("vi-VN").format(tongTien) + " đ";
+        document.getElementById("v-giamGia").textContent =
+          new Intl.NumberFormat("vi-VN").format(giamGia) + " đ";
+        
+        const payEl = document.getElementById("v-thanhToan");
+        payEl.textContent = trangThaiTT;
+        if (trangThaiTT === "Đã thanh toán") {
+          payEl.style.color = "#28a745"; // green
+        } else if (trangThaiTT === "Chưa thanh toán") {
+          payEl.style.color = "#fd7e14"; // orange
+        } else {
+          payEl.style.color = "#17a2b8"; // blue (Chưa lập HĐ)
+        }
+
+        // Gọi API lấy sản phẩm
+        const res = await fetch(`/api/don-hang/${maDH}/chi-tiet`);
+        const data = await res.json();
+        let html = "";
+        if (data.success) {
+          const items = data.data.items ? data.data.items : data.data;
+          items.forEach((item) => {
+            const discPercent = (item.GiamGiaSP || 0) * 100;
+            html += `<tr>
+                    <td>${item.TenSP || item.name}</td>
+                    <td>${item.SoLuong || item.quantity}</td>
+                    <td>${new Intl.NumberFormat("vi-VN").format(item.GiaBan || item.price)} đ</td>
+                    <td style="color: #ff4d4d;">${discPercent > 0 ? "-" + discPercent + "%" : ""}</td>
+                    <td>${new Intl.NumberFormat("vi-VN").format(item.ThanhTien)} đ</td>
+                </tr>`;
+          });
+        }
+        document.getElementById("v-chiTietBody").innerHTML =
+          html || '<tr><td colspan="4">Không có dữ liệu</td></tr>';
+        document.getElementById("orderDetailModal").style.display = "flex";
+      }
+
+      async function deleteOrder(maDH) {
+        const confirmDelete = await javiConfirm(`Bạn có chắc chắn muốn xóa đơn hàng ${maDH} này không?`);
+        if (!confirmDelete) return;
+
+        try {
+          const res = await fetch(`/api/don-hang/${maDH}`, {
+            method: "DELETE",
+          });
+          const data = await res.json();
+          if (data.success) {
+            alert("Xóa đơn hàng thành công!");
+            loadDonHangData();
+          } else {
+            alert("Lỗi: " + data.message);
+          }
+        } catch (err) {
+          alert("Lỗi Server khi thực hiện xóa đơn hàng!");
+        }
+      }
+ 
+      function redirectLapHD(maDH) {
+        window.location.href = `hoa-don.html?lapMaDH=${encodeURIComponent(maDH)}`;
+      }
+
+      // Cài đặt Fetch API (Chuẩn bị kết nối Node.js)
+      async function loadDonHangData() {
+        try {
+          const response = await fetch("/api/don-hang");
+          const data = await response.json();
+          if (data.success) {
+            const tbody = document.querySelector("#orderTable tbody");
+            let html = "";
+ 
+            // Sắp xếp theo Mã ĐH giảm dần (mới nhất lên đầu)
+            data.data.sort((a, b) => b.MaDH.localeCompare(a.MaDH));
+ 
+            data.data.forEach((item) => {
+              const date = new Date(item.NgayDat).toLocaleDateString("vi-VN");
+              
+              // Trạng thái đơn hàng
+              let statusClass = "";
+              if (item.TrangThaiDonHang === "Hoàn thành")
+                statusClass = "status-success";
+              else if (item.TrangThaiDonHang === "Chờ giao")
+                statusClass = "status-warning";
+              else if (
+                item.TrangThaiDonHang === "Không hoàn thành" ||
+                item.TrangThaiDonHang === "Không thành công"
+              )
+                statusClass = "status-orange";
+              else statusClass = "status-info";
+ 
+              // Trạng thái thanh toán
+              let pStatus = item.TrangThaiThanhToan;
+              let pStatusText = pStatus ? pStatus : "Chưa lập HĐ";
+              let pStatusHtml = "";
+              if (pStatus === "Đã thanh toán") {
+                pStatusHtml = `<span class="status-success">${pStatusText}</span>`;
+              } else if (pStatus === "Chưa thanh toán") {
+                pStatusHtml = `<span class="status-orange">${pStatusText}</span>`;
+              } else {
+                pStatusHtml = `
+                  <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 4px 0;">
+                    <span class="status-info">${pStatusText}</span>
+                    <button class="action-btn" style="background-color: var(--color-primary); color: #000; font-size: 11px; padding: 2px 6px; font-weight: bold; border-radius: 4px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; line-height: 1.2;" onclick="redirectLapHD('${item.MaDH.trim()}')">
+                      <i class="fas fa-file-invoice" style="font-size: 10px;"></i> Lập HĐ
+                    </button>
+                  </div>
+                `;
+              }
+ 
+              let btnHtml = `<div style="display: flex; gap: 5px; align-items: center; white-space: nowrap;">
+                <button class="action-btn btn-view" onclick="viewOrder('${item.MaDH}', '${item.MaKH}', '${item.TongTienDonHang}', '${item.TongGiamGiaSP}', '${item.TongTienSauGiam}', '${pStatusText}')"><i class="fas fa-eye"></i> Xem</button>`;
+              
+              // Chỉ hiển thị nút Sửa, Xóa nếu chưa lập hóa đơn và chưa lập phiếu xuất
+              if (!pStatus && !item.MaPX) {
+                btnHtml += `
+                  <button class="action-btn" style="background-color: #28a745; color: white;" onclick="window.location.href='ban-hang.html?editMaDH=${item.MaDH.trim()}'"><i class="fas fa-edit"></i> Sửa</button>
+                  <button class="action-btn" style="background-color: #dc3545; color: white;" onclick="deleteOrder('${item.MaDH.trim()}')"><i class="fas fa-trash-alt"></i> Xóa</button>
+                `;
+              }
+ 
+              if (item.TrangThaiDonHang === "Chờ giao" && !item.MaPX) {
+                btnHtml += `<button class="action-btn" style="background-color: #ffc107; color: #000;" onclick="window.location.href='xuat-kho.html?maDH=${item.MaDH.trim()}'"><i class="fas fa-truck-loading"></i> Lập PX</button>`;
+              }
+              btnHtml += `</div>`;
+ 
+              html += `
+                <tr>
+                  <td>${item.MaDH}</td>
+                  <td>${date}</td>
+                  <td>${item.MaKH}</td>
+                  <td>${item.MaNV}</td>
+                  <td>${new Intl.NumberFormat("vi-VN").format(item.TongTienDonHang)} đ</td>
+                  <td>${new Intl.NumberFormat("vi-VN").format(item.TongGiamGiaSP)} đ</td>
+                  <td style="color: var(--color-primary); font-weight: bold;">${new Intl.NumberFormat("vi-VN").format(item.TongTienSauGiam)} đ</td>
+                  <td class="${statusClass}">${item.TrangThaiDonHang}</td>
+                  <td>${pStatusHtml}</td>
+                  <td>${btnHtml}</td>
+                </tr>
+              `;
+            });
+            tbody.innerHTML =
+              html ||
+              '<tr><td colspan="10" style="text-align:center;">Chưa có đơn hàng nào</td></tr>';
+          }
+        } catch (error) {
+          console.error("Lỗi:", error);
+        }
+      }
+      document.addEventListener("DOMContentLoaded", loadDonHangData);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>In Chứng Từ - JAVI COFFEE</title>
+    <style>
+      /* GIAO DIỆN XEM TRƯỚC TRÊN MÀN HÌNH (SCREEN) */
+      body {
+        font-family: "Times New Roman", Times, serif;
+        background-color: #525659; /* Màu nền giống trình duyệt xem PDF */
+        margin: 0;
+        padding: 20px 0;
+        color: #000;
+      }
+
+      /* Thanh công cụ điều hướng */
+      .no-print {
+        width: 210mm;
+        margin: 0 auto 20px auto;
+        background: #333;
+        padding: 15px;
+        border-radius: 8px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+        box-sizing: border-box;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      }
+
+      .no-print button {
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .btn-print {
+        background-color: #ffd700;
+        color: #000;
+      }
+      .btn-print:hover {
+        background-color: #e6c200;
+      }
+
+      .btn-close {
+        background-color: #dc3545;
+        color: #fff;
+      }
+      .btn-close:hover {
+        background-color: #c82333;
+      }
+
+      /* Khung giấy A5 chuẩn (Khổ đứng chuyên nghiệp) */
+      .print-container {
+        width: 148mm;
+        min-height: 210mm;
+        background-color: #fff;
+        margin: 0 auto;
+        padding: 10mm 15mm;
+        box-sizing: border-box;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        position: relative;
+      }
+
+      /* Thiết kế Header: Info bên trái, Logo góc phải */
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        border-bottom: 2px solid #000;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+      }
+
+      .company-info {
+        flex: 1;
+        padding-left: 20px;
+        line-height: 1.5;
+        font-size: 14px;
+      }
+
+      .company-info h2 {
+        margin: 0 0 5px 0;
+        font-size: 18px;
+        text-transform: uppercase;
+        font-weight: bold;
+      }
+
+      .logo {
+        flex: 0 0 150px;
+        text-align: left;
+      }
+      .logo img {
+        width: 100%;
+        height: auto;
+      }
+
+      /* Tiêu đề chứng từ */
+      .document-title {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .document-title h1 {
+        font-size: 20px;
+        text-transform: uppercase;
+        margin: 0 0 5px 0;
+      }
+      .document-title p {
+        font-style: italic;
+        margin: 0;
+        color: #333;
+        font-size: 12px;
+      }
+
+      /* Thông tin đối tượng (Khách hàng/Nhà cung cấp) */
+      .target-info {
+        margin-bottom: 15px;
+        line-height: 1.6;
+        font-size: 12px;
+      }
+
+      /* Bảng dữ liệu sản phẩm */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 15px;
+        font-size: 12px;
+      }
+      th,
+      td {
+        border: 1px solid #000;
+        padding: 6px 8px;
+      }
+      th {
+        font-weight: bold;
+        text-align: center;
+      }
+      .text-center {
+        text-align: center;
+      }
+      .text-right {
+        text-align: right;
+      }
+
+      /* Khung Tổng tiền */
+      .summary-box {
+        width: 60%;
+        margin-left: auto;
+        margin-bottom: 20px;
+      }
+      .summary-box table {
+        margin: 0;
+      }
+      .summary-box td {
+        border: none;
+        padding: 4px 8px;
+      }
+      .summary-total {
+        font-weight: bold;
+        font-size: 14px;
+        border-top: 1px solid #000 !important;
+      }
+
+      /* Chữ ký 3 cột - Chống cắt trang */
+      .signatures {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        page-break-inside: avoid; /* Đảm bảo cụm chữ ký không bị rớt trang */
+      }
+      .sig-col {
+        text-align: center;
+        width: 30%;
+        font-size: 12px;
+      }
+      .sig-col strong {
+        display: block;
+        margin-bottom: 5px;
+      }
+      .sig-col i {
+        font-size: 13px;
+        color: #555;
+      }
+      .sig-name {
+        margin-top: 60px; /* Chừa khoảng trống ký tên */
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+
+      /* =========================================================
+         ĐỊNH DẠNG RIÊNG KHI THỰC HIỆN LỆNH IN (PRINT) 
+         ========================================================= */
+      @media print {
+        @page {
+          size: A5 portrait;
+          margin: 0;
+        } /* Reset margin trình duyệt */
+        body {
+          background-color: #fff;
+          padding: 0;
+        }
+        .no-print {
+          display: none !important;
+        } /* Ẩn toàn bộ nút bấm */
+        .print-container {
+          box-shadow: none;
+          width: 100%;
+          padding: 10mm 15mm; /* Viền giấy in chuẩn */
+        }
+        th {
+          background-color: transparent !important;
+          print-color-adjust: exact;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Thanh điều hướng thao tác -->
+    <div class="no-print">
+      <button class="btn-close" onclick="window.close()">❌ Đóng</button>
+      <button class="btn-print" onclick="window.print()">
+        🖨️ Thực Hiện In
+      </button>
+    </div>
+
+    <!-- Vùng phôi giấy in -->
+    <div class="print-container">
+      <!-- 1. HEADER: Thông tin công ty & Logo -->
+      <div class="header">
+        <div class="logo">
+          <img src="images/logo-javi-scan.png" alt="JAVI COFFEE" />
+        </div>
+        <div class="company-info">
+          <h2>CÔNG TY TNHH JAVI COFFEE</h2>
+          <div><strong>Mã số thuế:</strong> 0314857973</div>
+          <div>
+            <strong>Địa chỉ:</strong> 13 Đường số 7, Khu Phố 5, Phường Linh
+            Chiểu, Thành phố Hồ Chí Minh
+          </div>
+          <div><strong>Điện thoại:</strong> 0909979012</div>
+        </div>
+      </div>
+
+      <!-- 2. TIÊU ĐỀ CHỨNG TỪ (Render động qua JS) -->
+      <div class="document-title">
+        <h1 id="doc-title">CHỨNG TỪ</h1>
+        <p>
+          Số: <strong id="doc-id">...</strong> | Ngày in:
+          <span id="doc-date">...</span>
+        </p>
+      </div>
+
+      <!-- 3. THÔNG TIN KHÁCH HÀNG / ĐỐI TÁC -->
+      <div class="target-info" id="target-info">
+        <div>
+          <strong>Khách hàng:</strong>
+          ..........................................................................................
+        </div>
+        <div>
+          <strong>Địa chỉ/Điện thoại:</strong>
+          ..........................................................................................
+        </div>
+        <div>
+          <strong>Ghi chú/Lý do:</strong>
+          .................................................................................................
+        </div>
+      </div>
+
+      <!-- 4. BẢNG CHI TIẾT SẢN PHẨM -->
+      <table id="data-table">
+        <thead>
+          <tr id="table-head">
+            <th width="5%">STT</th>
+            <th width="45%">Tên hàng hóa, dịch vụ</th>
+            <th width="10%">ĐVT</th>
+            <th width="10%">SL</th>
+            <th width="15%">Đơn giá</th>
+            <th width="15%">Thành tiền</th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+          <tr>
+            <td colspan="6" class="text-center">Đang tải dữ liệu...</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 5. TỔNG CỘNG THÀNH TIỀN -->
+      <div class="summary-box" id="summary-section">
+        <table>
+          <tr>
+            <td>Tổng cộng:</td>
+            <td class="text-right" id="sum-total">0 đ</td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- 6. CHỮ KÝ (Chống cắt trang) -->
+      <div class="signatures">
+        <div class="sig-col" id="sig-col-1">
+          <strong>Khách hàng</strong>
+          <i>(Ký, ghi rõ họ tên)</i>
+          <div class="sig-name"></div>
+        </div>
+        <div class="sig-col" id="sig-col-2">
+          <strong>Thủ Kho / Kế Toán</strong>
+          <i>(Ký, ghi rõ họ tên)</i>
+          <div class="sig-name"></div>
+        </div>
+        <div class="sig-col" id="sig-col-3">
+          <strong>Người Lập Phiếu</strong>
+          <i>(Ký, ghi rõ họ tên)</i>
+          <div class="sig-name" id="emp-name-footer">
+            ..............................
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOGIC ĐIỀU KHIỂN ĐA NĂNG -->
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        // 1. Tự động lấy ngày giờ in
+        document.getElementById("doc-date").textContent =
+          new Date().toLocaleString("vi-VN");
+
+        // 2. Lấy tên nhân viên đang thao tác từ LocalStorage (Ưu tiên format chuẩn của hệ thống Javi)
+        const currentUserStr = localStorage.getItem("currentUser");
+        let empName = "..............................";
+        if (currentUserStr) {
+          const user = JSON.parse(currentUserStr);
+          empName = user.HoTenNV || "..............................";
+        } else if (localStorage.getItem("employeeName")) {
+          empName = localStorage.getItem("employeeName");
+        }
+        document.getElementById("emp-name-footer").textContent = empName;
+
+        // 3. Phân tích tham số URL (Ví dụ: ?type=HD&id=HD001)
+        const urlParams = new URLSearchParams(window.location.search);
+        const type = urlParams.get("type") || "HD";
+        const id = (urlParams.get("id") || "...").trim();
+
+        document.getElementById("doc-id").textContent = id;
+
+        // 4. Cơ cấu Từ điển API dựa trên Loại phiếu
+        const typeConfig = {
+          HD: { title: "HÓA ĐƠN BÁN HÀNG", api: `/api/hoa-don/${id}/chi-tiet` },
+          PN: { title: "PHIẾU NHẬP KHO", api: `/api/nhap-kho/${id}/chi-tiet` },
+          PX: { title: "PHIẾU XUẤT KHO", api: `/api/xuat-kho/${id}/chi-tiet` },
+          PT: { title: "PHIẾU THU TIỀN", api: `/api/phieu-thu/${id}/chi-tiet` },
+          PC: { title: "PHIẾU CHI TIỀN", api: `/api/phieu-chi/${id}/chi-tiet` },
+          DH: { title: "ĐƠN ĐẶT HÀNG", api: `/api/don-hang/${id}/chi-tiet` },
+        };
+
+        const config = typeConfig[type] || typeConfig["HD"];
+        document.getElementById("doc-title").textContent = config.title;
+
+        // Nếu không có ID thực tế thì chỉ hiện phôi rỗng
+        if (id === "...") {
+          document.getElementById("table-body").innerHTML =
+            `<tr><td colspan="6" class="text-center" style="height: 100px;">Bản in nháp (Chưa có dữ liệu)</td></tr>`;
+          return;
+        }
+
+        // 5. FETCH API Gọi dữ liệu từ Node.js Backend
+        try {
+          const res = await fetch(config.api);
+          const responseData = await res.json();
+
+          if (responseData.success) {
+            const data = responseData.data;
+
+            // KHÔNG LẤY NGƯỜI LẬP PHIẾU ĐỂ ƯU TIÊN NGƯỜI ĐANG THAO TÁC IN TỪ LOCALSTORAGE
+            // (Đã set empName từ đầu ở phía trên)
+
+            // Tùy biến thông tin theo dạng (HD/PN hay PT/PC)
+            let targetHtml = "";
+            let tableHtml = "";
+            let totalAmt = 0;
+
+            // Cấu trúc render cho Hóa đơn (HD)
+            if (type === "HD") {
+              targetHtml = `
+                  <div><strong>Khách hàng:</strong> ${data.TenKH || "Khách lẻ"}</div>
+                  <div><strong>Địa chỉ/SĐT:</strong> ${data.DiaChiKH || ""} - ${data.SoDTKH || ""}</div>
+               `;
+
+              document.getElementById("table-head").innerHTML = `
+                <th width="5%">STT</th>
+                <th width="35%">Tên hàng hóa, dịch vụ</th>
+                <th width="10%">ĐVT</th>
+                <th width="10%">SL</th>
+                <th width="15%">Đơn giá</th>
+                <th width="10%">Giảm giá</th>
+                <th width="15%">Thành tiền</th>
+              `;
+
+              if (data.items && data.items.length > 0) {
+                data.items.forEach((item, index) => {
+                  const qty = item.quantity || item.SoLuong || 0;
+                  const price = item.price || item.GiaBan || 0;
+                  const disc = item.GiamGiaSP || item.giamGia || 0;
+                  const thanhTien = item.ThanhTien || (qty * price * (1 - disc));
+                  totalAmt += thanhTien;
+                  tableHtml += `
+                      <tr>
+                        <td class="text-center">${index + 1}</td>
+                        <td>${item.name || item.TenSP}</td>
+                        <td class="text-center">${item.unit || item.DonViTinh || "-"}</td>
+                        <td class="text-center">${qty}</td>
+                        <td class="text-right">${new Intl.NumberFormat("vi-VN").format(price)} đ</td>
+                        <td class="text-center">${(disc * 100).toFixed(0)}%</td>
+                        <td class="text-right">${new Intl.NumberFormat("vi-VN").format(thanhTien)} đ</td>
+                      </tr>
+                    `;
+                });
+              }
+            }
+            // Cấu trúc render cho Đơn đặt hàng (DH)
+            else if (type === "DH") {
+              targetHtml = `
+                  <div><strong>Khách hàng:</strong> ${data.TenKH || "Khách lẻ"}</div>
+                  <div><strong>Địa chỉ/SĐT:</strong> ${data.DiaChiKH || ""} - ${data.SoDTKH || ""}</div>
+               `;
+ 
+              if (data.items && data.items.length > 0) {
+                data.items.forEach((item, index) => {
+                  const thanhTien =
+                    item.ThanhTien || item.quantity * item.price;
+                  totalAmt += thanhTien;
+                  tableHtml += `
+                      <tr>
+                        <td class="text-center">${index + 1}</td>
+                        <td>${item.name || item.TenSP}</td>
+                        <td class="text-center">${item.unit || item.DonViTinh || "-"}</td>
+                        <td class="text-center">${item.quantity || item.SoLuong}</td>
+                        <td class="text-right">${new Intl.NumberFormat("vi-VN").format(item.price || item.GiaBan)} đ</td>
+                        <td class="text-right">${new Intl.NumberFormat("vi-VN").format(thanhTien)} đ</td>
+                      </tr>
+                    `;
+                });
+              }
+            }
+            // Cấu trúc render cho Phiếu Nhập
+            else if (type === "PN") {
+              targetHtml = `
+                <div><strong>Nhà cung cấp:</strong> ${data.TenNCC || "..."}</div>
+                <div><strong>Số HĐ NCC:</strong> ${data.SoHoaDonNCC || "(Không có)"}</div>`;
+              // API nhap-kho chi-tiet trả về mảng trực tiếp
+              const items = Array.isArray(data) ? data : data.items || [];
+              items.forEach((item, index) => {
+                const price = item.GiaNhap || item.price || 0;
+                const qty = item.SoLuong || item.quantity || 0;
+                const name = item.TenSP || item.name || "";
+                const thanhTien = qty * price;
+                totalAmt += thanhTien;
+                tableHtml += `
+                    <tr>
+                      <td class="text-center">${index + 1}</td>
+                      <td>${name}</td>
+                      <td class="text-center">-</td>
+                      <td class="text-center">${qty}</td>
+                      <td class="text-right">${new Intl.NumberFormat("vi-VN").format(price)} đ</td>
+                      <td class="text-right">${new Intl.NumberFormat("vi-VN").format(thanhTien)} đ</td>
+                    </tr>
+                  `;
+              });
+            }
+            // Cấu trúc cho Thu / Chi (Ẩn bảng đi)
+            else if (type === "PT" || type === "PC") {
+              const amt = data.SoTienThucThu || data.SoTienThucChi || 0;
+              targetHtml = `
+                  <div><strong>Số tiền giao dịch:</strong> <span style="font-size:18px; font-weight:bold;">${new Intl.NumberFormat("vi-VN").format(amt)} đ</span></div>
+                  <div><strong>Hình thức:</strong> ${data.HinhThucThanhToan || "Tiền mặt"}</div>
+                  <div><strong>Lý do/Ghi chú:</strong> ${data.GhiChu || ""}</div>
+               `;
+              if (type === "PT") {
+                targetHtml += `<div><strong>Khách hàng nộp tiền:</strong> ${data.TenKH || "..."}</div>`;
+              } else {
+                // PC
+                targetHtml += `<div><strong>Đơn vị nhận tiền:</strong> ${data.TenNCC || "..."}</div>`;
+              }
+              document.getElementById("data-table").style.display = "none";
+              document.getElementById("summary-section").style.display = "none";
+            }
+            // Mặc định (Phiếu Xuất...)
+            else {
+              let tenKH = data.TenKH || "Khách lẻ";
+              let diaChiKH = data.DiaChiKH || "";
+              let soDTKH = data.SoDTKH || "";
+
+              if (!data.TenKH && data.MaDH) {
+                try {
+                  const resDH = await fetch(`/api/don-hang/${data.MaDH.trim()}/chi-tiet`);
+                  const resDHJson = await resDH.json();
+                  if (resDHJson.success && resDHJson.data) {
+                    tenKH = resDHJson.data.TenKH || "Khách lẻ";
+                    diaChiKH = resDHJson.data.DiaChiKH || "";
+                    soDTKH = resDHJson.data.SoDTKH || "";
+                  }
+                } catch (e) {
+                  console.error("Lỗi khi tải thông tin khách hàng từ đơn hàng:", e);
+                }
+              }
+
+              targetHtml = `
+                <div><strong>Xuất theo đơn hàng:</strong> ${data.MaDH || id}</div>
+                <div><strong>Khách hàng:</strong> ${tenKH}</div>
+                <div><strong>Địa chỉ/SĐT:</strong> ${diaChiKH} - ${soDTKH}</div>
+              `;
+              const items = Array.isArray(data) ? data : data.items || [];
+              items.forEach((item, index) => {
+                tableHtml += `
+                    <tr>
+                      <td class="text-center">${index + 1}</td>
+                      <td colspan="2">${item.TenSP || item.name}</td>
+                      <td class="text-center">${item.DonViTinh || item.unit}</td>
+                      <td class="text-center" colspan="2">${item.SoLuong || item.quantity}</td>
+                    </tr>
+                  `;
+              });
+              document.getElementById("table-head").innerHTML = `
+                  <th width="10%">STT</th>
+                  <th width="50%" colspan="2">Tên hàng hóa</th>
+                  <th width="20%">ĐVT</th>
+                  <th width="20%" colspan="2">Số lượng xuất</th>
+               `;
+              document.getElementById("summary-section").style.display = "none";
+            }
+
+            document.getElementById("target-info").innerHTML = targetHtml;
+            if (tableHtml)
+              document.getElementById("table-body").innerHTML = tableHtml;
+
+            if (type === "HD") {
+              document.getElementById("summary-section").innerHTML = `
+                <table>
+                  <tr>
+                    <td>Tổng cộng:</td>
+                    <td class="text-right">${new Intl.NumberFormat("vi-VN").format(data.TongTienDonHang || 0)} đ</td>
+                  </tr>
+                  <tr>
+                    <td>Giảm giá khách hàng:</td>
+                    <td class="text-right" style="color: red;">- ${new Intl.NumberFormat("vi-VN").format(data.cusDiscountAmt || 0)} đ</td>
+                  </tr>
+                  <tr>
+                    <td>Giảm giá khác:</td>
+                    <td class="text-right" style="color: red;">- ${new Intl.NumberFormat("vi-VN").format(data.extraDiscountAmount || 0)} đ</td>
+                  </tr>
+                  <tr class="summary-total">
+                    <td style="border-top: 1px solid #000; font-weight: bold; font-size: 14px;">Tổng thanh toán:</td>
+                    <td class="text-right" style="border-top: 1px solid #000; font-weight: bold; font-size: 14px;">${new Intl.NumberFormat("vi-VN").format(data.TongTienThanhToan || 0)} đ</td>
+                  </tr>
+                </table>
+              `;
+            } else {
+              document.getElementById("sum-total").textContent =
+                new Intl.NumberFormat("vi-VN").format(totalAmt) + " đ";
+            }
+
+            // Bổ sung: Điều chỉnh chữ ký theo loại phiếu giống hệt template in của auth.js
+            if (type === "HD" || type === "DH" || type === "PX") {
+              document.getElementById("sig-col-2").style.display = "none";
+              document.getElementById("sig-col-1").innerHTML =
+                `<strong>Khách hàng</strong><i>(Ký, ghi rõ họ tên)</i><div class="sig-name"></div>`;
+            } else if (type === "PN") {
+              document.getElementById("sig-col-1").innerHTML =
+                `<strong>Người giao hàng</strong><i>(Ký, ghi rõ họ tên)</i><div class="sig-name"></div>`;
+            } else if (type === "PT" || type === "PC") {
+              document.getElementById("sig-col-1").innerHTML =
+                type === "PT"
+                  ? `<strong>Khách hàng</strong><i>(Ký, ghi rõ họ tên)</i><div class="sig-name"></div>`
+                  : `<strong>Người nhận tiền</strong><i>(Ký, ghi rõ họ tên)</i><div class="sig-name"></div>`;
+              if (type === "PT") {
+                document.getElementById("sig-col-2").style.display = "none";
+              } else {
+                document.getElementById("sig-col-2").innerHTML =
+                  `<strong>Kế toán</strong><i>(Ký, ghi rõ họ tên)</i><div class="sig-name"></div>`;
+              }
+            }
+
+            // Tự động mở hộp thoại in sau khi render xong (Delay 500ms cho ảnh logo load)
+            setTimeout(() => window.print(), 500);
+          } else {
+            document.getElementById("table-body").innerHTML =
+              `<tr><td colspan="6" class="text-center" style="color:red">Không tìm thấy dữ liệu trên máy chủ!</td></tr>`;
+          }
+        } catch (error) {
+          document.getElementById("table-body").innerHTML =
+            `<tr><td colspan="6" class="text-center" style="color:red">Lỗi kết nối API lấy dữ liệu!</td></tr>`;
+        }
+      });
+    </script>
+  </body>
+</html>

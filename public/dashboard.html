@@ -1,0 +1,1028 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trang Chủ - Bảng Điều Khiển - JAVI COFFEE</title>
+
+    <!-- Nhúng CSS đồng bộ -->
+    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/sidebar.css" />
+    <link rel="stylesheet" href="css/logo.css" />
+
+    <!-- Nhúng FontAwesome (để hiển thị các icon trên Sidebar và Thẻ thông tin) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/auth.js"></script>
+
+    <style>
+      /* 1. Cấu trúc lưới cho các Thẻ thống kê (Dashboard Cards) */
+      .dashboard-cards {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        margin-top: 20px;
+        margin-bottom: 30px;
+      }
+
+      .card {
+        background-color: var(--color-bg-surface);
+        padding: 20px;
+        border-radius: 8px;
+        border: 1px solid var(--color-border);
+        display: flex;
+        flex-direction: column;
+        transition:
+          transform 0.3s ease,
+          border-color 0.3s;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        border-color: var(--color-primary);
+        box-shadow: 0 4px 12px rgba(255, 215, 0, 0.1);
+      }
+
+      .card-title {
+        color: var(--color-text-muted);
+        font-size: 14px;
+        font-weight: 500;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .card-title i {
+        color: var(--color-primary);
+      }
+
+      .card-value {
+        font-size: 26px;
+        font-weight: 700;
+        color: var(--color-primary);
+      }
+
+      .card-value.alert {
+        color: #ff4d4d; /* Màu đỏ cho cảnh báo */
+      }
+
+      /* Khu vực 2: Phân tích trạng thái */
+      .analysis-section {
+        display: grid;
+        grid-template-columns: 1fr 2.5fr;
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+
+      .chart-container,
+      .status-container {
+        background-color: var(--color-bg-surface);
+        padding: 20px;
+        border-radius: 8px;
+        border: 1px solid var(--color-border);
+      }
+
+      .analysis-section h3,
+      .chart-container h3,
+      .status-container h3 {
+        color: var(--color-primary);
+        margin-bottom: 20px;
+        font-size: 16px;
+        text-transform: uppercase;
+      }
+
+      .status-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+
+      .status-item {
+        background-color: #1a1a1a;
+        padding: 15px;
+        border-radius: 6px;
+      }
+
+      .status-label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
+
+      .progress-bar-container {
+        width: 100%;
+        height: 8px;
+        background-color: #333;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .progress-bar {
+        height: 100%;
+        border-radius: 4px;
+      }
+
+      .bg-success {
+        background-color: #28a745;
+      }
+      .bg-warning {
+        background-color: #ffc107;
+      }
+      .bg-info {
+        background-color: #17a2b8;
+      }
+
+      /* Khu vực 3: Lưới Bảng dữ liệu song song */
+      .tables-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .table-wrapper {
+        background-color: var(--color-bg-surface);
+        padding: 20px;
+        border-radius: 8px;
+        border: 1px solid var(--color-border);
+      }
+
+      .table-wrapper h3 {
+        color: var(--color-primary);
+        font-size: 16px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-transform: uppercase;
+      }
+
+      /* Trạng thái đơn hàng (Badges) */
+      .badge {
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+      .badge.completed {
+        background-color: rgba(0, 255, 0, 0.1);
+        color: #00ff00;
+        border: 1px solid #00ff00;
+      }
+      .badge.pending {
+        background-color: rgba(255, 215, 0, 0.1);
+        color: var(--color-primary);
+        border: 1px solid var(--color-primary);
+      }
+      .badge.debt {
+        background-color: rgba(220, 53, 69, 0.1);
+        color: #dc3545;
+        border: 1px solid #dc3545;
+      }
+
+      .table-responsive {
+        overflow-x: auto;
+      }
+
+      table th,
+      table td {
+        font-size: 13px;
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 1. CỘT ĐIỀU HƯỚNG BÊN TRÁI (SIDEBAR) -->
+    <div class="sidebar">
+      <div class="sidebar-brand">
+        <img
+          src="images/logo-javi.png"
+          alt="JAVI COFFEE"
+          class="javi-logo-sidebar"
+        />
+      </div>
+      <ul class="sidebar-menu">
+        <!-- Class active được gắn ở mục Tổng Quan để highlight vàng lên -->
+        <li>
+          <a href="dashboard.html" class="active"
+            ><i class="fas fa-home"></i> Trang Chủ</a
+          >
+        </li>
+        <li>
+          <a href="san-pham.html"><i class="fas fa-coffee"></i> Sản Phẩm</a>
+        </li>
+        <li>
+          <a href="nhap-kho.html"><i class="fas fa-boxes"></i> Nhập Kho</a>
+        </li>
+        <li>
+          <a href="xuat-kho.html"
+            ><i class="fas fa-truck-loading"></i> Xuất Kho</a
+          >
+        </li>
+        <li>
+          <a href="don-hang.html"
+            ><i class="fas fa-shopping-cart"></i> Bán Hàng</a
+          >
+        </li>
+        <li>
+          <a href="hoa-don.html"><i class="fas fa-file-invoice"></i> Hóa Đơn</a>
+        </li>
+        <li>
+          <a href="cong-no.html"
+            ><i class="fas fa-hand-holding-usd"></i> Công Nợ</a
+          >
+        </li>
+        <li>
+          <a href="phieu-thu.html"><i class="fas fa-receipt"></i> Phiếu Thu</a>
+        </li>
+        <li>
+          <a href="phieu-chi.html"
+            ><i class="fas fa-money-bill-wave"></i> Phiếu Chi</a
+          >
+        </li>
+        <li>
+          <a href="nha-cung-cap.html"
+            ><i class="fas fa-building"></i> Nhà Cung Cấp</a
+          >
+        </li>
+        <li>
+          <a href="khach-hang.html"><i class="fas fa-users"></i> Khách Hàng</a>
+        </li>
+        <li>
+          <a href="nhan-vien.html"><i class="fas fa-user-tie"></i> Nhân Viên</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 2. VÙNG NỘI DUNG CHÍNH (MAIN CONTENT) -->
+    <div class="main-content">
+      <!-- BỔ SUNG: Header chứa Tiêu đề và User Profile -->
+      <div
+        class="header-container"
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 20px;
+          gap: 20px;
+          flex-wrap: wrap;
+        "
+      >
+        <h2><i class="fas fa-chart-pie"></i> Bảng Điều Khiển Trung Tâm</h2>
+
+        <!-- Bộ lọc Báo Cáo -->
+        <div
+          class="report-controls"
+          style="display: flex; gap: 10px; align-items: center"
+        >
+          <select
+            id="reportYear"
+            class="form-control"
+            onchange="refreshAllDashboardData()"
+            style="
+              padding: 8px 15px;
+              border-radius: 6px;
+              background: var(--color-bg-surface);
+              color: #fff;
+              border: 1px solid var(--color-border);
+              font-size: 14px;
+              cursor: pointer;
+            "
+          >
+            <option value="all">-- Tất cả các năm --</option>
+          </select>
+          <select
+            id="reportType"
+            class="form-control"
+            style="
+              padding: 8px 15px;
+              border-radius: 6px;
+              background: var(--color-bg-surface);
+              color: #fff;
+              border: 1px solid var(--color-border);
+              font-size: 14px;
+              cursor: pointer;
+            "
+          >
+            <option value="overview">Báo Cáo Tổng Quan</option>
+            <option value="revenue">Báo Cáo Doanh Thu</option>
+            <option value="inventory">Báo Cáo Tồn Kho</option>
+            <option value="top10">Báo Cáo Top 10 SP Bán Chạy</option>
+          </select>
+          <select
+            id="reportMonth"
+            class="form-control"
+            style="
+              padding: 8px 15px;
+              border-radius: 6px;
+              background: var(--color-bg-surface);
+              color: #fff;
+              border: 1px solid var(--color-border);
+              font-size: 14px;
+              cursor: pointer;
+              display: none;
+            "
+          >
+            <option value="1">Tháng 1</option>
+            <option value="2">Tháng 2</option>
+            <option value="3">Tháng 3</option>
+            <option value="4">Tháng 4</option>
+            <option value="5">Tháng 5</option>
+            <option value="6">Tháng 6</option>
+            <option value="7">Tháng 7</option>
+            <option value="8">Tháng 8</option>
+            <option value="9">Tháng 9</option>
+            <option value="10">Tháng 10</option>
+            <option value="11">Tháng 11</option>
+            <option value="12">Tháng 12</option>
+          </select>
+          <button
+            class="btn"
+            style="background-color: #17a2b8; color: white"
+            onclick="printDashboardReport()"
+          >
+            <i class="fas fa-print"></i> In Báo Cáo
+          </button>
+        </div>
+      </div>
+
+      <!-- KHU VỰC 1: Hàng chứa 4 thẻ thông tin Thống kê -->
+      <div class="dashboard-cards">
+        <div class="card">
+          <div class="card-title">
+            Tổng Doanh Thu Bán Ra <i class="fas fa-wallet"></i>
+          </div>
+          <div class="card-value" id="stat-doanh-thu">0 đ</div>
+        </div>
+        <div class="card">
+          <div class="card-title">
+            Tổng Chi Phí Nhập Hàng <i class="fas fa-file-invoice-dollar"></i>
+          </div>
+          <div class="card-value" id="stat-chi-phi">0 đ</div>
+        </div>
+        <div class="card">
+          <div class="card-title">
+            Tổng Công Nợ Khách Hàng <i class="fas fa-hand-holding-usd"></i>
+          </div>
+          <div class="card-value" id="stat-cong-no">0 đ</div>
+        </div>
+        <div class="card">
+          <div class="card-title">
+            Cảnh Báo Hết Hàng
+            <i class="fas fa-exclamation-triangle" style="color: #ff4d4d"></i>
+          </div>
+          <div class="card-value alert" id="stat-canh-bao">0 SP</div>
+        </div>
+      </div>
+
+      <!-- KHU VỰC 2: Phân tích trạng thái đơn hàng -->
+      <div class="analysis-section">
+        <div class="status-container">
+          <h3>Cơ cấu Thanh toán</h3>
+          <div class="status-grid">
+            <div class="status-item">
+              <div class="status-label">
+                <span
+                  ><i class="fas fa-money-bill-wave" style="color: #28a745"></i>
+                  Đã thu (Tiền mặt)</span
+                ><span id="ratio-cash-text">0%</span>
+              </div>
+              <div class="progress-bar-container">
+                <div
+                  class="progress-bar bg-success"
+                  id="ratio-cash-bar"
+                  style="width: 0%"
+                ></div>
+              </div>
+            </div>
+            <div class="status-item">
+              <div class="status-label">
+                <span
+                  ><i class="fas fa-university" style="color: #17a2b8"></i> Đã
+                  thu (Chuyển khoản)</span
+                ><span id="ratio-bank-text">0%</span>
+              </div>
+              <div class="progress-bar-container">
+                <div
+                  class="progress-bar bg-info"
+                  id="ratio-bank-bar"
+                  style="width: 0%"
+                ></div>
+              </div>
+            </div>
+            <div class="status-item">
+              <div class="status-label">
+                <span
+                  ><i class="fas fa-user-clock" style="color: #ffc107"></i>
+                  Khách Mua Nợ</span
+                ><span id="ratio-debt-text">0%</span>
+              </div>
+              <div class="progress-bar-container">
+                <div
+                  class="progress-bar bg-warning"
+                  id="ratio-debt-bar"
+                  style="width: 0%"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="chart-container">
+          <h3>Biểu Đồ Doanh Thu & Chi Phí (6 Tháng)</h3>
+          <div style="height: 250px; width: 100%">
+            <canvas id="revenueChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- KHU VỰC 3: Đối chiếu Dòng tiền (Hai bảng song song) -->
+      <div class="tables-grid">
+        <!-- Bảng 1: Hóa đơn bán ra -->
+        <div class="table-wrapper">
+          <h3><i class="fas fa-file-invoice"></i> Hóa Đơn Bán Hàng Mới Nhất</h3>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Mã HD</th>
+                  <th>Ngày Lập</th>
+                  <th>Thanh Toán</th>
+                  <th>Tổng Tiền</th>
+                  <th>Trạng Thái</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="5" style="text-align: center">Đang tải...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Bảng 2: Phiếu nhập kho (Chi phí) -->
+        <div class="table-wrapper">
+          <h3><i class="fas fa-boxes"></i> Phiếu Nhập Kho Mới Nhất</h3>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Mã PN</th>
+                  <th>Ngày Nhập</th>
+                  <th>Nhà Cung Cấp</th>
+                  <th>Tổng Tiền</th>
+                  <th>Thanh Toán</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="5" style="text-align: center">Đang tải...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- KHU VỰC 4: Bảng Sản Phẩm Bán Chạy -->
+      <div
+        class="tables-grid"
+        style="margin-top: 20px; grid-template-columns: 1fr"
+      >
+        <div class="table-wrapper">
+          <h3>
+            <i class="fas fa-fire" style="color: #ff4d4d"></i> Top 5 Sản Phẩm
+            Bán Chạy Nhất
+          </h3>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Mã SP</th>
+                  <th>Tên Sản Phẩm</th>
+                  <th>Đơn Vị Tính</th>
+                  <th>Số Lượng Đã Bán</th>
+                </tr>
+              </thead>
+              <tbody id="topProductsBody">
+                <tr>
+                  <td colspan="4" style="text-align: center">Đang tải...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let myChart = null;
+
+      // Bổ sung: Hàm tải các năm tồn tại trong DB vào Combobox
+      async function loadAvailableYears() {
+        try {
+          const res = await fetch("/api/dashboard/years", {
+            cache: "no-store",
+          });
+          const data = await res.json();
+          if (data.success && data.data.length > 0) {
+            const select = document.getElementById("reportYear");
+            select.innerHTML =
+              '<option value="all">-- Tất cả các năm --</option>';
+            data.data.forEach((year, index) => {
+              // Mặc định chọn năm mới nhất (năm đầu tiên trong list giảm dần)
+              select.innerHTML += `<option value="${year}" ${index === 0 ? "selected" : ""}>Năm ${year}</option>`;
+            });
+          }
+        } catch (err) {
+          console.error("Lỗi lấy danh sách năm:", err);
+        }
+      }
+
+      // Hàm gọi lại tất cả dữ liệu Dashboard khi thay đổi bộ lọc Năm
+      function refreshAllDashboardData() {
+        loadStatsData();
+        loadChartData();
+        loadPaymentRatio();
+        loadRecentTables();
+        loadTopProducts();
+      }
+
+      // Bổ sung: Hàm tải dữ liệu tổng quan cho Thẻ thống kê động
+      async function loadStatsData() {
+        try {
+          const year = document.getElementById("reportYear").value;
+          const res = await fetch(`/api/dashboard/stats?year=${year}`, {
+            cache: "no-store",
+          });
+          const data = await res.json();
+          if (data.success) {
+            document.getElementById("stat-doanh-thu").textContent =
+              new Intl.NumberFormat("vi-VN").format(data.data.doanhThu) + " đ";
+            document.getElementById("stat-chi-phi").textContent =
+              new Intl.NumberFormat("vi-VN").format(data.data.chiPhi) + " đ";
+            document.getElementById("stat-cong-no").textContent =
+              new Intl.NumberFormat("vi-VN").format(data.data.congNo) + " đ";
+            document.getElementById("stat-canh-bao").textContent =
+              data.data.canhBao + " SP";
+          }
+        } catch (error) {
+          console.error("Lỗi lấy dữ liệu thẻ thống kê:", error);
+        }
+      }
+
+      // Cập nhật: Hàm tính toán và hiển thị Cơ cấu thanh toán từ Hóa đơn
+      async function loadPaymentRatio() {
+        try {
+          const year = document.getElementById("reportYear").value;
+          const res = await fetch("/api/hoa-don", { cache: "no-store" });
+          const data = await res.json();
+          if (data.success && data.data.length > 0) {
+            let cash = 0,
+              bank = 0,
+              debt = 0;
+
+            let filteredData = data.data;
+            if (year !== "all") {
+              filteredData = filteredData.filter(
+                (inv) => new Date(inv.NgayLap).getFullYear() === parseInt(year),
+              );
+            }
+
+            filteredData.forEach((invoice) => {
+              if (invoice.TrangThaiThanhToan === "Chưa thanh toán") debt++;
+              else if (invoice.HinhThucThanhToan === "Tiền mặt") cash++;
+              else bank++; // Chuyển khoản hoặc hình thức khác
+            });
+
+            const total = filteredData.length;
+            const pCash = total > 0 ? Math.round((cash / total) * 100) : 0;
+            const pBank = total > 0 ? Math.round((bank / total) * 100) : 0;
+            // Tổng 3 giá trị phải bằng 100%
+            const pDebt = total > 0 ? 100 - pCash - pBank : 0;
+
+            document.getElementById("ratio-cash-text").textContent =
+              pCash + "%";
+            document.getElementById("ratio-cash-bar").style.width = pCash + "%";
+            document.getElementById("ratio-bank-text").textContent =
+              pBank + "%";
+            document.getElementById("ratio-bank-bar").style.width = pBank + "%";
+            document.getElementById("ratio-debt-text").textContent =
+              pDebt + "%";
+            document.getElementById("ratio-debt-bar").style.width = pDebt + "%";
+          }
+        } catch (error) {
+          console.error("Lỗi lấy dữ liệu cơ cấu thanh toán:", error);
+        }
+      }
+
+      async function loadChartData() {
+        try {
+          const year = document.getElementById("reportYear").value;
+          const res = await fetch(`/api/dashboard/chart-data?year=${year}`, {
+            cache: "no-store",
+          });
+          const data = await res.json();
+          if (data.success && data.data.length > 0) {
+            const labels = data.data.map((d) => `T${d.Thang}/${d.Nam}`);
+            const doanhThu = data.data.map((d) => d.DoanhThuBanHang);
+            const chiPhi = data.data.map((d) => d.ChiPhiNhapHang);
+
+            if (myChart) myChart.destroy(); // Hủy chart cũ trước khi vẽ lại
+            const ctx = document
+              .getElementById("revenueChart")
+              .getContext("2d");
+            myChart = new Chart(ctx, {
+              type: "bar",
+              data: {
+                labels: labels,
+                datasets: [
+                  {
+                    label: "Doanh Thu",
+                    data: doanhThu,
+                    backgroundColor: "#ffd700",
+                    borderRadius: 4,
+                  },
+                  {
+                    label: "Chi Phí",
+                    data: chiPhi,
+                    backgroundColor: "#ff4d4d",
+                    borderRadius: 4,
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    grid: { color: "#333" },
+                    ticks: { color: "#999" },
+                  },
+                  x: { grid: { display: false }, ticks: { color: "#999" } },
+                },
+                plugins: {
+                  legend: {
+                    labels: {
+                      color: "#fff",
+                      font: { family: "'Inter', sans-serif" },
+                    },
+                  },
+                },
+              },
+            });
+          }
+        } catch (err) {
+          console.error("Lỗi vẽ biểu đồ", err);
+        }
+      }
+
+      // Bổ sung: Hàm tải dữ liệu cho 2 bảng gần đây (Hóa đơn & Phiếu nhập)
+      async function loadRecentTables() {
+        const year = document.getElementById("reportYear").value;
+        try {
+          const resHD = await fetch("/api/hoa-don", { cache: "no-store" });
+          const dataHD = await resHD.json();
+          if (dataHD.success) {
+            const tbodyHD = document.querySelectorAll(
+              ".table-responsive tbody",
+            )[0];
+            let html = "";
+            let filteredHD = dataHD.data;
+            if (year !== "all") {
+              filteredHD = filteredHD.filter(
+                (item) =>
+                  new Date(item.NgayLap).getFullYear() === parseInt(year),
+              );
+            }
+            filteredHD
+              .sort((a, b) => new Date(b.NgayLap) - new Date(a.NgayLap)) // Sắp xếp mới nhất trước
+              .slice(0, 5) // Lấy 5 bản ghi
+              .forEach((item) => {
+                const date = new Date(item.NgayLap).toLocaleDateString("vi-VN");
+                let statusClass =
+                  item.TrangThaiThanhToan === "Đã thanh toán"
+                    ? "completed"
+                    : "debt";
+                let badgeText =
+                  item.TrangThaiThanhToan === "Đã thanh toán"
+                    ? "Đã thu"
+                    : "Chưa thu";
+                html += `<tr><td>${item.MaHD}</td><td>${date}</td><td>${item.HinhThucThanhToan}</td><td>${new Intl.NumberFormat("vi-VN").format(item.TongTienThanhToan)} đ</td><td><span class="badge ${statusClass}">${badgeText}</span></td></tr>`;
+              });
+            tbodyHD.innerHTML =
+              html ||
+              '<tr><td colspan="5" style="text-align:center;">Chưa có hóa đơn nào</td></tr>';
+          }
+        } catch (e) {
+          console.error("Lỗi tải bảng hóa đơn:", e);
+        }
+
+        try {
+          const resPN = await fetch("/api/nhap-kho", { cache: "no-store" });
+          const dataPN = await resPN.json();
+          if (dataPN.success) {
+            const tbodyPN = document.querySelectorAll(
+              ".table-responsive tbody",
+            )[1];
+            let html = "";
+            let filteredPN = dataPN.data;
+            if (year !== "all") {
+              filteredPN = filteredPN.filter(
+                (item) =>
+                  new Date(item.NgayNhap).getFullYear() === parseInt(year),
+              );
+            }
+            filteredPN
+              .sort((a, b) => new Date(b.NgayNhap) - new Date(a.NgayNhap)) // Sắp xếp mới nhất trước
+              .slice(0, 5) // Lấy 5 bản ghi
+              .forEach((item) => {
+                const date = new Date(item.NgayNhap).toLocaleDateString(
+                  "vi-VN",
+                );
+                let statusClass = "";
+                if (item.TrangThaiThanhToan === "Đã thanh toán")
+                  statusClass = "completed";
+                else if (item.TrangThaiThanhToan === "Thanh toán một phần")
+                  statusClass = "pending";
+                else statusClass = "debt";
+                html += `<tr><td>${item.MaPN}</td><td>${date}</td><td>${item.MaNCC}</td><td>${new Intl.NumberFormat("vi-VN").format(item.TongTienNhap)} đ</td><td><span class="badge ${statusClass}">${item.TrangThaiThanhToan}</span></td></tr>`;
+              });
+            tbodyPN.innerHTML =
+              html ||
+              '<tr><td colspan="5" style="text-align:center;">Chưa có phiếu nhập nào</td></tr>';
+          }
+        } catch (e) {
+          console.error("Lỗi tải bảng phiếu nhập:", e);
+        }
+      }
+
+      // Bổ sung: Hàm tải danh sách sản phẩm bán chạy (Dữ liệu thực tế)
+      async function loadTopProducts() {
+        try {
+          const year = document.getElementById("reportYear").value;
+          const res = await fetch(
+            `/api/dashboard/top-products?year=${year}&limit=5`,
+            { cache: "no-store" },
+          );
+          const data = await res.json();
+          const tbody = document.getElementById("topProductsBody");
+          if (data.success && data.data.length > 0) {
+            let html = "";
+            data.data.forEach((item) => {
+              html += `<tr><td>${item.MaSP}</td><td style="font-weight: bold;">${item.TenSP}</td><td>${item.DonViTinh}</td><td style="color: var(--color-primary); font-weight: bold;">${item.SoLuongDaBan}</td></tr>`;
+            });
+            tbody.innerHTML = html;
+          } else {
+            tbody.innerHTML =
+              '<tr><td colspan="4" style="text-align: center">Chưa có dữ liệu</td></tr>';
+          }
+        } catch (e) {
+          console.error("Lỗi tải sản phẩm bán chạy:", e);
+        }
+      }
+
+      // Chức năng In Báo Cáo trực tiếp trang Dashboard
+      async function printDashboardReport() {
+        const yearValue = document.getElementById("reportYear").value;
+        const yearSelect = document.getElementById("reportYear");
+        const year = yearSelect.options[yearSelect.selectedIndex].text;
+        const type = document.getElementById("reportType").value;
+        const month = document.getElementById("reportMonth").value;
+
+        const currentUserData = localStorage.getItem("currentUser");
+        const user = currentUserData
+          ? JSON.parse(currentUserData)
+          : { HoTenNV: "...................." };
+
+        const printWindow = window.open("", "_blank");
+        printWindow.document.write(
+          "<html><body><h3 style='text-align: center; font-family: sans-serif; margin-top: 50px;'>Đang tạo báo cáo, vui lòng đợi...</h3></body></html>",
+        );
+
+        let title = "BÁO CÁO TỔNG QUAN TÀI CHÍNH";
+        let content = "";
+
+        if (type === "overview") {
+          content = `
+            <table><thead><tr><th>Chỉ Tiêu</th><th>Giá Trị Ghi Nhận</th></tr></thead>
+            <tbody>
+              <tr><td>Tổng Doanh Thu Bán Hàng</td><td class="text-right"><strong>${document.getElementById("stat-doanh-thu").textContent}</strong></td></tr>
+              <tr><td>Tổng Chi Phí Nhập Hàng</td><td class="text-right"><strong>${document.getElementById("stat-chi-phi").textContent}</strong></td></tr>
+              <tr><td>Tổng Công Nợ Khách Hàng Hiện Tại</td><td class="text-right"><strong>${document.getElementById("stat-cong-no").textContent}</strong></td></tr>
+              <tr><td>Số lượng Sản Phẩm Cảnh Báo Hết Kho</td><td class="text-right"><strong>${document.getElementById("stat-canh-bao").textContent}</strong></td></tr>
+            </tbody></table>`;
+        } else if (type === "revenue") {
+          title = "BÁO CÁO DOANH THU";
+          try {
+            const res = await fetch(
+              `/api/dashboard/chart-data?year=${yearValue}`,
+              { cache: "no-store" },
+            );
+            const data = await res.json();
+            if (data.success && data.data.length > 0) {
+              let rows = "";
+              let tongDoanhThu = 0;
+              let tongChiPhi = 0;
+              let tongLoiNhuan = 0;
+
+              data.data.forEach((item) => {
+                tongDoanhThu += item.DoanhThuBanHang;
+                tongChiPhi += item.ChiPhiNhapHang;
+                tongLoiNhuan += item.LoiNhuanThuan;
+                rows += `<tr>
+                  <td class="text-center" style="padding: 10px;">Tháng ${item.Thang}/${item.Nam}</td>
+                  <td class="text-right" style="padding: 10px;">${new Intl.NumberFormat("vi-VN").format(item.DoanhThuBanHang)} đ</td>
+                  <td class="text-right" style="padding: 10px;">${new Intl.NumberFormat("vi-VN").format(item.ChiPhiNhapHang)} đ</td>
+                  <td class="text-right" style="padding: 10px; font-weight: bold; color: ${item.LoiNhuanThuan >= 0 ? "green" : "red"};">${new Intl.NumberFormat("vi-VN").format(item.LoiNhuanThuan)} đ</td>
+                </tr>`;
+              });
+
+              content = `
+                <p style="text-align: center; font-style: italic;">Báo cáo tổng hợp doanh thu, chi phí và lợi nhuận theo từng tháng trong ${year}.</p>
+                <table>
+                  <thead><tr><th style="width: 25%">Kỳ Báo Cáo</th><th style="width: 25%">Tổng Doanh Thu</th><th style="width: 25%">Tổng Chi Phí</th><th style="width: 25%">Lợi Nhuận Thuần</th></tr></thead>
+                  <tbody>${rows}</tbody>
+                  <tfoot><tr>
+                    <td class="text-center" style="font-weight: bold; padding: 10px;">TỔNG CỘNG</td>
+                    <td class="text-right" style="font-weight: bold; color: green; padding: 10px;">${new Intl.NumberFormat("vi-VN").format(tongDoanhThu)} đ</td>
+                    <td class="text-right" style="font-weight: bold; color: red; padding: 10px;">${new Intl.NumberFormat("vi-VN").format(tongChiPhi)} đ</td>
+                    <td class="text-right" style="font-weight: bold; color: ${tongLoiNhuan >= 0 ? "green" : "red"}; padding: 10px;">${new Intl.NumberFormat("vi-VN").format(tongLoiNhuan)} đ</td>
+                  </tr></tfoot>
+                </table>`;
+            } else {
+              content = `<p style="text-align: center; margin-top: 20px;">Chưa có dữ liệu giao dịch trong ${year}.</p>`;
+            }
+          } catch (e) {
+            content = `<p style="text-align: center; color: red;">Lỗi khi tải dữ liệu báo cáo: ${e.message}</p>`;
+          }
+        } else if (type === "inventory") {
+          title = "BÁO CÁO TỒN KHO CHI TIẾT";
+          try {
+            const res = await fetch("/api/san-pham");
+            const data = await res.json();
+            if (data.success) {
+              let rows = "";
+              let totalStock = 0;
+              let totalAvail = 0;
+              data.data.forEach((item, index) => {
+                totalStock += item.SoLuongTon;
+                totalAvail += item.SoLuongKD;
+                rows += `
+                  <tr>
+                    <td class="text-center">${index + 1}</td>
+                    <td class="text-center">${item.MaSP}</td>
+                    <td>${item.TenSP}</td>
+                    <td class="text-center">${item.MaLoaiSP || "Khác"}</td>
+                    <td class="text-center">${item.DonViTinh}</td>
+                    <td class="text-right" style="font-weight: bold;">${item.SoLuongTon}</td>
+                    <td class="text-right" style="font-weight: bold;">${item.SoLuongKD}</td>
+                  </tr>
+                `;
+              });
+              content = `
+                <table>
+                  <thead>
+                    <tr>
+                      <th style="width: 5%">STT</th>
+                      <th style="width: 10%">Mã SP</th>
+                      <th style="width: 35%">Tên Sản Phẩm</th>
+                      <th style="width: 10%">Phân Loại</th>
+                      <th style="width: 10%">ĐVT</th>
+                      <th style="width: 15%">Tồn Thực Tế</th>
+                      <th style="width: 15%">Tồn Khả Dụng</th>
+                    </tr>
+                  </thead>
+                  <tbody>${rows}
+                    <tr>
+                      <td colspan="5" class="text-right" style="font-weight: bold;">TỔNG CỘNG:</td>
+                      <td class="text-right" style="font-weight: bold; color: red;">${new Intl.NumberFormat("vi-VN").format(totalStock)}</td>
+                      <td class="text-right" style="font-weight: bold; color: red;">${new Intl.NumberFormat("vi-VN").format(totalAvail)}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              `;
+            } else {
+              content = `<p style="text-align: center; color: red;">Lỗi tải dữ liệu tồn kho: ${data.message}</p>`;
+            }
+          } catch (e) {
+            content = `<p style="text-align: center; color: red;">Lỗi kết nối khi tải dữ liệu tồn kho.</p>`;
+          }
+        } else if (type === "top10") {
+          const repYear =
+            yearValue === "all" ? new Date().getFullYear() : yearValue;
+          title = `BÁO CÁO TOP 10 SẢN PHẨM BÁN CHẠY - THÁNG ${month}/${repYear}`;
+          try {
+            const res = await fetch(
+              `/api/dashboard/top-products?year=${repYear}&month=${month}&limit=10`,
+              { cache: "no-store" },
+            );
+            const data = await res.json();
+            if (data.success && data.data.length > 0) {
+              let rows = "";
+              data.data.forEach((item, index) => {
+                rows += `<tr>
+                  <td class="text-center">${index + 1}</td>
+                  <td class="text-center">${item.MaSP}</td>
+                  <td>${item.TenSP}</td>
+                  <td class="text-center">${item.DonViTinh}</td>
+                  <td class="text-right" style="font-weight: bold; color: green;">${item.SoLuongDaBan}</td>
+                </tr>`;
+              });
+              content = `
+                <p style="text-align: center; font-style: italic;">Thống kê 10 sản phẩm có số lượng bán ra cao nhất trong tháng ${month} năm ${repYear}.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 10%">Xếp hạng</th>
+                            <th style="width: 15%">Mã SP</th>
+                            <th style="width: 40%">Tên Sản Phẩm</th>
+                            <th style="width: 15%">ĐVT</th>
+                            <th style="width: 20%">Số Lượng Đã Bán</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>
+              `;
+            } else {
+              content = `<p style="text-align: center; margin-top: 20px; font-weight: bold; color: red;">Không có dữ liệu bán hàng trong Tháng ${month}/${repYear}.</p>`;
+            }
+          } catch (e) {
+            content = `<p style="text-align: center; color: red;">Lỗi khi tải dữ liệu báo cáo: ${e.message}</p>`;
+          }
+        }
+
+        printWindow.document.open();
+        printWindow.document.write(`
+          <html><head><title>${title} - JAVI COFFEE</title>
+          <style>
+            body{font-family: 'Times New Roman', serif; padding: 30px; color: #000;} 
+            .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 20px; }
+            .logo { flex: 0 0 120px; text-align: left; }
+            .logo img { width: 100%; height: auto; }
+            .company-info { flex: 1; padding-left: 20px; line-height: 1.5; font-size: 13px; }
+            .company-info h2 { margin: 0 0 5px 0; font-size: 16px; text-transform: uppercase; font-weight: bold; color: #000; }
+            h1{text-align:center; text-transform:uppercase; font-size: 20px; margin-top: 10px; margin-bottom: 5px;} 
+            table{width:100%; border-collapse:collapse; margin-top:20px; font-size: 13px;} 
+            th,td{border:1px solid #000; padding:10px; text-align:left;} 
+            .text-right{text-align:right;} 
+            .text-center{text-align:center;} 
+            th{background-color:#f2f2f2 !important; print-color-adjust: exact;}
+          </style>
+          </head><body>
+          <div class="header">
+            <div class="logo">
+              <img src="${window.location.origin}/images/logo-javi-scan.png" alt="JAVI COFFEE" />
+            </div>
+            <div class="company-info">
+              <h2>CÔNG TY TNHH JAVI COFFEE</h2>
+              <div><strong>Mã số thuế:</strong> 0314857973</div>
+              <div><strong>Địa chỉ:</strong> 13 Đường số 7, Khu Phố 5, Phường Linh Chiểu, Thành phố Hồ Chí Minh</div>
+              <div><strong>Điện thoại:</strong> 0909979012</div>
+            </div>
+          </div>
+          <h1>${title}</h1>
+          <p style="text-align:center;"><strong>Kỳ báo cáo:</strong> ${year} | <strong>Ngày in:</strong> ${new Date().toLocaleString("vi-VN")}</p>
+          ${content}
+          <br><div style="display:flex; justify-content:space-around; margin-top:50px; text-align:center;"><div><strong>Người lập báo cáo</strong><br><i>(Ký, ghi rõ họ tên)</i><br><br><br><br>${user.HoTenNV}</div><div><strong>Giám Đốc</strong><br><i>(Ký, đóng dấu)</i></div></div></body></html>
+        `);
+        printWindow.document.close();
+        setTimeout(() => {
+          printWindow.print();
+        }, 500);
+      }
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        await loadAvailableYears(); // Tải danh sách năm và tự chọn năm mới nhất
+        refreshAllDashboardData(); // Sau đó tải tất cả dữ liệu
+
+        const reportTypeSelect = document.getElementById("reportType");
+        const monthSelect = document.getElementById("reportMonth");
+        if (reportTypeSelect && monthSelect) {
+          reportTypeSelect.addEventListener("change", function () {
+            if (this.value === "top10") {
+              monthSelect.style.display = "inline-block";
+              monthSelect.value = new Date().getMonth() + 1; // Mặc định tháng hiện tại
+            } else {
+              monthSelect.style.display = "none";
+            }
+          });
+        }
+      });
+
+      // Bổ sung: Tự động refresh dữ liệu nếu người dùng ấn nút "Back" từ trang khác quay về
+      window.addEventListener("pageshow", function (event) {
+        if (event.persisted) {
+          refreshAllDashboardData();
+        }
+      });
+    </script>
+  </body>
+</html>
