@@ -1,0 +1,9 @@
+/* Rotate each Dong Son motif around its own center; keep its position/mask fixed. */
+.auth-dongson > svg {
+ transform-origin:50% 50%;
+ transform-box:view-box;
+ animation:authMotifTurn 90s linear infinite;
+}
+.auth-dongson--right > svg {animation-direction:reverse}
+@keyframes authMotifTurn {from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.auth-dongson > svg{animation:none}}

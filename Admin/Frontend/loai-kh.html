@@ -1,0 +1,233 @@
+﻿<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Lý Loại Khách Hàng - JAVI COFFEE</title>
+    <link rel="stylesheet" href="/css/global.css?v=20261021-form-unified" />
+    <link rel="stylesheet" href="/admin/css/sidebar.css?v=20261021-action-fit-2" />
+    <link rel="stylesheet" href="/admin/css/san-pham.css" />
+    <link
+      rel="stylesheet"
+      href="/vendor/fontawesome/css/all.min.css"
+    />
+    <script src="/admin/js/auth.js?v=20261021-form-unified"></script>
+    <script src="/admin/js/report-filters.js?v=20261021-action-fit-2"></script>
+      <!-- Google Fonts: 2 font chuẩn xuyên suốt hệ thống (Hỗ trợ 100% tiếng Việt) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+<script src="/admin/js/grid-files.js" defer></script><script src="/admin/js/ui-consistency.js?v=20261021-form-unified" defer></script><link rel="stylesheet" href="/admin/css/admin-design.css">
+<script defer src="/admin/js/admin-design.js"></script>
+</head>
+  <body>
+    <div class="sidebar"></div>
+
+    <div class="main-content">
+      <div class="page-header">
+        <h2><i class="fas fa-tags"></i> QUẢN LÝ LOẠI KHÁCH HÀNG</h2>
+        <button class="btn" onclick="openModal()">
+          <i class="fas fa-plus"></i> Thêm Loại Khách Hàng
+        </button>
+      </div>
+
+
+
+      <div class="table-responsive">
+        <table id="dataTable">
+          <thead>
+            <tr>
+<th>Mã Loại Khách Hàng</th>
+              <th>Tên Loại Khách Hàng</th>
+              <th>Tỷ Lệ Chiết Khấu</th>
+              <th style="text-align: right;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="4" style="text-align: center">
+                Đang tải dữ liệu...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    
+      
+    </div>
+
+    <!-- KHUNG MODAL -->
+    <div class="modal-overlay" id="addModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-plus-circle"></i> Thêm Loại Khách Hàng</h3>
+          <button class="close-btn" onclick="closeModal()">&times;</button>
+        </div>
+        <form id="addForm">
+          <div class="section-title">Thông tin phân loại</div>
+          <div class="form-group">
+            <label
+              >Mã Loại Khách Hàng (Tối đa 3 ký tự)
+              <span style="color: red">*</span></label
+            >
+            <input type="text" id="maLoaiKH" required maxlength="3" />
+          </div>
+          <div class="form-group">
+            <label>Tên Loại Khách Hàng <span style="color: red">*</span></label>
+            <input type="text" id="tenLoaiKH" required />
+          </div>
+          <div class="form-group">
+            <label
+              >Tỷ Lệ Chiết Khấu (%) (VD: Nhập 10 cho 10%)
+              <span style="color: red">*</span></label
+            >
+            <input
+              type="number"
+              step="any"
+              id="tyLeChietKhau"
+              min="0"
+              max="100"
+              required
+            />
+          </div>
+          <div
+            class="modal-footer"
+            style="
+              display: flex;
+              justify-content: flex-end;
+              gap: 10px;
+              margin-top: 20px;
+            "
+          >
+            <button
+              type="button"
+              class="btn"
+              style="background-color: #333; color: #fff"
+              onclick="closeModal()"
+            >
+              Hủy
+            </button>
+            <button type="submit" class="btn">Lưu Loại Khách Hàng</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      let listData = [];
+      let editId = null;
+
+      function openModal() {
+        document.getElementById("addForm").reset();
+        editId = null;
+        document.getElementById("maLoaiKH").readOnly = false;
+        document.querySelector(".modal-header h3").innerHTML =
+          '<i class="fas fa-plus-circle"></i> Thêm Loại Khách Hàng';
+        document.getElementById("addModal").style.display = "flex";
+      }
+
+      function closeModal() {
+        document.getElementById("addModal").style.display = "none";
+      }
+
+      function editData(id) {
+        const item = listData.find((x) => x.MaLoaiKH.trim() === id.trim());
+        if (!item) return;
+        editId = item.MaLoaiKH.trim();
+        document.getElementById("maLoaiKH").value = item.MaLoaiKH.trim();
+        document.getElementById("maLoaiKH").readOnly = true;
+        document.getElementById("tenLoaiKH").value = item.TenLoaiKH;
+        document.getElementById("tyLeChietKhau").value = item.TyLeChietKhau * 100;
+        document.querySelector(".modal-header h3").innerHTML =
+          '<i class="fas fa-edit"></i> Cập Nhật Loại Khách Hàng';
+        document.getElementById("addModal").style.display = "flex";
+      }
+
+      async function deleteData(id) {
+        const confirmed = await javiConfirm("Bạn có chắc muốn xóa Loại Khách Hàng " + id + " ?");
+        if (!confirmed) return;
+        try {
+          const res = await fetch("/api/loai-kh/" + id.trim(), {
+            method: "DELETE",
+          });
+          const data = await res.json();
+          if (data.success) {
+            alert(data.message);
+            loadData();
+          } else alert("Lỗi: " + data.message);
+        } catch (e) {
+          alert("Lỗi kết nối server");
+        }
+      }
+
+      document
+        .getElementById("addForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const payload = {
+            maLoaiKH: document.getElementById("maLoaiKH").value.trim(),
+            tenLoaiKH: document.getElementById("tenLoaiKH").value.trim(),
+            tyLeChietKhau: parseFloat(
+              document.getElementById("tyLeChietKhau").value,
+            ) / 100,
+          };
+
+          const url = editId ? "/api/loai-kh/" + editId : "/api/loai-kh";
+          const method = editId ? "PUT" : "POST";
+
+          try {
+            const res = await fetch(url, {
+              method,
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+            const data = await res.json();
+            if (data.success) {
+              alert(data.message);
+              closeModal();
+              loadData();
+            } else alert("Lỗi: " + data.message);
+          } catch (err) {
+            alert("Lỗi Server!");
+          }
+        });
+
+
+
+      async function loadData() {
+        try {
+          const res = await fetch("/api/loai-kh", { cache: "no-store" });
+          const data = await res.json();
+
+          if (data.success) {
+            listData = data.data;
+            const tbody = document.querySelector("#dataTable tbody");
+            let html = "";
+            data.data.forEach((item) => {
+              html += `
+                <tr data-row-edit="editData" data-edit-id="${encodeURIComponent(item.MaLoaiKH.trim())}">
+                  
+<td>${item.MaLoaiKH.trim()}</td>
+                  <td>${item.TenLoaiKH}</td>
+                  <td style="color:var(--color-primary); font-weight:bold;">${(item.TyLeChietKhau * 100).toFixed(0)}%</td>
+                  <td>
+                    <button class="action-btn btn-delete" onclick="deleteData('${item.MaLoaiKH.trim()}')"><i class="fas fa-trash"></i></button>
+                  </td>
+                </tr>
+              `;
+            });
+            tbody.innerHTML =
+              html ||
+              '<tr><td colspan="4" style="text-align:center;">Chưa có dữ liệu</td></tr>';
+          }
+        } catch (err) {
+          console.error("Lỗi:", err);
+        }
+      }
+      document.addEventListener("DOMContentLoaded", loadData);
+    </script>
+  </body>
+</html>

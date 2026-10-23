@@ -1,0 +1,798 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bán Hàng POS - JAVI COFFEE</title>
+
+    <!-- Nhúng CSS -->
+    <link rel="stylesheet" href="/css/global.css?v=20261021-form-unified" />
+    <link rel="stylesheet" href="/admin/css/sidebar.css?v=20261021-action-fit-2" />
+    <link rel="stylesheet" href="/admin/css/ban-hang.css?v=20261021-form-unified" />
+    <link
+      rel="stylesheet"
+      href="/vendor/fontawesome/css/all.min.css"
+    />
+    <script src="/admin/js/auth.js?v=20261021-form-unified"></script>
+    <script src="/admin/js/report-filters.js?v=20261021-action-fit-2"></script>
+      <!-- Google Fonts: 2 font chuẩn xuyên suốt hệ thống (Hỗ trợ 100% tiếng Việt) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+<script src="/admin/js/pos-coupons.js?v=20261021-form-unified" defer></script><script src="/admin/js/pos-customer.js?v=20261020-pos-lookup" defer></script><script src="/admin/js/pos-options.js?v=20261021-action-fit-2" defer></script><script src="/admin/js/ui-consistency.js?v=20261021-form-unified" defer></script><link rel="stylesheet" href="/admin/css/admin-design.css">
+<script defer src="/admin/js/admin-design.js"></script>
+</head>
+  <body class="pos-page">
+    <div class="sidebar"></div>
+    <main class="main-content pos-main">
+      <div class="page-header">
+        <h2 id="posPageTitle"><i class="fas fa-shopping-cart" aria-hidden="true"></i> BÁN HÀNG POS</h2>
+        <a href="don-hang.html" class="btn pos-back"><i class="fas fa-arrow-left" aria-hidden="true"></i> Quay lại đơn hàng</a>
+      </div>
+      <div class="pos-workspace">
+        <section class="pos-customer-bar" aria-label="Khách hàng của đơn">
+          <div class="pos-customer-picker"><label for="khInput">Thông tin đơn hàng</label><div class="pos-customer-search"><i class="fas fa-search" aria-hidden="true"></i><input type="search" id="khInput" placeholder="Nhập mã khách hàng hoặc số điện thoại" autocomplete="off" aria-describedby="customer-search-message"><kbd>Enter</kbd><small id="customer-search-message" role="status" aria-live="polite" hidden></small></div><button type="button" id="btnOpenAddCustomer" class="btn" onclick="openCustomerModal()" title="Thêm khách hàng mới" aria-label="Thêm khách hàng mới"><i class="fas fa-user-plus" aria-hidden="true"></i></button></div>
+          <div id="customer-details" hidden><div><span>Khách hàng</span><strong id="kh-ten"></strong></div><div><span>Loại khách</span><strong id="kh-loai"></strong></div><div><span>Số điện thoại</span><strong id="kh-sdt"></strong></div><div class="pos-customer-address"><span>Địa chỉ</span><strong id="kh-diachi"></strong></div></div>
+        </section>
+        <div class="pos-layout">
+          <section class="products-panel" aria-labelledby="posCatalogTitle">
+            <div class="pos-panel-heading"><div><h3 id="posCatalogTitle">Danh sách sản phẩm</h3></div><span id="posProductCount" class="pos-count"></span></div>
+            <div class="filter-bar"><input type="search" id="searchPos" aria-label="Tìm sản phẩm" placeholder="Tìm tên hoặc mã sản phẩm..." oninput="filterPos()"><select id="categoryPos" aria-label="Lọc loại sản phẩm" onchange="filterPos()"><option value="">Tất cả danh mục</option></select></div>
+            <div class="product-grid" id="productGrid"><p class="pos-empty">Đang tải sản phẩm...</p></div>
+          </section>
+          <section class="cart-panel" aria-labelledby="posCartTitle">
+            <div class="cart-header pos-panel-heading"><div><h3 id="posCartTitle">Sản phẩm đã chọn <span id="posOrderCount" class="pos-count">0</span></h3></div><button class="btn btn-danger pos-clear" onclick="clearCart()">Xóa tất cả</button></div>
+            <div class="pos-cart-columns" aria-hidden="true"><span>Sản phẩm / Đơn giá</span><span>Số lượng / Thành tiền</span></div>
+            <div class="cart-items" id="cartItems"><div class="pos-cart-empty"><i class="fas fa-shopping-basket" aria-hidden="true"></i><strong>Đơn hàng đang trống</strong></div></div>
+                    <aside class="payment-panel" aria-labelledby="posPaymentTitle">
+            <h3 id="posPaymentTitle" class="pos-sr-only">Thanh toán</h3>
+            <div class="cart-summary">
+              <div class="summary-row"><span>Tiền hàng</span><strong id="sumSubtotal">0 đ</strong></div>
+              <div class="summary-row"><span>Chiết khấu KH (<span id="cusDiscountPercent">0</span>%)</span><span id="sumCusDiscount" class="pos-discount-value">0 đ</span></div>
+              <div class="pos-discount-field"><label for="extraDiscountInput">Giảm giá thêm</label><div class="pos-discount-inputs"><input type="number" id="extraDiscountInput" value="0" min="0" oninput="renderCart()"><select id="extraDiscountType" aria-label="Đơn vị giảm giá" onchange="renderCart()"><option value="VNĐ">đ</option><option value="%">%</option></select></div></div>
+              <div class="summary-row"><span>Tiền giảm thêm</span><span id="sumExtraDiscount" class="pos-discount-value">0 đ</span></div>
+              <div class="pos-coupon-field"><label for="posCouponPicker">Mã giảm giá</label><input type="hidden" id="posCoupon"><button type="button" id="posCouponPicker" onclick="openPOSCouponPicker()" class="btn"><i class="fas fa-ticket" aria-hidden="true"></i><span id="posCouponSummary">Chọn mã giảm giá</span><i class="fas fa-angle-right" aria-hidden="true"></i></button><small id="posCouponMessage" role="status"></small></div>
+              <div class="summary-row pos-discount-total"><span>Tổng giảm giá</span><strong id="sumTotalDiscount" class="pos-discount-value">0 đ</strong></div>
+            </div>
+            <div class="cart-actions">
+              <div class="pos-payable"><span>Khách cần trả</span><strong id="sumTotal">0 đ</strong></div>
+              <label class="pos-status-label" for="orderStatus">Trạng thái đơn</label><select id="orderStatus"><option value="Hoàn thành" selected>Hoàn thành tại quầy</option><option value="Chờ giao">Giao sau</option></select>
+              <div class="pos-action-buttons"><button class="btn pos-cancel" id="btnCancelOrder" onclick="cancelOrder()">Hủy</button><button class="btn" id="btnSaveOrder" onclick="checkout(false)"><i class="fas fa-save" aria-hidden="true"></i> Lưu đơn</button></div>
+            </div>
+          </aside>
+          </section>
+
+        </div>
+      </div>
+    </main>
+
+    <!-- KHUNG MODAL THÊM KHÁCH HÀNG MỚI -->
+    <div class="modal-overlay" id="addCustomerModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-user-plus"></i> Thêm Khách Hàng Mới</h3>
+          <button class="close-btn" onclick="closeCustomerModal()">
+            &times;
+          </button>
+        </div>
+        <form id="addCustomerForm">
+          <div class="section-title">Thông tin khách hàng</div>
+          <div class="form-group">
+            <label>Tên Khách Hàng <span style="color: red">*</span></label>
+            <input
+              type="text"
+              id="newCusName"
+              placeholder="VD: Nguyễn Văn A"
+              required
+            />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Số Điện Thoại <span style="color: red">*</span></label>
+              <input
+                type="text"
+                id="newCusPhone"
+                placeholder="VD: 090123..."
+                required
+              />
+              <div id="newCusPhoneAlert" style="display: none; font-size: 11px; color: #28a745; margin-top: 4px; font-weight: bold; line-height: 1.2;"></div>
+            </div>
+            <div class="form-group">
+              <label>Giới Tính</label>
+              <select id="newCusGender">
+                <option value="Nam">Nam</option>
+                <option value="Nữ">Nữ</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Loại Khách Hàng</label>
+              <select id="newCusType">
+                <option value="L01">Khách lẻ (0%)</option>
+                <option value="S01">Khách sỉ (5%)</option>
+                <option value="V01">Khách VIP (10%)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Địa chỉ</label>
+            <input
+              type="text"
+              id="newCusAddress"
+              placeholder="VD: 123 Đường ABC..."
+            />
+          </div>
+          <div
+            style="
+              display: flex;
+              justify-content: flex-end;
+              gap: 10px;
+              margin-top: 20px;
+            "
+          >
+            <button
+              type="button"
+              class="btn"
+              style="background-color: #333; color: #fff"
+              onclick="closeCustomerModal()"
+            >
+              Hủy
+            </button>
+            <button type="submit" class="btn">Lưu Khách Hàng</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- LOGIC JAVASCRIPT GIỎ HÀNG -->
+    <script>
+      // ==========================================
+      // 1. KHAI BÁO BIẾN TOÀN CỤC
+      // ==========================================
+      let cart = [];
+      let customersList = [];
+      let productsList = []; // Lưu trữ sản phẩm gốc để đối chiếu tồn kho
+      let categoriesList = [];
+      let posCouponCode="",posCouponDiscount=0,posCouponBasis="";
+      window.cartTotals = { rawSubtotal: 0, totalDiscount: 0, finalTotal: 0 };
+      let editModeMaDH = null;
+      let originalOrderItems = {};
+
+      function getMaxAllowedQty(maSP) {
+        const product = productsList.find((p) => p.MaSP.trim() === maSP);
+        const baseQty = product ? Number(product.SoLuongKD) : 0;
+        const originalQty = originalOrderItems[maSP] || 0;
+        return baseQty + originalQty;
+      }
+
+      // Định dạng tiền tệ
+      const formatCurrency = (amount) => {
+        return new Intl.NumberFormat("vi-VN", {
+          style: "currency",
+          currency: "VND",
+        }).format(amount);
+      };
+
+      // ==========================================
+      // 2. KHU VỰC DỮ LIỆU SẢN PHẨM & TÌM KIẾM
+      // ==========================================
+      async function loadProductsForPOS() {
+        const grid = document.getElementById("productGrid");
+        grid.innerHTML =
+          '<p style="text-align: center; color: #888; grid-column: 1 / -1"><i class="fas fa-spinner fa-spin"></i> Đang tải danh sách sản phẩm...</p>';
+
+        try {
+          // 1. Tải danh mục SP
+          const catRes = await fetch("/api/loai-sp", { cache: "no-store" });
+          const catData = await catRes.json();
+          if (catData.success) categoriesList = catData.data || [];
+
+          // 2. Tải Sản phẩm
+          let res = await fetch("/api/san-pham", { cache: "no-store" });
+          if (res.status === 404)
+            res = await fetch("/api/products", { cache: "no-store" }); // Fallback
+          if (!res.ok) throw new Error("Lỗi HTTP: " + res.status);
+
+          const data = await res.json();
+          if (!data.success) throw new Error(data.message || "Lỗi tải dữ liệu");
+
+          productsList = data.data || [];
+          renderProductGrid(); // Gọi hàm vẽ UI
+        } catch (err) {
+          grid.innerHTML = `<p style="color: red; text-align: center; grid-column: 1 / -1">Lỗi: ${err.message}</p>`;
+        }
+      }
+
+      function renderProductGrid() {
+        const grid = document.getElementById("productGrid");
+        const catSelect = document.getElementById("categoryPos");
+        const searchTxt = document
+          .getElementById("searchPos")
+          .value.toLowerCase();
+        const selectedCat = catSelect.value;
+
+        grid.innerHTML = "";
+        let hasProducts = false;let visibleProductCount=0;
+        const categoriesInUse = new Set();
+
+        // Vẽ sản phẩm lên lưới
+        productsList.forEach((p) => {
+          const maSP = p.MaSP ? String(p.MaSP).trim() : "";
+          const slkd = getMaxAllowedQty(maSP);
+          // Chỉ hiển thị SP có tồn kho > 0
+          if (slkd > 0) {
+            const maLoai = p.MaLoaiSP ? String(p.MaLoaiSP).trim() : "";
+            const tenSP = p.TenSP || "";
+            const giaBan = Number(p.GiaBan) || 0;
+
+            categoriesInUse.add(maLoai);
+
+            const matchSearch =
+              tenSP.toLowerCase().includes(searchTxt) ||
+              maSP.toLowerCase().includes(searchTxt);
+            const matchCat = selectedCat === "" || maLoai === selectedCat;
+
+            if (matchSearch && matchCat) {
+              hasProducts = true;visibleProductCount++;
+              grid.innerHTML += `<button type="button" class="product-card" data-pos-product="${posEscape(maSP)}" data-cat="${posEscape(maLoai)}" onclick="addToCart(this.dataset.posProduct)" aria-label="Chọn ${posEscape(tenSP)}"><span class="product-code">${posEscape(maSP)}</span><span class="product-name">${posEscape(tenSP)}</span><span class="product-price">${formatCurrency(giaBan)}${p.ApDungTuyChon?'<small> / 100g</small>':''}</span><span class="product-stock">Còn ${p.ApDungTuyChon?Number((slkd/10).toFixed(2))+' kg':slkd+' '+posEscape(p.DonViTinh||'sản phẩm')}</span><span class="product-pick" aria-hidden="true">+</span></button>`;
+
+            }
+          }
+        });
+
+        if (!hasProducts) {
+          grid.innerHTML =
+            '<p style="text-align: center; color: #888; grid-column: 1 / -1">Không có sản phẩm nào phù hợp</p>';
+        }
+
+        document.getElementById('posProductCount').textContent=visibleProductCount+' sản phẩm';
+        // Rebuild from current database categories; never retain legacy coffee labels.
+        const selectedCategory=catSelect.value;
+        catSelect.replaceChildren(new Option('-- Tất cả danh mục --',''),...categoriesList.filter(cat=>productsList.some(p=>String(p.MaLoaiSP||'').trim()===String(cat.MaLoaiSP||'').trim())).map(cat=>new Option(cat.TenLoaiSP,String(cat.MaLoaiSP).trim())));
+        catSelect.value=[...catSelect.options].some(option=>option.value===selectedCategory)?selectedCategory:'';
+
+      }
+
+      // Lọc nhanh khi gõ phím
+      function filterPos() {
+        renderProductGrid();
+      }
+
+      // ==========================================
+      // 3. THAO TÁC GIỎ HÀNG (THÊM, SỬA, XÓA)
+      // ==========================================
+      function addToCart(maSP, tenSP, price) {
+        // Kiểm tra tồn kho gốc qua helper hiệu chỉnh cho sửa đơn
+        const maxQty = getMaxAllowedQty(maSP);
+
+        const existing = cart.find((item) => item.maSP === maSP);
+        if (existing) {
+          if (existing.qty + 1 > maxQty) {
+            return alert(
+              `Không thể thêm! Sản phẩm này chỉ còn ${maxQty} trong kho.`,
+            );
+          }
+          existing.qty += 1;
+        } else {
+          if (maxQty < 1) return alert(`Sản phẩm này đã hết hàng!`);
+          cart.push({ maSP, tenSP, price, qty: 1, itemDiscountPercent: 0 });
+        }
+        renderCart();
+      }
+
+      function updateQty(maSP, delta) {
+        const item = cart.find((i) => (i.rowId||i.maSP) === maSP);
+        if (item) {
+          const maxQty = maxRowQty(item);
+
+          const newQty = item.qty + delta;
+          if (newQty > maxQty) {
+            return alert(`Sản phẩm này chỉ còn ${maxQty} trong kho!`);
+          }
+
+          item.qty = newQty;
+          if (item.qty <= 0) cart = cart.filter((i) => (i.rowId||i.maSP) !== maSP);
+          renderCart();
+        }
+      }
+
+      function setQty(maSP, value) {
+        const item = cart.find((i) => (i.rowId||i.maSP) === maSP);
+        if (item) {
+          const maxQty = maxRowQty(item);
+
+          let newQty = parseInt(value, 10);
+
+          if (isNaN(newQty) || newQty <= 0) {
+            cart = cart.filter((i) => (i.rowId||i.maSP) !== maSP);
+          } else {
+            if (newQty > maxQty) {
+              alert(
+                `Sản phẩm này chỉ còn ${maxQty} trong kho! Đã đưa về số lượng tối đa.`,
+              );
+              newQty = maxQty;
+            }
+            item.qty = newQty;
+          }
+          renderCart();
+        }
+      }
+
+      function setItemDiscount(maSP, value) {
+        const item = cart.find((i) => (i.rowId||i.maSP) === maSP);
+        if (item) {
+          let disc = parseFloat(value) || 0;
+          if (disc < 0) disc = 0;
+          if (disc > 100) disc = 100;
+          item.itemDiscountPercent = disc;
+          renderCart();
+        }
+      }
+
+      function removeItem(maSP) {
+        cart = cart.filter((i) => (i.rowId||i.maSP) !== maSP);
+        renderCart();
+      }
+
+      async function clearCart() {
+        if (cart.length === 0) return;
+        if (await javiConfirm("Bạn có chắc chắn muốn hủy đơn hàng này?")) {
+          cart = [];
+          posCouponCode="";posCouponDiscount=0;posCouponBasis="";document.getElementById("posCoupon").value="";document.getElementById("posCouponMessage").textContent="";
+          document.getElementById("extraDiscountInput").value = 0;
+          renderCart();
+        }
+      }
+
+      // ==========================================
+      // 4. TÍNH TOÁN & HIỂN THỊ GIỎ HÀNG
+      // ==========================================
+      function renderCart() {
+        window.refreshPOSCouponSummary?.();
+        const cartContainer = document.getElementById("cartItems");
+        document.getElementById("posOrderCount").textContent=cart.length;
+        if (cart.length === 0) {
+          posCouponCode="";posCouponDiscount=0;posCouponBasis="";document.getElementById("posCoupon").value="";document.getElementById("posCouponMessage").textContent="";window.refreshPOSCouponSummary?.();
+          cartContainer.innerHTML =
+            '<div class="pos-cart-empty"><i class="fas fa-shopping-basket" aria-hidden="true"></i><strong>Đơn hàng đang trống</strong></div>';
+          document.getElementById("sumSubtotal").innerText = "0 đ";
+          document.getElementById("sumCusDiscount").innerText = "0 đ";
+          document.getElementById("sumExtraDiscount").innerText = "0 đ";
+          document.getElementById("sumTotalDiscount").innerText = "0 đ";
+          document.getElementById("sumTotal").innerText = "0 đ";
+          window.cartTotals = {
+            rawSubtotal: 0,
+            totalDiscount: 0,
+            finalTotal: 0,
+          };
+          return;
+        }
+
+        let html = "";
+        let rawSubtotal = 0;
+        let itemDiscountTotal = 0;
+
+        // Render từng dòng sản phẩm
+        cart.forEach((item) => {
+          const lineTotalRaw = item.price * item.qty;
+          const itemDiscAmt =
+            lineTotalRaw * ((item.itemDiscountPercent || 0) / 100);
+
+          rawSubtotal += lineTotalRaw;
+          itemDiscountTotal += itemDiscAmt;
+
+          const rowKey=posEscape(item.rowId||item.maSP);
+          html += `<article class="cart-item" data-pos-row="${posEscape(item.rowId||item.maSP)}"><div class="cart-item-info"><span class="product-code">${posEscape(item.maSP)}</span><div class="cart-item-name">${posEscape(item.tenSP)}</div>${item.trongLuongGram?'<span class="pos-item-options">'+(item.trongLuongGram>=1000?item.trongLuongGram/1000+'kg':item.trongLuongGram+'g')+' / '+posEscape(item.loaiXay)+'</span>':''}<div class="cart-item-price">${formatCurrency(item.price)} <span>/ ${item.trongLuongGram?'lựa chọn':posEscape(productsList.find(p=>p.MaSP.trim()===item.maSP)?.DonViTinh||'sản phẩm')}</span></div><label class="pos-item-discount">Giảm/SP <input aria-label="Giảm giá cho ${posEscape(item.tenSP)}" type="number" value="${item.itemDiscountPercent||0}" min="0" max="100" onchange="setItemDiscount('${rowKey}', this.value)"> %</label></div><div class="pos-item-actions"><button class="pos-remove" type="button" aria-label="Xóa ${posEscape(item.tenSP)}" onclick="removeItem('${rowKey}')"><i class="fas fa-trash-alt" aria-hidden="true"></i></button><div class="qty-controls"><button class="qty-btn" aria-label="Giảm số lượng" onclick="updateQty('${rowKey}',-1)">−</button><input aria-label="Số lượng ${posEscape(item.tenSP)}" type="number" value="${item.qty}" min="0" max="${maxRowQty(item)}" step="1" onchange="setQty('${rowKey}',this.value)"><button class="qty-btn" aria-label="Tăng số lượng" onclick="updateQty('${rowKey}',1)">+</button></div><strong class="pos-line-total">${formatCurrency(lineTotalRaw-itemDiscAmt)}</strong></div></article>`;
+
+        });
+        cartContainer.innerHTML = html;
+
+        // TÍNH TOÁN TỔNG TIỀN
+        const subtotalAfterItemDiscounts = rawSubtotal - itemDiscountTotal;
+
+        // 1. Chiết khấu Khách hàng (Áp dụng trên tiền sau khi giảm giá món)
+        const khInput = document.getElementById("khInput").value;
+        const maKH = khInput ? khInput.split(" - ")[0].trim() : "";
+        const customer = currentPosCustomer();
+        const cusDiscountPercent = customer
+          ? Number(customer.TyLeChietKhau) * 100
+          : 0;
+
+        document.getElementById("cusDiscountPercent").innerText =
+          cusDiscountPercent.toFixed(0);
+        const cusDiscountAmt =
+          subtotalAfterItemDiscounts * (cusDiscountPercent / 100);
+        const remainingSubtotal = subtotalAfterItemDiscounts - cusDiscountAmt;
+
+        // 2. Giảm giá thêm toàn đơn (Voucher)
+        const extraDiscountType =
+          document.getElementById("extraDiscountType").value;
+        const extraDiscountVal =
+          parseFloat(document.getElementById("extraDiscountInput").value) || 0;
+        let extraDiscountAmount = 0;
+
+        if (extraDiscountType === "%") {
+          extraDiscountAmount = remainingSubtotal * (extraDiscountVal / 100);
+        } else {
+          extraDiscountAmount = extraDiscountVal;
+        }
+
+        if(posCouponBasis!==JSON.stringify(posCouponPayload())){posCouponDiscount=0;posCouponCode="";document.getElementById("posCouponMessage").textContent=document.getElementById("posCoupon").value.trim()?"Đơn đã thay đổi, vui lòng áp dụng lại mã.":"";}
+        extraDiscountAmount=Math.min(Math.max(0,extraDiscountAmount),remainingSubtotal);
+        // 3. Chốt số
+        const totalDiscount =
+          itemDiscountTotal + cusDiscountAmt + extraDiscountAmount + posCouponDiscount;
+        let finalTotal = rawSubtotal - totalDiscount;
+        if (finalTotal < 0) finalTotal = 0;
+
+        document.getElementById("sumSubtotal").innerText =
+          formatCurrency(rawSubtotal);
+        document.getElementById("sumCusDiscount").innerText =
+          "-" + formatCurrency(cusDiscountAmt);
+        document.getElementById("sumExtraDiscount").innerText =
+          "-" + formatCurrency(extraDiscountAmount);
+        document.getElementById("sumTotalDiscount").innerText =
+          "-" + formatCurrency(totalDiscount);
+        document.getElementById("sumTotal").innerText =
+          formatCurrency(finalTotal);
+
+        window.cartTotals = { rawSubtotal, totalDiscount, finalTotal };
+      }
+
+      // ==========================================
+      // 5. THANH TOÁN & IN ẤN
+      // ==========================================
+
+
+      function posCouponPayload(){return {editOrderId:editModeMaDH||null,maKH:String(currentPosCustomer()?.MaKH||'').trim(),cartItems:cart.map(i=>({maSP:i.maSP,trongLuongGram:i.trongLuongGram,loaiXay:i.loaiXay,qty:i.qty,itemDiscount:(Number(i.itemDiscountPercent)||0)/100})),giamThuCong:Number(document.getElementById('extraDiscountInput').value)||0,loaiGiamThuCong:document.getElementById('extraDiscountType').value,maGiamGias:document.getElementById('posCoupon').value.split(',').map(code=>code.trim().toUpperCase()).filter(Boolean)};}
+      async function applyPOSCoupon(codes=null,isCurrent=()=>true){
+        const current=posCouponPayload(),body=codes?{...current,maGiamGias:codes}:current,signature=JSON.stringify(current);
+        try{const response=await fetch('/api/don-hang/coupon-quote',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}),result=await response.json();if(!response.ok||!result.success)throw Error(result.message);if(!isCurrent())throw Error('Đã hủy chọn mã.');if(signature!==JSON.stringify(posCouponPayload()))throw Error('Đơn đã thay đổi. Vui lòng chọn lại mã.');
+          document.getElementById('posCoupon').value=(result.data.codes||[]).join(',');posCouponCode=(result.data.codes||[]).join(',');posCouponDiscount=result.data.couponDiscount;posCouponBasis=JSON.stringify(posCouponPayload());renderCart();
+          document.getElementById('posCouponMessage').textContent=posCouponCode?'Giảm '+formatCurrency(posCouponDiscount):'';window.refreshPOSCouponSummary?.();return result.data;
+        }catch(e){if(codes)throw e;posCouponCode='';posCouponDiscount=0;posCouponBasis='';renderCart();document.getElementById('posCouponMessage').textContent=e.message;}
+      }
+
+      async function checkout() {
+        if(document.getElementById("posCoupon").value.trim() && (!posCouponCode||posCouponBasis!==JSON.stringify(posCouponPayload())))return alert("Vui lòng áp dụng lại mã sau khi thay đổi đơn hàng.");
+        if (cart.length === 0)
+          return alert("Vui lòng chọn ít nhất 1 sản phẩm!");
+ 
+        const khInput = document.getElementById("khInput").value;
+        const maKH = String(currentPosCustomer()?.MaKH||'').trim();
+        if (!maKH || !customersList.find((c) => c.MaKH.toUpperCase() === maKH))
+          return alert("Vui lòng chọn Khách hàng hợp lệ từ danh sách!");
+ 
+        const userData = JSON.parse(localStorage.getItem("currentUser"));
+ 
+        // Chuyển đổi % giảm giá thành số thập phân để lưu vào CSDL (ví dụ 10% -> 0.1)
+        const payloadCart = cart.map((item) => ({
+          maSP: item.maSP,
+          trongLuongGram:item.trongLuongGram,loaiXay:item.loaiXay,
+          tenSP: item.tenSP, // FIX: Bổ sung tên SP để báo lỗi tồn kho chính xác
+          qty: item.qty,
+          itemDiscount: (parseFloat(item.itemDiscountPercent) || 0) / 100,
+        }));
+ 
+        const payload = {
+          ...posCouponPayload(),
+          maGiamGia:posCouponCode,
+          maKH: maKH,
+          maNV: userData ? userData.MaNV : "NV001",
+          cartItems: payloadCart,
+          tongTienDonHang: window.cartTotals.rawSubtotal,
+          tongGiamGiaSP: window.cartTotals.totalDiscount,
+          tongTienSauGiam: window.cartTotals.finalTotal,
+          trangThaiDonHang: document.getElementById("orderStatus").value,
+        };
+ 
+        try {
+          const url = editModeMaDH ? `/api/don-hang/${editModeMaDH}` : "/api/don-hang";
+          const method = editModeMaDH ? "PUT" : "POST";
+          const response = await fetch(url, {
+            method: method,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+ 
+          const data = await response.json();
+          if (data.success) {
+            alert(editModeMaDH ? "Cập nhật đơn hàng thành công!" : "Lên đơn hàng thành công!");
+ 
+            if (editModeMaDH) {
+              window.location.href = "don-hang.html";
+            } else {
+              cart = [];
+              document.getElementById("extraDiscountInput").value = "0";
+              renderCart();
+              loadProductsForPOS(); // Cập nhật lại số lượng tồn kho trên lưới sau khi bán
+            }
+          } else {
+            alert("Lỗi: " + data.message);
+          }
+        } catch (err) {
+          alert("Lỗi kết nối tới Server API!");
+        }
+      }
+
+      async function cancelOrder() {
+        const msg = editModeMaDH 
+          ? "Bạn có chắc chắn muốn hủy chỉnh sửa và quay lại danh sách đơn hàng?" 
+          : "Bạn có chắc chắn muốn hủy đơn hàng hiện tại (xóa giỏ hàng)?";
+        if (await javiConfirm(msg)) {
+          if (editModeMaDH) {
+            window.location.href = "don-hang.html";
+          } else {
+            cart = [];
+            document.getElementById("extraDiscountInput").value = "0";
+            renderCart();
+          }
+        }
+      }
+ 
+      // ==========================================
+      // LOGIC XỬ LÝ KHÁCH HÀNG MỚI
+      // ==========================================
+      const addCustomerModal = document.getElementById("addCustomerModal");
+      let previousCustomerValue = ""; // Lưu lại KH đang chọn để revert nếu hủy
+ 
+      let selectedCustomer=null;
+      function currentPosCustomer(){return selectedCustomer;}
+      function handleKHChange(){
+        const input=document.getElementById('khInput'),query=input.value.trim().split(' - ')[0];
+        const matches=findPosCustomers(customersList,query),message=document.getElementById('customer-search-message');
+        selectedCustomer=matches.length===1?matches[0]:null;
+        const details=document.getElementById('customer-details');details.hidden=!selectedCustomer;
+        message.textContent=matches.length>1?'Số điện thoại trùng nhiều khách. Vui lòng nhập mã khách hàng.':query&&!selectedCustomer?'Không tìm thấy khách hàng.':'';
+        message.hidden=!message.textContent;input.setAttribute('aria-invalid',String(Boolean(message.textContent)));
+        if(selectedCustomer){
+          input.value=String(selectedCustomer.MaKH).trim();previousCustomerValue=input.value;
+          for(const [id,key] of [['kh-ten','TenKH'],['kh-loai','TenLoaiKH'],['kh-sdt','SoDTKH'],['kh-diachi','DiaChiKH']]){
+            const field=document.getElementById(id),value=String(selectedCustomer[key]??'').trim();field.textContent=id==='kh-ten'?`(${String(selectedCustomer.MaKH).trim()}) ${value}`:value;field.parentElement.hidden=!value;
+          }
+        }else previousCustomerValue='';
+        renderCart();
+      }
+      document.getElementById('khInput').addEventListener('input',function(){
+        selectedCustomer=null;previousCustomerValue='';document.getElementById('customer-details').hidden=true;
+        document.getElementById('customer-search-message').hidden=true;this.setAttribute('aria-invalid','false');renderCart();
+      });
+      document.getElementById('khInput').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();handleKHChange();}});
+
+      let isAutoFilled = false;
+
+      function openCustomerModal() {
+        document.getElementById("addCustomerForm").reset();
+        const alertEl = document.getElementById("newCusPhoneAlert");
+        if (alertEl) {
+          alertEl.style.display = "none";
+          alertEl.textContent = "";
+        }
+        isAutoFilled = false;
+        addCustomerModal.style.display = "flex";
+      }
+ 
+      function closeCustomerModal() {
+        addCustomerModal.style.display = "none";
+        document.getElementById("khInput").value = previousCustomerValue; // Revert về khách cũ nếu bấm Hủy
+        const alertEl = document.getElementById("newCusPhoneAlert");
+        if (alertEl) {
+          alertEl.style.display = "none";
+          alertEl.textContent = "";
+        }
+        isAutoFilled = false;
+      }
+
+      window.addEventListener("click", function (e) {
+        if (e.target === addCustomerModal) {
+          closeCustomerModal();
+        }
+      });
+
+      // Lắng nghe sự kiện nhập Số điện thoại khách hàng mới
+      document.getElementById("newCusPhone").addEventListener("input", function() {
+        const value = this.value.trim();
+        const alertEl = document.getElementById("newCusPhoneAlert");
+        
+        if (!value) {
+          alertEl.style.display = "none";
+          alertEl.textContent = "";
+          if (isAutoFilled) {
+            document.getElementById("newCusName").value = "";
+            document.getElementById("newCusGender").value = "Nam";
+            document.getElementById("newCusType").value = "L01";
+            document.getElementById("newCusAddress").value = "";
+            isAutoFilled = false;
+          }
+          return;
+        }
+        
+        const cleanVal = value.replace(/\D/g, '');
+        if (cleanVal.length < 3) {
+          alertEl.style.display = "none";
+          alertEl.textContent = "";
+          return;
+        }
+
+        const existingCus = customersList.find(c => {
+          const cPhone = c.SoDTKH ? String(c.SoDTKH).replace(/\D/g, '') : '';
+          return cPhone && cPhone === cleanVal;
+        });
+
+        if (existingCus) {
+          document.getElementById("newCusName").value = existingCus.TenKH || "";
+          document.getElementById("newCusGender").value = existingCus.GioiTinhKH || "Nam";
+          document.getElementById("newCusType").value = existingCus.MaLoaiKH || "L01";
+          document.getElementById("newCusAddress").value = existingCus.DiaChiKH || "";
+          
+          alertEl.style.color = "#28a745";
+          alertEl.innerHTML = `<i class="fas fa-check-circle"></i> SĐT đã thuộc về KH: <strong>${existingCus.TenKH}</strong> (${existingCus.MaKH.trim()})`;
+          alertEl.style.display = "block";
+          isAutoFilled = true;
+        } else {
+          alertEl.style.display = "none";
+          alertEl.textContent = "";
+          if (isAutoFilled) {
+            document.getElementById("newCusName").value = "";
+            document.getElementById("newCusGender").value = "Nam";
+            document.getElementById("newCusType").value = "L01";
+            document.getElementById("newCusAddress").value = "";
+            isAutoFilled = false;
+          }
+        }
+      });
+ 
+      // Bắt sự kiện tạo Khách hàng
+      document
+        .getElementById("addCustomerForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+ 
+          const phone = document.getElementById("newCusPhone").value.trim();
+          const cleanVal = phone.replace(/\D/g, '');
+          const existingCus = customersList.find(c => {
+            const cPhone = c.SoDTKH ? String(c.SoDTKH).replace(/\D/g, '') : '';
+            return cPhone && cPhone === cleanVal;
+          });
+
+          if (existingCus) {
+            const newKHVal = `${existingCus.MaKH.trim()} - ${existingCus.TenKH}`;
+            previousCustomerValue = newKHVal;
+            document.getElementById("khInput").value = newKHVal;
+            addCustomerModal.style.display = "none";
+            
+            const alertEl = document.getElementById("newCusPhoneAlert");
+            if (alertEl) {
+              alertEl.style.display = "none";
+              alertEl.textContent = "";
+            }
+            isAutoFilled = false;
+            
+            handleKHChange();
+            renderCart();
+            return;
+          }
+
+          const payload = {
+            tenKH: document.getElementById("newCusName").value,
+            soDT: phone,
+            gioiTinh: document.getElementById("newCusGender").value,
+            maLoai: document.getElementById("newCusType").value,
+            diaChi: document.getElementById("newCusAddress").value,
+            email: "",
+          };
+ 
+          try {
+            const res = await fetch("/api/khach-hang", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+            const data = await res.json();
+            if (data.success) {
+              alert(data.message);
+              closeCustomerModal();
+              await loadCustomers(); // Cập nhật danh sách mới từ DB
+              document.getElementById("khInput").value =
+                String(customersList.find(c=>String(c.SoDTKH||'').replace(/\D/g,'')===cleanVal)?.MaKH||'').trim();
+              handleKHChange();
+              renderCart();
+            } else {
+              alert("Lỗi: " + data.message);
+            }
+          } catch (e) {
+            alert("Lỗi Server");
+          }
+        });
+ 
+      async function loadCustomers() {
+        try {
+          const res = await fetch("/api/khach-hang");
+          const data = await res.json();
+          if (data.success) {
+            customersList = data.data;
+
+ 
+            // Không tự động load khách hàng mặc định để trống ô nhập
+          }
+        } catch (e) {}
+      }
+
+      async function checkEditMode() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const editMaDH = urlParams.get("editMaDH");
+        if (!editMaDH) return;
+
+        editModeMaDH = editMaDH.trim();
+
+        // Cập nhật giao diện
+        const headerTitle = document.querySelector(".page-header h2");
+        if (headerTitle) {
+          headerTitle.innerHTML = `<i class="fas fa-edit"></i> CẬP NHẬT ĐƠN HÀNG ${editModeMaDH}`;
+        }
+        document.title = `Cập Nhật Đơn Hàng ${editModeMaDH} - JAVI COFFEE`;
+
+        const btnSave = document.getElementById("btnSaveOrder");
+        if (btnSave) {
+          btnSave.textContent = "Cập nhật";
+        }
+
+        try {
+          const res = await fetch(`/api/don-hang/${editModeMaDH}/chi-tiet`);
+          const data = await res.json();
+          if (data.success && data.data) {
+            const dh = data.data;
+
+            // Đặt khách hàng
+            const customer = customersList.find((c) => c.MaKH.trim() === dh.MaKH.trim());
+            if (customer) {
+              document.getElementById("khInput").value = `${customer.MaKH.trim()} - ${customer.TenKH}`;
+              handleKHChange();
+            }
+
+            // Ghi nhận số lượng gốc để bù trừ kho khi chọn món
+            originalOrderItems = {};
+            dh.items.forEach((item) => {
+              originalOrderItems[item.MaSP.trim()] = (originalOrderItems[item.MaSP.trim()]||0)+item.quantity*(item.TrongLuongGram?item.TrongLuongGram/100:1);
+            });
+
+            // Gán giỏ hàng
+            cart = dh.items.map((item) => ({
+              maSP: item.MaSP.trim(),rowId:crypto.randomUUID(),trongLuongGram:item.TrongLuongGram,loaiXay:item.LoaiXay,
+              tenSP: item.TenSP || item.name,
+              qty: item.quantity,
+              price: item.price,
+              itemDiscountPercent: ((item.GiamGiaSP || 0) * 100),
+            }));
+
+            // Tính toán giảm giá thêm
+            const itemDiscountTotal = cart.reduce((sum, item) => sum + (item.qty * item.price * (item.itemDiscountPercent / 100)), 0);
+            const subtotalAfterItemDiscounts = dh.TongTienDonHang - itemDiscountTotal;
+            const cusDiscountPercent = customer ? Number(customer.TyLeChietKhau) : 0;
+            const cusDiscountAmt = subtotalAfterItemDiscounts * cusDiscountPercent;
+            const extraDiscountAmount = dh.TongGiamGiaSP - itemDiscountTotal - cusDiscountAmt - Number(dh.TienGiamMa||0);
+
+            document.getElementById("extraDiscountInput").value = Math.max(0, extraDiscountAmount);
+            document.getElementById("extraDiscountType").value = "VNĐ";
+            document.getElementById("orderStatus").value = dh.TrangThaiDonHang;
+
+            document.getElementById("posCoupon").value=(dh.MaGiamGias||[dh.MaGiamGia]).filter(Boolean).join(",");window.refreshPOSCouponSummary?.();
+            renderCart();
+            if(document.getElementById("posCoupon").value)await applyPOSCoupon();
+            renderProductGrid(); // Vẽ lại lưới sản phẩm để phản ánh đúng số lượng cộng dồn tồn kho
+          }
+        } catch (e) {
+          console.error("Lỗi tải chi tiết đơn hàng để sửa:", e);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        await loadCustomers();
+        await loadProductsForPOS();
+        await checkEditMode();
+      });
+    </script>
+  </body>
+</html>

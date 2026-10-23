@@ -1,0 +1,435 @@
+﻿<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lịch Sử Phiếu Chi - JAVI COFFEE</title>
+    <link rel="stylesheet" href="/css/global.css?v=20261021-form-unified" />
+    <link rel="stylesheet" href="/admin/css/sidebar.css?v=20261021-action-fit-2" />
+    <link rel="stylesheet" href="/admin/css/san-pham.css" />
+    <link
+      rel="stylesheet"
+      href="/vendor/fontawesome/css/all.min.css"
+    />
+    <script src="/admin/js/auth.js?v=20261021-form-unified"></script>
+    <script src="/admin/js/report-filters.js?v=20261021-action-fit-2"></script>
+      <!-- Google Fonts: 2 font chuẩn xuyên suốt hệ thống (Hỗ trợ 100% tiếng Việt) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+<script src="/admin/js/grid-files.js" defer></script><script src="/admin/js/ui-consistency.js?v=20261021-form-unified" defer></script><link rel="stylesheet" href="/admin/css/admin-design.css">
+<script defer src="/admin/js/admin-design.js"></script>
+</head>
+  <body>
+    <div class="sidebar"></div>
+
+    <div class="main-content">
+      <div class="page-header">
+        <h2><i class="fas fa-money-bill-wave"></i> LỊCH SỬ PHIẾU CHI</h2>
+        <button class="btn" onclick="openCreateModal()">
+          <i class="fas fa-plus"></i> Lập Phiếu Chi Mới
+        </button>
+      </div>
+
+      <form class="report-filters" data-report-table="dataTable" data-date-column="1" data-value-column="3" onsubmit="event.preventDefault(); applyRowReportFilters(this, true)">
+        <label>Từ ngày<input type="date" id="expenseFrom" aria-describedby="expenseFromError" /><small id="expenseFromError" class="date-range-error" aria-live="polite" hidden></small></label>
+        <label>Đến ngày<input type="date" id="expenseTo" /></label>
+        <div class="filter-field"><span>Hình thức thanh toán</span><details class="multi-filter" id="expenseValues" data-default-values="Tiền mặt|Chuyển khoản"><summary>Tất cả</summary><div class="multi-options"></div></details></div>
+        <button class="btn" type="submit"><i class="fas fa-filter"></i> Xem</button>
+      </form>
+
+      <div class="table-responsive">
+        <table id="dataTable">
+          <thead>
+            <tr>
+<th>Mã PC</th>
+              <th>Ngày Chi</th>
+              <th>Số Tiền Chi</th>
+              <th>Hình Thức</th>
+              <th>Mã Phiếu Nhập</th>
+              <th style="display:none;">Người Lập</th>
+              <th>Ghi Chú</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="7" style="text-align: center">Đang tải...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    
+      
+    </div>
+
+    <!-- MODAL CHI TIẾT -->
+    <div class="modal-overlay" id="detailModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-money-bill-wave"></i> Chi Tiết Phiếu Chi</h3>
+          <button class="close-btn" onclick="closeDetailModal()">
+            &times;
+          </button>
+        </div>
+        <div
+          class="detail-body"
+          style="padding: 20px; line-height: 2; font-size: 14px"
+        >
+          <div><strong>Mã Phiếu Chi:</strong> <span id="v-maPC"></span></div>
+          <div><strong>Ngày Chi:</strong> <span id="v-ngayChi"></span></div>
+          <div><strong>Nhà Cung Cấp:</strong> <span id="v-tenNCC"></span></div>
+          <div><strong>Phiếu Nhập Gốc:</strong> <span id="v-maPN"></span></div>
+          <div>
+            <strong>Hình Thức TT:</strong> <span id="v-hinhThuc"></span>
+          </div>
+          <div style="font-size: 18px; margin-top: 10px">
+            <strong>Số Tiền Chi:</strong>
+            <span
+              id="v-soTien"
+              style="color: #dc3545; font-weight: bold"
+            ></span>
+          </div>
+          <hr style="border-color: #333; margin: 15px 0" />
+          <div><strong>Ghi Chú:</strong> <span id="v-ghiChu"></span></div>
+          <div><strong>Người Lập:</strong> <span id="v-maNV"></span></div>
+        </div>
+        <div
+          class="modal-footer"
+          style="
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+          "
+        >
+          <button
+            type="button"
+            class="btn"
+            style="background-color: #333; color: #fff"
+            onclick="closeDetailModal()"
+          >
+            Đóng
+          </button>
+          <button
+            type="button"
+            class="btn"
+            style="background-color: #17a2b8; color: white"
+            onclick="printDetail()"
+          >
+            <i class="fas fa-print"></i> In Phiếu Chi
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL TẠO PHIẾU CHI MỚI -->
+    <div class="modal-overlay" id="createModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 style="color: #dc3545">
+            <i class="fas fa-money-bill-wave"></i> Lập Phiếu Chi Trả Nợ NCC
+          </h3>
+          <button class="close-btn" onclick="closeCreateModal()">
+            &times;
+          </button>
+        </div>
+        <form id="createForm">
+          <div class="section-title">Thông tin phiếu chi</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label
+                >Mã Phiếu Nhập Liên Kết <span style="color: red">*</span></label
+              >
+              <input
+                type="text"
+                id="pcMaPN"
+                placeholder="Tìm mã Phiếu Nhập..."
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label
+                >Số Tiền Thực Chi (VNĐ) <span style="color: red">*</span></label
+              >
+              <input
+                type="number"
+                step="any"
+                id="pcSoTien"
+                placeholder="Nhập số tiền chi..."
+                required
+              />
+            </div>
+          </div>
+          <div class="section-title">Thanh toán và người thực hiện</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label
+                >Hình Thức Thanh Toán <span style="color: red">*</span></label
+              >
+              <select id="pcHinhThuc" required>
+                <option value="Chuyển khoản">Chuyển khoản ngân hàng</option>
+                <option value="Tiền mặt">Tiền mặt</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Nhân Viên Chi <span style="color: red">*</span></label>
+              <input
+                type="text"
+                id="pcMaNV"
+                placeholder="Tìm nhân viên..."
+                required
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Ghi Chú</label>
+            <input
+              type="text"
+              id="pcGhiChu"
+              placeholder="Ví dụ: Thanh toán nợ đợt 1..."
+            />
+          </div>
+          <div
+            style="
+              display: flex;
+              justify-content: flex-end;
+              gap: 10px;
+              margin-top: 20px;
+            "
+          >
+            <button
+              type="button"
+              class="btn"
+              style="background-color: #333; color: #fff"
+              onclick="closeCreateModal()"
+            >
+              Hủy Bỏ
+            </button>
+            <button
+              type="submit"
+              class="btn"
+              style="background-color: #dc3545; color: white"
+            >
+              Lưu Phiếu Chi
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      const modal = document.getElementById("detailModal");
+      function closeDetailModal() {
+        modal.style.display = "none";
+      }
+      const createModal = document.getElementById("createModal");
+      function closeCreateModal() {
+        createModal.style.display = "none";
+      }
+
+      async function viewDetail(id) {
+        try {
+          const res = await fetch(`/api/phieu-chi/${id}/chi-tiet`);
+          const data = await res.json();
+          if (data.success) {
+            const item = data.data;
+            document.getElementById("v-maPC").textContent = item.MaPC
+              ? item.MaPC.trim()
+              : "";
+            document.getElementById("v-ngayChi").textContent = new Date(
+              item.NgayChi,
+            ).toLocaleString("vi-VN");
+            document.getElementById("v-tenNCC").textContent =
+              item.TenNCC || "Không xác định";
+            document.getElementById("v-maPN").textContent = item.MaPN
+              ? item.MaPN.trim()
+              : "(Không có)";
+            document.getElementById("v-hinhThuc").textContent =
+              item.HinhThucThanhToan;
+            document.getElementById("v-soTien").textContent =
+              new Intl.NumberFormat("vi-VN").format(item.SoTienThucChi) + " đ";
+            document.getElementById("v-ghiChu").textContent =
+              item.GhiChu || "(Không có)";
+            document.getElementById("v-maNV").textContent =
+              item.NguoiLapPhieu || (item.MaNV ? item.MaNV.trim() : "");
+            modal.style.display = "flex";
+          } else {
+            alert("Lỗi: " + data.message);
+          }
+        } catch (e) {
+          alert("Lỗi Server!");
+        }
+      }
+
+      function printDetail() {
+        const maPC = document.getElementById("v-maPC").textContent;
+        window.open(
+          `in-chung-tu.html?type=PC&id=${encodeURIComponent(maPC.trim())}`,
+          "_blank",
+        );
+      }
+
+      function filterTable() {
+        applyRowReportFilters(document.querySelector('[data-report-table="dataTable"]'), true);
+      }
+
+      async function loadData() {
+        try {
+          const res = await fetch("/api/phieu-chi");
+          const data = await res.json();
+          if (data.success) {
+            const tbody = document.querySelector("#dataTable tbody");
+            let html = "";
+            data.data.forEach((item) => {
+              html += `
+                <tr
+                  style="cursor: pointer;"
+                  title="Double-click để xem chi tiết"
+                  ondblclick="viewDetail('${item.MaPC ? item.MaPC.trim() : ''}')"
+                >
+                  
+<td>${item.MaPC ? item.MaPC.trim() : ""}</td>
+                  <td>${new Date(item.NgayChi).toLocaleDateString("vi-VN")}</td>
+                  <td style="color: #dc3545; font-weight: bold;">${new Intl.NumberFormat("vi-VN").format(item.SoTienThucChi)} đ</td>
+                  <td>${item.HinhThucThanhToan}</td>
+                  <td>${item.MaPN ? item.MaPN.trim() : ""}</td>
+                  <td style="display:none;">${item.MaNV ? item.MaNV.trim() : ""}</td>
+                  <td>${item.GhiChu || ""}</td>
+                </tr>
+              `;
+            });
+            tbody.innerHTML =
+              html ||
+              '<tr><td colspan="7" style="text-align:center;">Chưa có dữ liệu</td></tr>';
+          }
+        } catch (err) {
+          console.error("Lỗi:", err);
+        }
+      }
+
+      // Bổ sung: Lấy dữ liệu Autocomplete cho Form tạo mới
+      async function loadFormLookups() {
+        try {
+          const resPN = await fetch("/api/nhap-kho");
+          const dataPN = await resPN.json();
+          if (dataPN.success) {
+            const pnList = dataPN.data
+              .filter(
+                (p) =>
+                  (p.TrangThaiThanhToan ? p.TrangThaiThanhToan.trim() : "") !==
+                  "Đã thanh toán",
+              )
+              .map(
+                (p) =>
+                  `${p.MaPN ? p.MaPN.trim() : ""} - T.Tiền: ${new Intl.NumberFormat("vi-VN").format(p.TongTienNhap)} đ (Đã trả: ${new Intl.NumberFormat("vi-VN").format(p.SoTienDaTraNCC)} đ)`,
+              );
+            setupAutocomplete("pcMaPN", pnList);
+          }
+          const resNV = await fetch("/api/nhan-vien");
+          const dataNV = await resNV.json();
+          if (dataNV.success) {
+            const listNV = dataNV.data.map(
+              (nv) => `${nv.MaNV ? nv.MaNV.trim() : ""} - ${nv.HoTenNV}`,
+            );
+            setupAutocomplete("pcMaNV", listNV);
+          }
+        } catch (e) {}
+      }
+
+      function openCreateModal() {
+        document.getElementById("createForm").reset();
+        const currentUser = JSON.parse(
+          localStorage.getItem("currentUser") || "{}",
+        );
+        if (currentUser && currentUser.MaNV) {
+          document.getElementById("pcMaNV").value =
+            `${currentUser.MaNV.trim()} - ${currentUser.HoTenNV}`;
+        }
+        createModal.style.display = "flex";
+      }
+
+      document
+        .getElementById("createForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const currentUser = JSON.parse(
+            localStorage.getItem("currentUser") || "{}",
+          );
+          const payload = {
+            maPN: document
+              .getElementById("pcMaPN")
+              .value.split(" - ")[0]
+              .trim(),
+            soTienChi: document.getElementById("pcSoTien").value,
+            hinhThucTT: document.getElementById("pcHinhThuc").value,
+            ghiChu: document.getElementById("pcGhiChu").value,
+            maNV:
+              document.getElementById("pcMaNV").value.split(" - ")[0].trim() ||
+              (currentUser && currentUser.MaNV
+                ? currentUser.MaNV.trim()
+                : "NV001"),
+          };
+          try {
+            const res = await fetch("/api/phieu-chi", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+            const data = await res.json();
+            if (data.success) {
+              alert(data.message);
+              closeCreateModal();
+              loadData();
+            } else alert("Lỗi: " + data.message);
+          } catch (err) {
+            alert("Lỗi Server!");
+          }
+        });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        loadData();
+        loadFormLookups().then(() => {
+          // Tự động nhận diện nếu được chuyển hướng từ file nhap-kho.html
+          const urlMapn = new URLSearchParams(window.location.search).get(
+            "mapn",
+          );
+          const mapn = urlMapn ? urlMapn.trim() : null;
+          if (mapn) {
+            openCreateModal();
+            const inputPN = document.getElementById("pcMaPN");
+            if (inputPN._autocompleteData) {
+              const match = inputPN._autocompleteData.find((p) =>
+                p.startsWith(mapn),
+              );
+              inputPN.value = match || mapn;
+            } else inputPN.value = mapn;
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
+<div
+  id="customer-details"
+  style="
+    margin-top: 10px;
+    font-size: 13px;
+    background: #222;
+    padding: 10px;
+    border-radius: 4px;
+    display: none;
+    line-height: 1.8;
+  "
+>
+  <p style="margin: 0">
+    <strong><i class="fas fa-map-marker-alt"></i> Địa chỉ:</strong>
+    <span id="kh-diachi"></span>
+  </p>
+  <p style="margin: 0">
+    <strong><i class="fas fa-tag"></i> Loại Khách Hàng:</strong>
+    <span id="kh-loai"></span>
+  </p>
+</div>

@@ -1,0 +1,26 @@
+/* Standalone print documents do not load the admin theme. */
+html { color-scheme: light; }
+@page { size: A4 portrait; margin: 10mm; }
+@media print {
+  html, body { margin: 0 !important; padding: 0 !important; }
+  html, html body, html body * {
+    color: #000 !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    font-family: "Times New Roman", Times, serif !important;
+  }
+  .no-print, #javiCoffeeLoader, .javi-toast-container { display: none !important; }
+  .print-container { width: 100% !important; min-height: 0 !important; margin: 0 !important; padding: 0 !important; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { border-color: #000 !important; white-space: normal; overflow-wrap: anywhere; }
+  th { overflow-wrap: normal; }
+  thead { display: table-header-group; }
+  /* Print report totals once, after the last row. */
+  tfoot { display: table-row-group; }
+  tr, .header, .document-title, .title-section, .summary, .summary-box, .signatures, .report-signatures {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  img { max-width: 100%; filter: grayscale(1) contrast(1.7); }
+}

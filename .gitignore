@@ -1,2 +1,10 @@
 node_modules/
 .env
+
+# Generated files: no previews, screenshots or logs in the source tree
+output/
+outputs/
+scratch/
+tests/.artifacts/
+Admin/Backend/storage/logs/
+User/Backend/storage/previews/

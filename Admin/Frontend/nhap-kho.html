@@ -1,0 +1,599 @@
+﻿<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Lý Nhập Kho - JAVI COFFEE</title>
+
+    <!-- Nhúng CSS -->
+    <link rel="stylesheet" href="/css/global.css?v=20261021-form-unified" />
+    <link rel="stylesheet" href="/admin/css/sidebar.css?v=20261021-action-fit-2" />
+    <link rel="stylesheet" href="/admin/css/nhap-kho.css" />
+    <link
+      rel="stylesheet"
+      href="/vendor/fontawesome/css/all.min.css"
+    />
+    <script src="/admin/js/auth.js?v=20261021-form-unified"></script>
+    <script src="/admin/js/report-filters.js?v=20261021-action-fit-2"></script>
+      <!-- Google Fonts: 2 font chuẩn xuyên suốt hệ thống (Hỗ trợ 100% tiếng Việt) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+<script src="/admin/js/grid-files.js" defer></script><script src="/admin/js/ui-consistency.js?v=20261021-form-unified" defer></script><link rel="stylesheet" href="/admin/css/admin-design.css">
+<script defer src="/admin/js/admin-design.js"></script>
+</head>
+  <body>
+    <!-- 1. SIDEBAR: auth.js?v=20261021-form-unified tự động render -->
+    <div class="sidebar"></div>
+
+    <!-- 2. MAIN CONTENT -->
+    <div class="main-content">
+      <div class="page-header">
+        <h2><i class="fas fa-boxes"></i> QUẢN LÝ NHẬP KHO CÀ PHÊ</h2>
+        <button class="btn" onclick="openModal()">
+          <i class="fas fa-plus"></i> Tạo Phiếu Nhập Mới
+        </button>
+      </div>
+
+      <!-- KHU VỰC 1: Thẻ thống kê (Stat Cards) -->
+      <div class="stat-cards">
+        <div class="card">
+          <div class="card-title">
+            Tổng chi phí nhập hàng <i class="fas fa-file-invoice-dollar"></i>
+          </div>
+          <div class="card-value">180,200,000 đ</div>
+        </div>
+        <div class="card">
+          <div class="card-title">
+            Tổng phiếu nhập <i class="fas fa-receipt"></i>
+          </div>
+          <div class="card-value">20</div>
+        </div>
+        <div class="card">
+          <div class="card-title">
+            Còn nợ nhà cung cấp <i class="fas fa-hand-holding-usd"></i>
+          </div>
+          <div class="card-value danger">44,500,000 đ</div>
+        </div>
+      </div>
+
+      <form class="report-filters" data-report-table="receiptTable" data-date-column="2" data-value-column="7" onsubmit="event.preventDefault(); applyRowReportFilters(this, true)">
+        <label>Từ ngày<input type="date" id="importFrom" aria-describedby="importFromError" /><small id="importFromError" class="date-range-error" aria-live="polite" hidden></small></label>
+        <label>Đến ngày<input type="date" id="importTo" /></label>
+        <div class="filter-field"><span>Trạng thái</span><details class="multi-filter" id="importValues" data-default-values="Đã thanh toán|Thanh toán một phần|Chưa thanh toán"><summary>Tất cả</summary><div class="multi-options"></div></details></div>
+        <button class="btn" type="submit"><i class="fas fa-filter"></i> Xem</button>
+      </form>
+
+      <!-- KHU VỰC 2: Bảng Dữ Liệu -->
+      <div class="table-responsive">
+        <table id="receiptTable">
+          <thead>
+            <tr>
+<th>Mã PN</th>
+              <th>Số HĐ NCC</th>
+              <th>Ngày Nhập</th>
+              <th>Mã NCC</th>
+              <th>Tổng Tiền</th>
+              <th>Đã Trả</th>
+              <th>Còn Nợ</th>
+              <th>Trạng Thái</th>
+              <th style="display:none;">Mã NV</th>
+              <th style="text-align: right;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="10" style="text-align: center">
+                Đang tải dữ liệu...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    
+      
+    </div>
+
+    <!-- 3. KHUNG MODAL TẠO PHIẾU NHẬP MỚI -->
+    <div class="modal-overlay" id="receiptModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-plus-circle"></i> Tạo Phiếu Nhập Kho</h3>
+          <button class="close-btn" onclick="closeModal()">&times;</button>
+        </div>
+        <form id="receiptForm">
+          <!-- Thông tin phiếu -->
+          <div class="section-title">Thông tin chung</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nhà Cung Cấp <span style="color: red">*</span></label>
+              <div style="display: flex; gap: 5px">
+                <input
+                  type="text"
+                  placeholder="Tìm hoặc chọn NCC..."
+                  required
+                  onchange="validateNCC()"
+                />
+                <button
+                  type="button"
+                  class="btn"
+                  style="padding: 0 15px; min-width: unset"
+                  onclick="window.location.href = 'nha-cung-cap.html'"
+                  title="Thêm/Quản lý NCC"
+                >
+                  <i class="fas fa-building"></i>
+                </button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Ngày Nhập</label>
+              <input type="date" id="ngayNhap" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Số Hóa Đơn NCC (Đối chiếu)</label>
+              <input type="text" id="soHoaDonNCC" placeholder="VD: HDNCC-999" />
+            </div>
+          </div>
+
+          <!-- Chi tiết sản phẩm nhập -->
+          <div class="section-title">Chi tiết sản phẩm</div>
+          <div class="form-row">
+            <div class="form-group" style="flex: 2">
+              <label>Sản Phẩm <span style="color: red">*</span></label>
+              <input
+                type="text"
+                id="spInput"
+                placeholder="Tìm hoặc chọn Sản phẩm..."
+                required
+                onchange="validateSP()"
+              />
+            </div>
+            <div class="form-group">
+              <label>Số Lượng <span style="color: red">*</span></label>
+              <input
+                type="number"
+                step="any"
+                id="soLuong"
+                min="1"
+                placeholder="0"
+                oninput="calculateTotal()"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label>Đơn Giá Nhập <span style="color: red">*</span></label>
+              <input
+                type="number"
+                step="any"
+                id="giaNhap"
+                min="0"
+                placeholder="0"
+                oninput="calculateTotal()"
+                required
+              />
+            </div>
+          </div>
+
+          <!-- Nút thêm tạm vào danh sách -->
+          <button
+            type="button"
+            class="btn"
+            style="
+              background-color: #333;
+              color: #fff;
+              width: 100%;
+              margin-bottom: 20px;
+              font-size: 14px;
+            "
+          >
+            <i class="fas fa-arrow-down"></i> Thêm vào danh sách nhập
+          </button>
+
+          <!-- Tính toán thanh toán -->
+          <div class="section-title">Thanh toán</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Tổng Tiền Phiếu Nhập</label>
+              <input
+                type="text"
+                id="tongTien"
+                value="0"
+                readonly
+                style="
+                  background-color: #222;
+                  font-weight: bold;
+                  color: var(--color-primary);
+                "
+              />
+            </div>
+            <div class="form-group">
+              <label>Số Tiền Thanh Toán Trước</label>
+              <input
+                type="number"
+                step="any"
+                id="tienThanhToan"
+                min="0"
+                placeholder="Nhập số tiền đã trả..."
+              />
+            </div>
+          </div>
+
+          <div
+            style="
+              display: flex;
+              justify-content: flex-end;
+              gap: 10px;
+              margin-top: 20px;
+            "
+          >
+            <button
+              type="button"
+              class="btn"
+              style="background-color: #333; color: #fff"
+              onclick="closeModal()"
+            >
+              Hủy
+            </button>
+            <button type="submit" class="btn">Lưu Phiếu Nhập</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- 3.5. KHUNG MODAL CHI TIẾT PHIẾU NHẬP -->
+    <div class="modal-overlay" id="detailModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-info-circle"></i> Chi Tiết Phiếu Nhập Kho</h3>
+          <button class="close-btn" onclick="closeDetailModal()">
+            &times;
+          </button>
+        </div>
+        <div class="detail-body">
+          <div class="section-title">Thông tin chung</div>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 15px;
+              margin-bottom: 20px;
+              font-size: 14px;
+            "
+          >
+            <div>
+              <strong>Mã Phiếu Nhập:</strong> <span id="dt-maPN"></span>
+            </div>
+            <div><strong>Số HĐ NCC:</strong> <span id="dt-soHD"></span></div>
+            <div>
+              <strong>Ngày Nhập:</strong> <span id="dt-ngayNhap"></span>
+            </div>
+            <div>
+              <strong>Nhà Cung Cấp:</strong> <span id="dt-maNCC"></span>
+            </div>
+            <div>
+              <strong>Trạng Thái:</strong> <span id="dt-trangThai"></span>
+            </div>
+            <div><strong>Người Lập:</strong> <span id="dt-maNV"></span></div>
+          </div>
+
+          <div class="section-title">Danh sách sản phẩm</div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Mã SP</th>
+                  <th>Tên Sản Phẩm (Minh họa)</th>
+                  <th>Số Lượng</th>
+                  <th>Đơn Giá</th>
+                  <th>Thành Tiền</th>
+                </tr>
+              </thead>
+              <tbody id="dt-chiTietBody">
+                <!-- Dữ liệu chi tiết sẽ được JS đổ vào đây -->
+              </tbody>
+            </table>
+          </div>
+
+          <div style="text-align: right; margin-top: 20px; font-size: 16px">
+            <strong>Tổng Tiền Nhập: </strong>
+            <span
+              id="dt-tongTien"
+              style="
+                color: var(--color-primary);
+                font-size: 20px;
+                font-weight: bold;
+              "
+            ></span>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; margin-top: 20px">
+          <button
+            type="button"
+            class="btn"
+            onclick="printImport()"
+            style="background-color: #17a2b8; color: white; margin-right: 10px"
+          >
+            <i class="fas fa-print"></i> In Phiếu Nhập
+          </button>
+          <button type="button" class="btn" onclick="closeDetailModal()">
+            Đóng
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. LOGIC JAVASCRIPT -->
+    <script>
+      let nhapKhoList = [];
+      let nccListArray = [];
+      let spListArray = [];
+
+      async function loadDataForForm() {
+        try {
+          const resNCC = await fetch("/api/nha-cung-cap");
+          const dataNCC = await resNCC.json();
+          if (dataNCC.success) {
+            nccListArray = dataNCC.data;
+            const stringNCC = nccListArray.map(
+              (ncc) => `${ncc.MaNCC} - ${ncc.TenNCC}`,
+            );
+            setupAutocomplete("nccInput", stringNCC);
+          }
+
+          const resSP = await fetch("/api/san-pham");
+          const dataSP = await resSP.json();
+          if (dataSP.success) {
+            spListArray = dataSP.data;
+            const stringSP = spListArray.map(
+              (sp) => `${sp.MaSP} - ${sp.TenSP}`,
+            );
+            setupAutocomplete("spInput", stringSP);
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      // Đóng mở Modal
+      const modal = document.getElementById("receiptModal");
+      function openModal() {
+        document.getElementById("receiptForm").reset();
+        document.getElementById("ngayNhap").valueAsDate = new Date(); // Mặc định ngày hôm nay
+        calculateTotal();
+        modal.style.display = "flex";
+      }
+      function closeModal() {
+        modal.style.display = "none";
+      }
+
+      // Đóng mở Modal Xem chi tiết Phiếu Nhập
+      const detailModal = document.getElementById("detailModal");
+      function closeDetailModal() {
+        detailModal.style.display = "none";
+      }
+
+      async function viewDetail(maPN) {
+        const item = nhapKhoList.find((i) => i.MaPN.trim() === maPN);
+        if (!item) return;
+
+        document.getElementById("dt-maPN").textContent = item.MaPN;
+        document.getElementById("dt-soHD").textContent = item.SoHoaDonNCC || "";
+        document.getElementById("dt-ngayNhap").textContent = new Date(
+          item.NgayNhap,
+        ).toLocaleDateString("vi-VN");
+        document.getElementById("dt-maNCC").textContent = item.MaNCC;
+        document.getElementById("dt-maNV").textContent = item.MaNV;
+        document.getElementById("dt-tongTien").textContent =
+          new Intl.NumberFormat("vi-VN").format(item.TongTienNhap) + " đ";
+
+        const ttSpan = document.getElementById("dt-trangThai");
+        ttSpan.textContent = item.TrangThaiThanhToan;
+        ttSpan.className = "";
+        if (item.TrangThaiThanhToan.includes("Chưa"))
+          ttSpan.classList.add("status-danger");
+        else if (item.TrangThaiThanhToan.includes("một phần"))
+          ttSpan.classList.add("status-warning");
+        else ttSpan.classList.add("status-success");
+
+        try {
+          const res = await fetch(`/api/nhap-kho/${maPN}/chi-tiet`);
+          const data = await res.json();
+          const tbody = document.getElementById("dt-chiTietBody");
+          let html = "";
+          if (data.success && data.data.items) {
+            data.data.items.forEach((d) => {
+              html += `<tr>
+<td>${d.MaSP}</td><td>${d.TenSP}</td><td>${d.SoLuong}</td>
+                           <td>${new Intl.NumberFormat("vi-VN").format(d.GiaNhap)} đ</td>
+                           <td style="color: var(--color-primary); font-weight: bold;">${new Intl.NumberFormat("vi-VN").format(d.ThanhTien)} đ</td></tr>`;
+            });
+          }
+          tbody.innerHTML =
+            html ||
+            '<tr><td colspan="5" style="text-align:center;">Không có dữ liệu</td></tr>';
+          detailModal.style.display = "flex";
+        } catch (err) {
+          alert("Lỗi tải chi tiết phiếu nhập!");
+        }
+      }
+
+      function printImport() {
+        const maPN = document.getElementById("dt-maPN").textContent;
+        window.open(
+          `in-chung-tu.html?type=PN&id=${encodeURIComponent(maPN.trim())}`,
+          "_blank",
+        );
+      }
+
+      // Xử lý tự động nhân tiền
+      function calculateTotal() {
+        const soLuong =
+          parseFloat(document.getElementById("soLuong").value) || 0;
+        const giaNhap =
+          parseFloat(document.getElementById("giaNhap").value) || 0;
+        const tongTien = soLuong * giaNhap;
+
+        // Hiển thị định dạng tiền tệ VNĐ (chỉ hiển thị, không lưu trực tiếp text này vào DB)
+        document.getElementById("tongTien").value = new Intl.NumberFormat(
+          "vi-VN",
+          { style: "currency", currency: "VND" },
+        ).format(tongTien);
+      }
+
+      function validateNCC() {
+        const inputEl = document.getElementById("nccInput");
+        const val = inputEl.value.trim();
+        if (!val) return;
+
+        const exactMatch = nccListArray.find(
+          (n) => `${n.MaNCC} - ${n.TenNCC}` === val,
+        );
+        if (exactMatch) return;
+
+        const matches = nccListArray.filter(
+          (n) =>
+            n.TenNCC.toLowerCase().includes(val.toLowerCase()) ||
+            n.MaNCC.toLowerCase().includes(val.toLowerCase()),
+        );
+
+        if (matches.length > 0) {
+          inputEl.value = `${matches[0].MaNCC} - ${matches[0].TenNCC}`;
+        } else {
+          alert(
+            "Không tìm thấy Nhà cung cấp hợp lệ! Vui lòng chọn từ danh sách.",
+          );
+          inputEl.value = "";
+        }
+      }
+
+      function validateSP() {
+        const inputEl = document.getElementById("spInput");
+        const val = inputEl.value.trim();
+        if (!val) return;
+
+        const exactMatch = spListArray.find(
+          (s) => `${s.MaSP} - ${s.TenSP}` === val,
+        );
+        if (exactMatch) return;
+
+        const matches = spListArray.filter(
+          (s) =>
+            s.TenSP.toLowerCase().includes(val.toLowerCase()) ||
+            s.MaSP.toLowerCase().includes(val.toLowerCase()),
+        );
+
+        if (matches.length > 0) {
+          inputEl.value = `${matches[0].MaSP} - ${matches[0].TenSP}`;
+        } else {
+          alert("Không tìm thấy Sản phẩm hợp lệ! Vui lòng chọn từ danh sách.");
+          inputEl.value = "";
+        }
+      }
+
+      // Giả lập gửi form
+      document
+        .getElementById("receiptForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const nccVal = document
+            .getElementById("nccInput")
+            .value.split(" - ")[0];
+          const spVal = document
+            .getElementById("spInput")
+            .value.split(" - ")[0];
+          const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+          if (!nccVal || !spVal)
+            return alert("Vui lòng chọn NCC và Sản phẩm hợp lệ!");
+
+          const payload = {
+            maNV: currentUser ? currentUser.MaNV : "NV001",
+            maNCC: nccVal,
+            soHoaDonNCC: document.getElementById("soHoaDonNCC").value,
+            ghiChu:
+              "Thanh toán đợt 1: " +
+              (document.getElementById("tienThanhToan").value || "0"),
+            maSP: spVal,
+            soLuong: document.getElementById("soLuong").value,
+            giaNhap: document.getElementById("giaNhap").value,
+          };
+
+          try {
+            const res = await fetch("/api/nhap-kho", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+            const data = await res.json();
+            if (data.success) {
+              alert(data.message);
+              closeModal();
+              loadDanhSachNhapKho();
+            } else alert("Lỗi: " + data.message);
+          } catch (err) {
+            alert("Lỗi Server!");
+          }
+        });
+
+      function filterNhapKho() {
+        applyRowReportFilters(document.querySelector('[data-report-table="receiptTable"]'), true);
+      }
+
+      // Lấy dữ liệu API
+      async function loadDanhSachNhapKho() {
+        try {
+          const response = await fetch("/api/nhap-kho");
+          const data = await response.json();
+          if (data.success) {
+            nhapKhoList = data.data;
+            const tbody = document.querySelector("#receiptTable tbody");
+            let html = "";
+            data.data.forEach((item) => {
+              const date = new Date(item.NgayNhap).toLocaleDateString("vi-VN");
+              let statusClass = "";
+              if (item.TrangThaiThanhToan === "Đã thanh toán")
+                statusClass = "status-success";
+              else if (item.TrangThaiThanhToan === "Thanh toán một phần")
+                statusClass = "status-warning";
+              else statusClass = "status-danger";
+              html += `
+                <tr>
+                  
+<td>${item.MaPN}</td>
+                  <td>${item.SoHoaDonNCC || ""}</td>
+                  <td>${date}</td>
+                  <td>${item.MaNCC}</td>
+                  <td>${new Intl.NumberFormat("vi-VN").format(item.TongTienNhap)} đ</td>
+                  <td>${new Intl.NumberFormat("vi-VN").format(item.SoTienDaTraNCC)} đ</td>
+                  <td style="color: #dc3545; font-weight: bold;">${new Intl.NumberFormat("vi-VN").format(item.TongTienNhap - item.SoTienDaTraNCC)} đ</td>
+                  <td class="${statusClass}">${item.TrangThaiThanhToan}</td>
+                  <td style="display:none;">${item.MaNV}</td>
+                  <td style="text-align: right;">
+                    <button class="action-btn" onclick="viewDetail('${item.MaPN.trim()}')"><i class="fas fa-eye"></i></button>
+                    ${item.TrangThaiThanhToan !== "Đã thanh toán" ? `<button class="action-btn debt-collect debt-pay" title="Trả nợ" aria-label="Trả nợ" onclick="window.location.href='phieu-chi.html?mapn=${item.MaPN.trim()}'"><i class="fas fa-money-bill-transfer" aria-hidden="true"></i></button>` : ""}
+                  </td>
+                </tr>
+              `;
+            });
+            tbody.innerHTML =
+              html ||
+              '<tr><td colspan="10" style="text-align:center;">Chưa có dữ liệu</td></tr>';
+          }
+        } catch (error) {
+          console.error("API chưa được thiết lập trên server:", error);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        loadDanhSachNhapKho();
+        loadDataForForm();
+      });
+    </script>
+  </body>
+</html>

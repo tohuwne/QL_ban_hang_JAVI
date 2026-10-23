@@ -1,0 +1,230 @@
+﻿<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nhà Cung Cấp - JAVI COFFEE</title>
+    <link rel="stylesheet" href="/css/global.css?v=20261021-form-unified" />
+    <link rel="stylesheet" href="/admin/css/sidebar.css?v=20261021-action-fit-2" />
+    <link rel="stylesheet" href="/admin/css/san-pham.css" />
+    <link
+      rel="stylesheet"
+      href="/vendor/fontawesome/css/all.min.css"
+    />
+    <script src="/admin/js/auth.js?v=20261021-form-unified"></script>
+    <script src="/admin/js/report-filters.js?v=20261021-action-fit-2"></script>
+      <!-- Google Fonts: 2 font chuẩn xuyên suốt hệ thống (Hỗ trợ 100% tiếng Việt) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+<script src="/admin/js/grid-files.js" defer></script><script src="/admin/js/ui-consistency.js?v=20261021-form-unified" defer></script><link rel="stylesheet" href="/admin/css/admin-design.css">
+<script defer src="/admin/js/admin-design.js"></script>
+</head>
+  <body>
+    <div class="sidebar"></div>
+
+    <div class="main-content">
+      <div class="page-header">
+        <h2><i class="fas fa-building"></i> QUẢN LÝ NHÀ CUNG CẤP</h2>
+        <button class="btn" onclick="openModal()">
+          <i class="fas fa-plus"></i> Thêm Nhà Cung Cấp
+        </button>
+      </div>
+
+
+
+      <div class="table-responsive">
+        <table id="dataTable">
+          <thead>
+            <tr>
+<th>Mã NCC</th>
+              <th>Tên Nhà Cung Cấp</th>
+              <th>Số Điện Thoại</th>
+              <th>Email</th>
+              <th>Địa Chỉ</th>
+              <th style="text-align: right;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              
+<td>NCC01</td>
+              <td>Nông trại Cà phê Javi Đà Lạt</td>
+              <td>02633111222</td>
+              <td>dalat@javi.com</td>
+              <td>Xuân Thọ, TP. Đà Lạt</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    
+      
+    </div>
+
+    <!-- KHUNG MODAL -->
+    <div class="modal-overlay" id="addModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-plus-circle"></i> Thêm Nhà Cung Cấp</h3>
+          <button class="close-btn" onclick="closeModal()">&times;</button>
+        </div>
+        <form id="addForm">
+          <div class="section-title">Thông tin nhà cung cấp</div>
+          <div class="form-group">
+            <label>Tên Nhà Cung Cấp <span style="color: red">*</span></label>
+            <input type="text" id="tenNCC" required />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Số Điện Thoại <span style="color: red">*</span></label>
+              <input type="text" id="soDT" required />
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" id="email" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Địa Chỉ</label>
+            <input type="text" id="diaChi" />
+          </div>
+          <div class="form-group">
+            <label>Ghi Chú</label>
+            <textarea id="ghiChu" rows="2"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn"
+              style="background-color: #333; color: #fff"
+              onclick="closeModal()"
+            >
+              Hủy
+            </button>
+            <button type="submit" class="btn">Lưu Nhà Cung Cấp</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      let listData = [];
+      let editId = null;
+
+      const modal = document.getElementById("addModal");
+      function openModal() {
+        document.getElementById("addForm").reset();
+        editId = null;
+        document.querySelector(".modal-header h3").innerHTML =
+          '<i class="fas fa-plus-circle"></i> Thêm Nhà Cung Cấp';
+        modal.style.display = "flex";
+      }
+      function closeModal() {
+        modal.style.display = "none";
+      }
+
+      function editNCC(id) {
+        const item = listData.find((x) => x.MaNCC === id);
+        if (!item) return;
+        editId = id;
+        document.getElementById("tenNCC").value = item.TenNCC;
+        document.getElementById("soDT").value = item.SoDTNCC;
+        document.getElementById("email").value = item.EmailNCC;
+        document.getElementById("diaChi").value = item.DiaChiNCC;
+        document.getElementById("ghiChu").value = item.GhiChu;
+        document.querySelector(".modal-header h3").innerHTML =
+          '<i class="fas fa-edit"></i> Cập Nhật Nhà Cung Cấp';
+        modal.style.display = "flex";
+      }
+
+      async function deleteNCC(id) {
+        const confirmed = await javiConfirm("Bạn có chắc muốn xóa Nhà Cung Cấp " + id + " ?");
+        if (!confirmed) return;
+        try {
+          const res = await fetch("/api/nha-cung-cap/" + id, {
+            method: "DELETE",
+          });
+          const data = await res.json();
+          if (data.success) {
+            alert(data.message);
+            loadData();
+          } else alert("Lỗi: " + data.message);
+        } catch (e) {
+          alert("Lỗi kết nối server");
+        }
+      }
+
+      document
+        .getElementById("addForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const payload = {
+            tenNCC: document.getElementById("tenNCC").value,
+            soDT: document.getElementById("soDT").value,
+            email: document.getElementById("email").value,
+            diaChi: document.getElementById("diaChi").value,
+            ghiChu: document.getElementById("ghiChu").value,
+          };
+          try {
+            const url = editId
+              ? "/api/nha-cung-cap/" + editId
+              : "/api/nha-cung-cap";
+            const method = editId ? "PUT" : "POST";
+            const res = await fetch(url, {
+              method: method,
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+            const data = await res.json();
+            if (data.success) {
+              alert(data.message);
+              closeModal();
+              loadData();
+            } else alert("Lỗi: " + data.message);
+          } catch (err) {
+            alert("Lỗi Server!");
+          }
+        });
+
+
+
+      async function loadData() {
+        try {
+          const res = await fetch("/api/nha-cung-cap");
+          const data = await res.json();
+          if (data.success) {
+            listData = data.data;
+            const tbody = document.querySelector("#dataTable tbody");
+            let html = "";
+            data.data.forEach((item) => {
+              html += `
+                <tr data-row-edit="editNCC" data-edit-id="${encodeURIComponent(item.MaNCC)}">
+                  
+<td>${item.MaNCC}</td>
+                  <td>${item.TenNCC}</td>
+                  <td>${item.SoDTNCC || ""}</td>
+                  <td>${item.EmailNCC || ""}</td>
+                  <td>${item.DiaChiNCC || ""}</td>
+                  <td>
+                    <button class="action-btn btn-delete" onclick="deleteNCC('${item.MaNCC}')"><i class="fas fa-trash"></i></button>
+                  </td>
+                </tr>
+              `;
+            });
+            tbody.innerHTML =
+              html ||
+              '<tr><td colspan="6" style="text-align:center;">Chưa có dữ liệu</td></tr>';
+          }
+        } catch (err) {
+          console.error("Lỗi:", err);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", loadData);
+    </script>
+  </body>
+</html>

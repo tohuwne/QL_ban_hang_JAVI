@@ -1,0 +1,247 @@
+/* Final presentation layer for every back-office module. Business layout and permissions stay in their existing modules. */
+body.has-app-sidebar,body.import-page {
+ --app-accent:#dfc282;--color-primary:#dfc282;--color-primary-hover:#eed6a1;--javi-gold:#dfc282;
+ --app-surface:#12171d;--app-surface-raised:#192029;--app-surface-hover:#1b242e;--app-border:#303a46;
+ --color-bg-main:#0a0e13;--color-bg-surface:#12171d;--color-bg-elevated:#192029;
+ --color-border:#303a46;--color-input-bg:#0e141b;--color-input-border:#3b4654;
+ --color-text-main:#edf0f4;--color-text-body:#d5dbe3;--color-text-muted:#a5afbc;
+ --font-body:'Be Vietnam Pro','Segoe UI',sans-serif;--font-heading:var(--font-body);--font-main:var(--font-body);
+ --ui-control:40px;--ui-button:38px;--ui-radius:9px;--ui-drawer:720px;
+ background:#0a0e13!important;color:#edf0f4!important;font-size:13px;font-family:var(--font-body)!important;
+}
+body.has-app-sidebar .main-content {background:#0a0e13!important;padding:24px 28px!important;gap:0}
+body.has-app-sidebar .page-header {min-height:48px;gap:12px!important;margin-bottom:20px!important}
+body.has-app-sidebar .page-header h2,body.has-app-sidebar .import-heading h1 {font-size:21px!important;line-height:1.45!important;font-weight:650!important;letter-spacing:-.035em!important;color:#edf0f4!important}
+body.has-app-sidebar .page-header h2>i {font-size:18px;color:var(--app-accent)!important;padding:10px;border:1px solid #dfc28230;border-radius:11px;background:#dfc2820b}
+body.has-app-sidebar .user-info {height:40px;border-radius:10px;background:#12171d;border-color:#303a46}
+body.has-app-sidebar .user-avatar {background:#dfc282;color:#17130b;box-shadow:none}
+body.has-app-sidebar .sidebar {background:#0b0f14!important;border-right-color:#26303b!important;box-shadow:none!important;--sidebar-accent:#dfc282}
+body.has-app-sidebar .sidebar-menu li>a.active,body.has-app-sidebar .sidebar-menu li>a:hover {background:#dfc2820b!important;border-color:#dfc28221!important}
+
+/* Two button sizes: 38px primary controls, 30px compact row actions. */
+body.has-app-sidebar .javi-ui-button,body.import-page .javi-ui-button,
+body.has-app-sidebar .btn,body.import-page .btn {
+ --button-bg:linear-gradient(180deg,#ead3a0,#d5b772);--button-ink:#201a0e;--button-line:#e8d09b;
+ display:inline-flex;align-items:center!important;justify-content:center!important;gap:8px!important;
+ height:var(--ui-button)!important;min-height:var(--ui-button)!important;padding:0 15px!important;
+ border:1px solid var(--button-line)!important;border-radius:var(--ui-radius)!important;
+ background:var(--button-bg)!important;color:var(--button-ink)!important;font-family:var(--font-body)!important;
+ font-size:12px!important;font-weight:650!important;line-height:1.35!important;letter-spacing:0!important;
+ text-decoration:none!important;white-space:nowrap!important;box-shadow:inset 0 1px #ffffff21,0 2px 5px #0002!important;
+ transform:none!important;cursor:pointer;transition:background .16s ease,border-color .16s ease,box-shadow .16s ease!important;
+}
+body.has-app-sidebar .javi-ui-button[data-ui-tone=secondary],body.import-page .javi-ui-button[data-ui-tone=secondary],
+body.has-app-sidebar .btn-secondary,body.has-app-sidebar .directory-cancel,body.has-app-sidebar .import-secondary {
+ --button-bg:#1a222c;--button-ink:#dce2eb;--button-line:#455160;
+}
+body.has-app-sidebar .javi-ui-button[data-ui-tone=danger] {--button-bg:#ce72700c;--button-ink:#f0a09b;--button-line:#a35d5b70}
+body.has-app-sidebar .javi-ui-button[data-ui-tone=success] {--button-bg:#78b9a10d;--button-ink:#9cd4bf;--button-line:#589c8166}
+body.has-app-sidebar .javi-ui-button[data-ui-tone=accent] {--button-bg:#dfc2820c;--button-ink:#e8d09b;--button-line:#dfc28255}
+body.has-app-sidebar :is(.javi-ui-button,.btn):hover:not(:disabled) {filter:brightness(1.12);border-color:#e8d09b!important;box-shadow:0 0 0 3px #dfc2820a!important;transform:none!important}
+body.has-app-sidebar :is(.javi-ui-button,.btn):active:not(:disabled) {filter:brightness(.97)}
+body.has-app-sidebar :is(.javi-ui-button,.btn):disabled,body.import-page :is(.javi-ui-button,.btn):disabled {opacity:.42!important;cursor:not-allowed!important;filter:none;box-shadow:none!important}
+body.has-app-sidebar :is(button,a,input,select,textarea,summary):focus-visible {outline:2px solid #dfc282!important;outline-offset:3px!important}
+body.has-app-sidebar :is(.table-responsive,.import-preview-wrap) :is(.javi-ui-button,.btn),
+body.has-app-sidebar .javi-ui-button[data-ui-size=compact] {height:30px!important;min-height:30px!important;padding:0 10px!important;border-radius:7px!important;font-size:11px!important;gap:6px!important;box-shadow:none!important}
+body.has-app-sidebar .javi-ui-button[data-ui-icon=true],body.has-app-sidebar :is(.debt-collect,.debt-pay) {width:30px!important;min-width:30px!important;height:30px!important;min-height:30px!important;padding:0!important;gap:0!important}
+body.has-app-sidebar .javi-ui-button i {color:inherit!important;font-size:13px!important}
+
+/* Shared fields and search/filter density. Column filters remain compact. */
+body.has-app-sidebar :is(.main-content,.modal-overlay,dialog) :is(input,select,textarea):not([type=checkbox]):not([type=radio]):not([type=hidden]):not([type=file]),
+body.import-page :is(input,select,textarea):not([type=checkbox]):not([type=radio]):not([type=hidden]):not([type=file]) {
+ font-family:var(--font-body)!important;font-size:13px!important;font-weight:400!important;line-height:1.5!important;
+ border:1px solid #3b4654!important;border-radius:8px!important;background:#0e141b!important;color:#edf0f4!important;
+ min-width:0;min-height:var(--ui-control)!important;height:var(--ui-control)!important;padding:9px 12px!important;box-shadow:inset 0 1px 3px #0002!important;color-scheme:dark;
+}
+body.has-app-sidebar :is(.main-content,.modal-overlay,dialog) textarea {height:auto!important;min-height:104px!important;resize:vertical}
+body.has-app-sidebar :is(input,textarea)::placeholder {color:#7f8b9b!important;font-size:12px}
+body.has-app-sidebar :is(input,select,textarea):disabled {opacity:.6}
+body.has-app-sidebar :is(input[type=checkbox],input[type=radio]) {accent-color:#dfc282}
+body.has-app-sidebar :is(.form-group>label,.form-field>label,.web-form-grid>label,.field-label) {font-size:12px!important;font-weight:550!important;line-height:1.6;color:#bbc4d0!important;letter-spacing:0!important}
+body.has-app-sidebar :is(.form-row,.web-form-grid) {gap:16px!important}
+body.has-app-sidebar .form-group {margin-bottom:18px!important;min-width:0}
+body.has-app-sidebar :is(.filter-bar,.report-filters,.directory-toolbar) {gap:12px!important;border-color:#303a46!important;border-radius:11px!important;background:#12171d!important;padding:14px 16px!important;margin-bottom:16px!important}
+body.has-app-sidebar .report-filters {padding-bottom:28px!important}
+body.has-app-sidebar .report-filters :is(input,select) {height:38px!important;min-height:38px!important}
+body.has-app-sidebar .search-box input {padding-left:36px!important}
+body.has-app-sidebar :is(.filter-btn,.status-filter-tab,.web-tabs button) {height:36px!important;min-height:36px!important;padding:0 13px!important;border-radius:8px!important;font-family:var(--font-body)!important;font-size:12px!important;font-weight:500!important;border:1px solid #303a46!important;background:#12171d!important;color:#aeb9c8!important;box-shadow:none!important}
+body.has-app-sidebar :is(.filter-btn.active,.status-filter-tab[aria-pressed=true],.web-tabs button[aria-selected=true]) {color:#ead3a0!important;border-color:#dfc28266!important;background:#dfc28213!important}
+
+/* Uniform grid surface; preserve measured column widths and sticky positioning. */
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive {border:1px solid #303a46!important;border-radius:12px!important;background:#12171d!important;box-shadow:none!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table {font-family:var(--font-body)!important;font-size:12px!important;color:#d9e0e9!important;border-collapse:separate!important;border-spacing:0!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th {background:#1a222c!important;color:#aebaca!important;border-bottom:1px solid #3b4654!important;font-size:11px!important;font-weight:600!important;letter-spacing:.025em!important;text-transform:none!important;padding:12px 14px!important;vertical-align:top!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table tbody td {height:48px!important;padding:10px 14px!important;font-size:12px!important;line-height:1.6!important;border-bottom:1px solid #27313b!important;background:#12171d!important;color:#d9e0e9}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table tbody tr:nth-child(even) td {background:#141b23!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table tbody tr:hover td {background:#1b242e!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table tbody tr:last-child td {border-bottom:0!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table :is(th,td).javi-action-column {box-shadow:none!important;filter:none!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive thead :is(.col-filter-input,.col-multi-filter summary) {height:30px!important;min-height:30px!important;margin-top:7px!important;padding:4px 8px 4px 25px!important;border:1px solid #3a4655!important;border-radius:6px!important;background:#111922!important;font-size:11px!important}
+body.has-app-sidebar .pagination-container {color:#9ca8b8!important}
+body.has-app-sidebar .pagination-buttons button {border-color:#303a46!important;background:#12171d!important;color:#b7c1cf!important;box-shadow:none!important}
+body.has-app-sidebar .pagination-buttons button.active {background:#dfc2821c!important;border-color:#dfc28266!important;color:#ead3a0!important}
+
+/* Consistent right-hand editor; wider documents share one larger shell. */
+body.has-app-sidebar .modal-overlay:not(#javiAlertModal):not(#javiConfirmModal):not(#profileModal)>.modal-content.javi-fixed-modal {
+ width:min(var(--ui-drawer),100%)!important;max-width:100%!important;border-left:1px solid #46505d!important;border-radius:16px 0 0 16px!important;background:#12171d!important;
+}
+body.has-app-sidebar .modal-overlay:not(#javiAlertModal):not(#javiConfirmModal):not(#profileModal)>.modal-content.javi-fixed-modal:is(:has(table),.document-detail) {width:min(1020px,100%)!important}
+body.has-app-sidebar .modal-overlay>.modal-content.javi-fixed-modal>.modal-header {min-height:64px!important;padding:16px 24px!important;border-bottom:1px solid #303a46!important;background:linear-gradient(110deg,#dfc2820c,transparent 65%),#151c24!important}
+body.has-app-sidebar .modal-header h3 {font-size:17px!important;font-weight:600!important;color:#ead3a0!important;letter-spacing:-.02em!important}
+body.has-app-sidebar .modal-overlay>.modal-content.javi-fixed-modal .javi-modal-body {padding:24px!important;background:#12171d!important}
+body.has-app-sidebar .modal-overlay>.modal-content.javi-fixed-modal :is(.javi-modal-footer,.modal-footer) {min-height:70px!important;padding:14px 24px!important;background:#151c24!important;border-top-color:#303a46!important;gap:10px!important}
+body.has-app-sidebar :is(.modal-header .close-btn,.modal-header>.btn-close,.pos-dialog-close) {width:30px!important;height:30px!important;padding:0!important;display:inline-grid!important;place-items:center;background:#ffffff05!important;border:1px solid #ffffff16!important;border-radius:8px!important;color:#b6c0ce!important;font-size:20px!important;line-height:1!important}
+body.has-app-sidebar :is(.section-title,.card-panel-header) {color:#dfc282!important;font-size:12px!important;font-weight:600!important;border-color:#dfc28226!important;letter-spacing:.025em!important}
+body.has-app-sidebar :is(.pos-options-dialog,.pos-coupon-dialog,.pos-coupon-terms,.coupon-description-dialog) {background:#12171d!important;border:1px solid #46505d!important;border-radius:16px!important;color:#edf0f4!important;font-family:var(--font-body)!important}
+body.has-app-sidebar :is(.pos-options-heading,.pos-options-footer,.pos-coupon-heading,.pos-coupon-footer) {background:#151c24!important;border-color:#303a46!important;padding:16px 20px!important}
+body.has-app-sidebar .pos-options-form {background:transparent}
+body.has-app-sidebar .qty-controls input {height:30px!important;min-height:30px!important;padding:3px!important;text-align:center}
+body.has-app-sidebar .pos-item-discount input {height:26px!important;min-height:26px!important;padding:2px 5px!important;font-size:11px!important}
+body.has-app-sidebar .pos-catalog,body.has-app-sidebar .pos-order,body.has-app-sidebar .pos-panel {background:#12171d!important;border-color:#303a46!important;border-radius:12px!important}
+@media(max-width:760px) {
+ body.has-app-sidebar .main-content {padding:16px 14px!important}
+ body.has-app-sidebar .page-header h2 {font-size:18px!important}
+ body.has-app-sidebar .modal-overlay:not(#javiAlertModal):not(#javiConfirmModal):not(#profileModal)>.modal-content.javi-fixed-modal {width:100%!important;border-radius:0!important}
+ body.has-app-sidebar .modal-overlay>.modal-content.javi-fixed-modal :is(.javi-modal-body,.modal-header,.javi-modal-footer) {padding:16px!important}
+ body.has-app-sidebar .form-row {flex-wrap:wrap}
+ body.has-app-sidebar .form-row>.form-group {flex:1 1 100%}
+}
+@media(prefers-reduced-motion:reduce) {body.has-app-sidebar .javi-ui-button {transition:none!important}}
+/* Compact filters: shared specificity above the general 40px form-field rules. */
+body.has-app-sidebar .main-content .report-filters,
+body.has-app-sidebar .main-content .report-filters:has(.date-range-error:not([hidden])) {
+ padding:10px 12px!important;gap:10px!important;margin-bottom:14px!important;align-items:start!important;min-height:0!important;
+}
+body.has-app-sidebar .main-content .report-filters:has(.date-range-error:not([hidden])) {padding-bottom:28px!important}
+body.has-app-sidebar .main-content .report-filters > :is(label,.filter-field) {
+ display:grid!important;grid-template-rows:14px 30px!important;gap:4px!important;
+ flex:0 1 168px!important;width:168px!important;min-width:140px!important;max-width:168px!important;margin:0!important;font-size:11px!important;line-height:14px!important;
+}
+body.has-app-sidebar .main-content .report-filters :is(.filter-date-control,.filter-select-control) {height:30px!important;min-height:30px!important}
+body.has-app-sidebar .main-content .report-filters :is(input:not([type=checkbox]),select,.multi-filter summary) {
+ box-sizing:border-box!important;height:30px!important;min-height:30px!important;max-height:30px!important;width:100%!important;
+ margin:0!important;padding:4px 10px!important;font-size:11px!important;line-height:20px!important;border-radius:6px!important;
+}
+body.has-app-sidebar .main-content .report-filters > .btn {height:30px!important;min-height:30px!important;margin:18px 0 0!important;padding:0 13px!important;font-size:11px!important;align-self:start!important}
+body.has-app-sidebar .main-content .report-filters .filter-clear {width:18px!important;height:18px!important;min-height:18px!important;top:50%!important;transform:translateY(-50%)!important;font-size:14px!important}
+body.has-app-sidebar .main-content .report-filters .filter-select-control select {padding-right:40px!important}
+body.has-app-sidebar .main-content .report-filters .filter-date-control input {padding-right:28px!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th {padding:10px 14px!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-filter-wrapper {height:30px!important;margin:7px 0 0!important;position:relative!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-filter-wrapper :is(input.col-filter-input,select.col-filter-select),
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-multi-filter summary {
+ box-sizing:border-box!important;width:100%!important;height:30px!important;min-height:30px!important;max-height:30px!important;
+ margin:0!important;padding:4px 9px 4px 27px!important;font-size:11px!important;line-height:20px!important;border-radius:6px!important;
+}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-multi-filter {margin-top:7px!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-multi-filter summary {padding-left:9px!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-filter-wrapper .col-filter-icon {
+ left:8px!important;top:50%!important;transform:translateY(-50%)!important;width:13px!important;height:13px!important;margin:0!important;line-height:1!important;
+}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-filter-wrapper:has(input[type=date]) .col-filter-icon {display:none!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-filter-wrapper input.col-filter-input[type=date] {padding-left:8px!important;padding-right:7px!important}
+/* Opaque sticky cells share exactly the header/row surface, without a visible rail. */
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table.stable-table-layout thead th.javi-action-column {background:#1a222c!important;border-left:0!important;box-shadow:none!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table.stable-table-layout tbody tr td.javi-action-column {background:#12171d!important;border-left:0!important;box-shadow:none!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table.stable-table-layout tbody tr:nth-child(even) td.javi-action-column {background:#141b23!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table.stable-table-layout tbody tr:hover td.javi-action-column {background:#1b242e!important}
+body.has-app-sidebar .main-content .table-responsive :is(th,td).javi-action-column::before,
+body.has-app-sidebar .main-content .table-responsive :is(th,td).javi-action-column::after {box-shadow:none!important;background:none!important;border:0!important}
+@media(max-width:600px){body.has-app-sidebar .main-content .report-filters > :is(label,.filter-field){flex:1 1 calc(50% - 10px)!important;width:auto!important;max-width:none!important;min-width:120px!important}}
+body.has-app-sidebar .main-content:not(.overview-shell) .report-filters input:not([type=checkbox]):not([type=radio]):not([type=hidden]):not([type=file]) {
+ box-sizing:border-box!important;height:30px!important;min-height:30px!important;max-height:30px!important;margin:0!important;padding:4px 10px!important;font-size:11px!important;line-height:20px!important;
+}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-filter-wrapper .col-multi-filter {margin-top:0!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-filter-wrapper .filter-date-control {height:30px!important}
+/* Keep the overview shell's vertical rhythm separate from compact directory pages. */
+body.admin-overview.has-app-sidebar .main-content.overview-shell {display:flex!important;flex-direction:column!important;gap:16px!important;padding:20px 24px!important}
+body.admin-overview.has-app-sidebar .overview-shell .page-header.overview-header {margin-bottom:0!important}
+body.admin-overview.has-app-sidebar .overview-shell .overview-metrics {gap:16px!important}
+body.admin-overview.has-app-sidebar .overview-shell .overview-workspace {gap:16px!important}
+body.admin-overview.has-app-sidebar .overview-shell .overview-toolbar select {height:32px!important;min-height:32px!important;padding:4px 9px!important;font-size:12px!important}
+body.has-app-sidebar .status-filter-tab b {display:inline-flex!important;align-items:center!important;justify-content:center!important;width:22px!important;min-width:22px!important;height:22px!important;padding:0!important;border-radius:50%!important;font-size:11px!important;line-height:1!important;font-weight:600!important;font-variant-numeric:tabular-nums;background:#ffffff0b;color:inherit}
+body.has-app-sidebar .status-filter-tab[aria-pressed=true] b {background:#dfc282!important;color:#17130b!important}
+body.has-app-sidebar #couponDirectory .coupon-description-info {display:inline-grid;place-items:center;width:30px;height:30px;padding:0;border:1px solid #dfc28255;border-radius:7px;background:#dfc2820c;color:#e8d09b;font-size:14px;cursor:pointer}
+body.has-app-sidebar #couponDirectory :is(th,td):last-child {text-align:center!important}
+@media(max-height:800px){body.admin-overview.has-app-sidebar .main-content.overview-shell{gap:10px!important;padding:14px 20px!important}body.admin-overview.has-app-sidebar .overview-shell .overview-metrics,body.admin-overview.has-app-sidebar .overview-shell .overview-workspace{gap:10px!important}}
+/* Compact controls across the administration interface. */
+body.has-app-sidebar,body.import-page {--ui-control:32px;--ui-button:32px}
+body.has-app-sidebar :is(.main-content,.modal-overlay,dialog) :is(input,select):not([type=checkbox]):not([type=radio]):not([type=hidden]):not([type=file]),
+body.import-page :is(input,select):not([type=checkbox]):not([type=radio]):not([type=hidden]):not([type=file]) {box-sizing:border-box!important;padding-top:5px!important;padding-bottom:5px!important;font-size:12px!important}
+body.has-app-sidebar .javi-ui-button,body.has-app-sidebar .btn,body.import-page .btn {padding-left:12px!important;padding-right:12px!important;font-size:11px!important}
+body.has-app-sidebar .main-content .pos-action-buttons .btn {height:32px!important;min-height:32px!important;font-size:12px!important}
+body.has-app-sidebar .main-content .pos-item-discount input[type=number] {box-sizing:border-box!important;flex:0 0 60px!important;width:60px!important;min-width:60px!important;height:26px!important;min-height:26px!important;padding:3px 5px!important;text-align:center!important;font-size:12px!important;appearance:textfield;-moz-appearance:textfield}
+body.has-app-sidebar .main-content .pos-item-discount input::-webkit-inner-spin-button,
+body.has-app-sidebar .main-content .pos-item-discount input::-webkit-outer-spin-button {appearance:none;margin:0}
+body.has-app-sidebar .main-content .pos-discount-inputs {grid-template-columns:minmax(0,1fr) 64px!important}
+body.has-app-sidebar .main-content .pos-discount-inputs select#extraDiscountType {width:64px!important;min-width:64px!important;padding:4px 18px 4px 8px!important;text-align:left!important}
+body.has-app-sidebar .main-content .qty-controls :is(input,button) {height:28px!important;min-height:28px!important}
+body.has-app-sidebar .main-content .qty-controls input {width:40px!important;padding:2px!important}
+/* Validation has a permanent line, including while its content is hidden. */
+body.has-app-sidebar :is(.field-error,.date-range-error,#customer-search-message,#posCouponMessage,#commerceMessage,#couponEditorMessage),
+body.import-page #importMessage {display:block!important;box-sizing:border-box;min-height:18px!important;line-height:18px!important;font-size:11px!important;margin-top:4px!important;margin-bottom:4px!important}
+body.has-app-sidebar :is(.field-error,.date-range-error,#customer-search-message,#posCouponMessage,#commerceMessage,#couponEditorMessage):is([hidden],:empty),
+body.import-page #importMessage:is([hidden],:empty) {visibility:hidden!important;pointer-events:none}
+body.has-app-sidebar .main-content .report-filters,
+body.has-app-sidebar .main-content .report-filters:has(.date-range-error:not([hidden])) {padding-bottom:28px!important}
+body.has-app-sidebar .main-content .report-filters .date-range-error {margin:0!important;bottom:4px!important}
+body.has-app-sidebar.pos-page .pos-customer-picker,
+body.has-app-sidebar.pos-page .pos-customer-picker:has(small:not([hidden])) {padding-bottom:26px!important}
+body.has-app-sidebar.pos-page .main-content .pos-item-discount input[type=number]:not([hidden]):not([disabled]) {height:26px!important;min-height:26px!important;width:60px!important;min-width:60px!important;padding:3px 5px!important;font-size:12px!important}
+body.has-app-sidebar.pos-page .main-content .qty-controls input[type=number]:not([hidden]):not([disabled]) {height:28px!important;min-height:28px!important;padding:2px!important}
+body.has-app-sidebar .javi-feedback-slot,body.import-page .javi-feedback-slot {display:block!important;min-height:18px!important;line-height:18px!important;font-size:11px!important;box-sizing:border-box}
+body.has-app-sidebar .javi-feedback-slot:is([hidden],:empty,[style*="display: none"],[style*="display:none"]),
+body.import-page .javi-feedback-slot:is([hidden],:empty,[style*="display: none"],[style*="display:none"]) {visibility:hidden!important;pointer-events:none}
+body.has-app-sidebar.pos-page .main-content input#searchPos,
+body.has-app-sidebar.pos-page .main-content select#categoryPos {height:32px!important;min-height:32px!important;padding:5px 10px!important;font-size:12px!important}
+/* One outline shape for report/grid inputs and dropdowns, without a filled face. */
+body.has-app-sidebar .main-content:not(.overview-shell) .report-filters input:not([type=checkbox]):not([type=radio]):not([type=hidden]):not([type=file]),
+body.has-app-sidebar .main-content:not(.overview-shell) .report-filters select,
+body.has-app-sidebar .main-content:not(.overview-shell) .report-filters .multi-filter summary,
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-filter-wrapper :is(input.col-filter-input,select.col-filter-select),
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-multi-filter summary {
+ border-radius:6px!important;background:transparent!important;box-shadow:none!important;border-color:#3b4654!important;
+}
+body.has-app-sidebar .main-content:not(.overview-shell) .report-filters :is(.filter-date-control,.filter-select-control,.multi-filter),
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th :is(.col-filter-wrapper,.filter-date-control,.col-multi-filter) {background:transparent!important;box-shadow:none!important;border-radius:6px!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .report-filters :is(input,select)[aria-invalid=true] {border-color:#ed8b81!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .report-filters :is(input,select,summary):focus-visible,
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th :is(input.col-filter-input,summary):focus-visible {border-color:#dfc282!important}
+/* Square grid and toolbar containers; field/button shapes are independent. */
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive,
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table,
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table :is(thead,tbody,tr,th,td),
+body.has-app-sidebar .main-content :is(.report-filters,.filter-bar,.directory-toolbar),
+body.has-app-sidebar .main-content .report-filters:has(.date-range-error:not([hidden])),
+body.import-page :is(.import-preview-wrap,.import-preview-wrap table,.import-toolbar) {border-radius:0!important}
+/* Dense status tabs and pagination leave more vertical room for records. */
+body.has-app-sidebar .main-content:not(.overview-shell) .filter-section,
+body.has-app-sidebar .main-content:not(.overview-shell) .status-filter-tabs {gap:7px!important;margin:0 0 9px!important;padding:3px 0 0!important;min-height:0!important}
+body.has-app-sidebar .main-content:not(.overview-shell) :is(.filter-btn,.status-filter-tab) {height:28px!important;min-height:28px!important;padding:0 10px!important;font-size:11px!important;border-radius:5px!important;display:inline-flex!important;align-items:center!important;gap:6px!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .filter-btn .status-badge {position:static!important;top:auto!important;right:auto!important;width:auto!important;min-width:18px!important;height:18px!important;padding:0 4px!important;font-size:10px!important;border:0!important;box-shadow:none!important;flex-shrink:0}
+body.has-app-sidebar .main-content:not(.overview-shell) .status-filter-tab b {width:auto!important;min-width:18px!important;height:18px!important;padding:0 4px!important;font-size:10px!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .pagination-container {height:28px!important;min-height:28px!important;max-height:28px!important;margin:3px 0 0!important;padding:0 2px!important;flex-shrink:0!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .pagination-container .pagination-buttons button {height:22px!important;min-height:22px!important;max-height:22px!important;min-width:22px!important;line-height:20px!important;padding:0 5px!important;font-size:10px!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .pagination-info {font-size:10px!important}
+body.has-app-sidebar .main-content:not(.overview-shell):has(>.table-responsive) {padding-bottom:10px!important}
+/* Slightly tighter column headings and their search controls. */
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th {padding:7px 12px!important;font-size:10px!important;line-height:14px!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-header-box {gap:0!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-header-label {font-size:10px!important;line-height:14px!important;min-height:14px!important;margin:0!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-filter-wrapper {height:26px!important;margin-top:5px!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-filter-wrapper :is(input.col-filter-input,select.col-filter-select),
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-multi-filter summary {height:26px!important;min-height:26px!important;max-height:26px!important;font-size:10px!important;line-height:18px!important;padding-top:3px!important;padding-bottom:3px!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-filter-wrapper .filter-date-control {height:26px!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-filter-input::placeholder {font-size:10px!important}
+/* Keep compact count badges at the top-right of status filter buttons. */
+body.has-app-sidebar .main-content:not(.overview-shell) :is(.filter-btn,.status-filter-tab) {position:relative!important;overflow:visible!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .filter-btn .status-badge,
+body.has-app-sidebar .main-content:not(.overview-shell) .status-filter-tab b {
+ position:absolute!important;top:-6px!important;right:-6px!important;bottom:auto!important;left:auto!important;
+ display:inline-flex!important;align-items:center!important;justify-content:center!important;
+ width:18px!important;min-width:18px!important;height:18px!important;padding:0!important;margin:0!important;
+ border-radius:50%!important;border:1px solid #0a0e13!important;font-size:10px!important;line-height:1!important;
+ box-shadow:none!important;z-index:2!important;pointer-events:none;
+}
+body.has-app-sidebar .main-content:not(.overview-shell) .filter-section,
+body.has-app-sidebar .main-content:not(.overview-shell) .status-filter-tabs {column-gap:12px!important;padding-top:6px!important}

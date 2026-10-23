@@ -1,0 +1,412 @@
+﻿<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quản Trị Hệ Thống - JAVI COFFEE</title>
+  <link rel="stylesheet" href="/css/global.css?v=20261021-form-unified" />
+  <link rel="stylesheet" href="/admin/css/sidebar.css?v=20261021-action-fit-2" />
+  <link rel="stylesheet" href="/admin/css/quan-tri.css" />
+  <link rel="stylesheet" href="/vendor/fontawesome/css/all.min.css" />
+  <script src="/admin/js/auth.js?v=20261021-form-unified"></script>
+    <script src="/admin/js/report-filters.js?v=20261021-action-fit-2"></script>
+      <!-- Google Fonts: 2 font chuẩn xuyên suốt hệ thống (Hỗ trợ 100% tiếng Việt) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+<script src="/admin/js/grid-files.js" defer></script><script src="/admin/js/ui-consistency.js?v=20261021-form-unified" defer></script><link rel="stylesheet" href="/admin/css/admin-design.css">
+<script defer src="/admin/js/admin-design.js"></script>
+</head>
+
+<body class="scrollable-page">
+  <!-- SIDEBAR CONTAINER (Tự động điền dữ liệu bằng auth.js?v=20261021-form-unified) -->
+  <div class="sidebar"></div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+    <div class="page-header">
+      <h2><i class="fas fa-cogs"></i> QUẢN TRỊ HỆ THỐNG</h2>
+    </div>
+
+    <!-- BẢNG ĐIỀU KHIỂN SAO LƯU -->
+    <div class="admin-grid">
+      <!-- 1. Card thông tin cơ sở dữ liệu -->
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h3><i class="fas fa-database admin-card-icon"></i> Cơ Sở Dữ Liệu</h3>
+          <span class="status-badge status-badge-success">Kết nối tốt</span>
+        </div>
+        <ul class="db-info-list">
+          <li>
+            <span>Tên Database:</span>
+            <strong id="dbName">BH_WEB2</strong>
+          </li>
+          <li>
+            <span>Sản Phẩm Kinh Doanh:</span>
+            <strong id="statProducts">-</strong>
+          </li>
+          <li>
+            <span>Khách Hàng Hồ Sơ:</span>
+            <strong id="statCustomers">-</strong>
+          </li>
+          <li>
+            <span>Tổng Đơn Bán Ra:</span>
+            <strong id="statOrders">-</strong>
+          </li>
+          <li>
+            <span>Nhân Sự Vận Hành:</span>
+            <strong id="statEmployees">-</strong>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 2. Card tác vụ sao lưu -->
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h3><i class="fas fa-file-export admin-card-icon"></i> Sao Lưu Hệ Thống</h3>
+        </div>
+        <p style="font-size: 0.9rem; color: var(--color-text-muted); margin-bottom: 20px;">
+          Xuất toàn bộ cấu trúc dữ liệu, tài khoản nhân viên, hàng tồn kho và lịch sử giao dịch thành file sao lưu JSON
+          an toàn.
+        </p>
+        <button id="btnCreateBackup" class="btn"
+          style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px;">
+          <i class="fas fa-cloud-download-alt"></i> Tạo Bản Sao Lưu Mới
+        </button>
+      </div>
+
+      <!-- 3. Card tải lên file sao lưu -->
+      <div class="admin-card">
+        <div class="admin-card-header">
+          <h3><i class="fas fa-file-import admin-card-icon"></i> Tải Lên Bản Backup</h3>
+        </div>
+        <div class="upload-zone" id="uploadZone">
+          <i class="fas fa-cloud-upload-alt"></i>
+          <p><span class="highlight">Chọn file</span> hoặc kéo thả file backup vào đây</p>
+          <p style="font-size: 0.75rem; color: #666;">Định dạng cho phép: .json</p>
+          <input type="file" id="fileInput" accept=".json" />
+        </div>
+      </div>
+    </div>
+
+    <!-- TIẾN TRÌNH KHÔI PHỤC DỮ LIỆU -->
+    <div class="restore-progress-container" id="restoreProgressContainer">
+      <div class="progress-header">
+        <span style="color: var(--color-primary); font-weight: bold;">
+          <i class="fas fa-spinner fa-spin"></i> Đang khôi phục cơ sở dữ liệu...
+        </span>
+        <span id="progressPercentage" style="color: var(--color-primary); font-weight: bold;">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressBarFill"></div>
+      </div>
+      <div class="progress-status-log" id="progressStatusLog">
+        Bắt đầu tiến trình khôi phục...
+      </div>
+    </div>
+
+    <!-- DANH SÁCH BẢN SAO LƯU -->
+    <div class="page-header"
+      style="margin-top: 30px; border-bottom: 1px solid var(--color-border); padding-bottom: 10px;">
+      <h3><i class="fas fa-list-ul"></i> Lịch Sử Bản Sao Lưu</h3>
+    </div>
+
+    <div class="table-responsive" style="margin-top: 15px;">
+      <table id="backupTable">
+        <thead>
+          <tr>
+            <th style="width: 40%">Tên File Sao Lưu</th>
+            <th style="width: 25%">Ngày Tạo</th>
+            <th style="width: 15%">Dung Lượng</th>
+            <th style="width: 20%; text-align: right;">Thao Tác</th>
+          </tr>
+        </thead>
+        <tbody id="backupListBody">
+          <tr>
+            <td colspan="4" style="text-align: center; color: var(--color-text-muted);">Đang tải dữ liệu...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SCRIPT XỬ LÝ TRANG -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      loadStats();
+      loadBackupList();
+
+      // 1. Tạo bản sao lưu mới
+      const btnCreate = document.getElementById("btnCreateBackup");
+      btnCreate.addEventListener("click", async () => {
+        btnCreate.disabled = true;
+        btnCreate.innerHTML = '<span class="spinner-inline"></span> Đang tạo sao lưu...';
+
+        try {
+          const res = await fetch("/api/backup/create", { method: "POST" });
+          const data = await res.json();
+          if (data.success) {
+            await javiAlert("Tạo bản sao lưu thành công!\nFile: " + data.filename);
+            loadBackupList();
+            loadStats();
+          } else {
+            await javiAlert("Lỗi khi tạo sao lưu: " + data.message);
+          }
+        } catch (err) {
+          console.error(err);
+          await javiAlert("Lỗi kết nối máy chủ khi tạo sao lưu!");
+        } finally {
+          btnCreate.disabled = false;
+          btnCreate.innerHTML = '<i class="fas fa-cloud-download-alt"></i> Tạo Bản Sao Lưu Mới';
+        }
+      });
+
+      // 2. Kéo thả file upload
+      const uploadZone = document.getElementById("uploadZone");
+      const fileInput = document.getElementById("fileInput");
+
+      uploadZone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadZone.classList.add("dragover");
+      });
+
+      uploadZone.addEventListener("dragleave", () => {
+        uploadZone.classList.remove("dragover");
+      });
+
+      uploadZone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadZone.classList.remove("dragover");
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          handleFileUpload(files[0]);
+        }
+      });
+
+      fileInput.addEventListener("change", (e) => {
+        const files = e.target.files;
+        if (files.length > 0) {
+          handleFileUpload(files[0]);
+        }
+      });
+    });
+
+    // Hàm tải lên file sao lưu
+    async function handleFileUpload(file) {
+      if (!file.name.endsWith(".json")) {
+        await javiAlert("Chỉ chấp nhận file định dạng .json!");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = async function (e) {
+        try {
+          const content = e.target.result;
+          // Kiểm tra cấu trúc sơ bộ của JSON
+          const parsed = JSON.parse(content);
+          if (!parsed.database || !parsed.tables) {
+            await javiAlert("File JSON không đúng định dạng sao lưu của hệ thống JAVI!");
+            return;
+          }
+
+          const res = await fetch("/api/backup/upload", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ filename: file.name, content: content }),
+          });
+          const data = await res.json();
+          if (data.success) {
+            await javiAlert("Đã tải lên file sao lưu: " + file.name);
+            loadBackupList();
+          } else {
+            await javiAlert("Lỗi tải lên: " + data.message);
+          }
+        } catch (err) {
+          await javiAlert("Lỗi đọc file JSON hoặc file bị lỗi cú pháp!");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // Hàm lấy danh sách sao lưu
+    async function loadBackupList() {
+      try {
+        const res = await fetch("/api/backup/list");
+        const data = await res.json();
+        const tbody = document.getElementById("backupListBody");
+        tbody.innerHTML = "";
+
+        if (data.success && data.data.length > 0) {
+          data.data.forEach((file) => {
+            // Định dạng dung lượng
+            let sizeStr = "";
+            if (file.size < 1024) sizeStr = file.size + " B";
+            else if (file.size < 1024 * 1024) sizeStr = (file.size / 1024).toFixed(1) + " KB";
+            else sizeStr = (file.size / (1024 * 1024)).toFixed(1) + " MB";
+
+            // Định dạng thời gian
+            const date = new Date(file.createdAt);
+            const dateStr = date.toLocaleString("vi-VN");
+
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td style="font-weight: 500; color: #fff;"><i class="far fa-file-code" style="color: var(--color-primary); margin-right: 10px;"></i>${file.name}</td>
+                <td>${dateStr}</td>
+                <td>${sizeStr}</td>
+                <td>
+                  <div class="action-btn-group">
+                    <a href="/backups/${file.name}" download="${file.name}" class="backup-btn backup-btn-download" title="Tải về file sao lưu">
+                      <i class="fas fa-download"></i> Tải về
+                    </a>
+                    <button class="backup-btn backup-btn-restore" onclick="confirmRestore('${file.name}')" title="Khôi phục dữ liệu từ bản sao lưu này">
+                      <i class="fas fa-undo-alt"></i> Khôi phục
+                    </button>
+                    <button class="backup-btn backup-btn-delete" onclick="confirmDelete('${file.name}')" title="Xóa file sao lưu này">
+                      <i class="fas fa-trash-alt"></i> Xóa
+                    </button>
+                  
+      </div>
+                </td>
+              `;
+            tbody.appendChild(tr);
+          });
+        } else {
+          tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--color-text-muted);">Chưa có bản sao lưu nào được tạo.</td></tr>`;
+        }
+      } catch (err) {
+        console.error(err);
+        document.getElementById("backupListBody").innerHTML = `<tr><td colspan="4" style="text-align: center; color: #dc3545;">Lỗi kết nối máy chủ khi lấy danh sách sao lưu!</td></tr>`;
+      }
+    }
+
+    // Lấy thống kê cơ sở dữ liệu
+    async function loadStats() {
+      try {
+        const res = await fetch("/api/backup/stats");
+        const data = await res.json();
+        if (data.success) {
+          document.getElementById("dbName").innerText = data.data.dbName;
+          document.getElementById("statProducts").innerText = data.data.products;
+          document.getElementById("statCustomers").innerText = data.data.customers;
+          document.getElementById("statOrders").innerText = data.data.orders;
+          document.getElementById("statEmployees").innerText = data.data.employees;
+        }
+      } catch (err) {
+        console.error("Lỗi lấy thông số DB:", err);
+      }
+    }
+
+    // Xác nhận xóa
+    async function confirmDelete(filename) {
+      if (await javiConfirm("Bạn có chắc chắn muốn xóa vĩnh viễn file sao lưu:\n" + filename + " ?")) {
+        try {
+          const res = await fetch("/api/backup/" + filename, { method: "DELETE" });
+          const data = await res.json();
+          if (data.success) {
+            await javiAlert("Đã xóa file sao lưu thành công!");
+            loadBackupList();
+          } else {
+            await javiAlert("Lỗi xóa file: " + data.message);
+          }
+        } catch (err) {
+          await javiAlert("Lỗi kết nối máy chủ khi xóa!");
+        }
+      }
+    }
+
+    // Phục hồi dữ liệu
+    async function confirmRestore(filename) {
+      const confirmMsg = `CẢNH BÁO ĐẶC BIỆT QUAN TRỌNG:
+Hành động này sẽ XÓA TOÀN BỘ dữ liệu hiện tại trong cơ sở dữ liệu để ghi đè dữ liệu từ bản sao lưu này.
+Hệ thống sẽ bị khóa trong chốc lát để xử lý.
+
+Bạn có chắc chắn muốn KHÔI PHỤC dữ liệu từ file:
+${filename} ?`;
+
+      if (await javiConfirm(confirmMsg)) {
+        // Hiển thị thanh tiến trình khôi phục
+        const progressContainer = document.getElementById("restoreProgressContainer");
+        const barFill = document.getElementById("progressBarFill");
+        const percentage = document.getElementById("progressPercentage");
+        const logBox = document.getElementById("progressStatusLog");
+
+        progressContainer.style.display = "block";
+        barFill.style.width = "0%";
+        percentage.innerText = "0%";
+        logBox.innerHTML = "[INFO] Bắt đầu tiến trình khôi phục cơ sở dữ liệu...<br>";
+        logBox.scrollTop = logBox.scrollHeight;
+
+        // Vô hiệu hóa toàn bộ nút thao tác trên trang trong lúc chạy
+        document.querySelectorAll("button, input").forEach(btn => btn.disabled = true);
+
+        // Giả lập tiến trình chạy mượt trên giao diện cho đẹp
+        let progress = 0;
+        const progressInterval = setInterval(() => {
+          if (progress < 90) {
+            progress += Math.floor(Math.random() * 8) + 2;
+            if (progress > 90) progress = 90;
+            barFill.style.width = progress + "%";
+            percentage.innerText = progress + "%";
+          }
+        }, 200);
+
+        appendLog(logBox, "[INFO] Đang gửi yêu cầu khôi phục tới máy chủ...");
+        appendLog(logBox, "[DB] Vô hiệu hóa tất cả trigger hệ thống...");
+
+        try {
+          const res = await fetch("/api/backup/restore", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ filename }),
+          });
+          const data = await res.json();
+
+          clearInterval(progressInterval);
+
+          if (data.success) {
+            barFill.style.width = "100%";
+            percentage.innerText = "100%";
+
+            if (data.logs && data.logs.length > 0) {
+              data.logs.forEach(log => appendLog(logBox, log));
+            }
+
+            appendLog(logBox, "[SUCCESS] Khôi phục cơ sở dữ liệu thành công mỹ mãn!");
+
+            setTimeout(async () => {
+              await javiAlert("Khôi phục dữ liệu hệ thống thành công!\nPhiên làm việc sẽ được khởi động lại.");
+              // Đăng xuất và đưa về màn đăng nhập để đồng bộ lại dữ liệu phiên làm việc mới
+              localStorage.removeItem("currentUser");
+              window.location.href = "login.html";
+            }, 1000);
+          } else {
+            barFill.style.width = "0%";
+            percentage.innerText = "Lỗi";
+            appendLog(logBox, "[ERROR] Khôi phục thất bại: " + data.message);
+            await javiAlert("Lỗi khôi phục cơ sở dữ liệu:\n" + data.message);
+            // Phục hồi lại trạng thái nút
+            document.querySelectorAll("button, input").forEach(btn => btn.disabled = false);
+          }
+        } catch (err) {
+          clearInterval(progressInterval);
+          barFill.style.width = "0%";
+          percentage.innerText = "Lỗi";
+          appendLog(logBox, "[ERROR] Lỗi kết nối server.");
+          await javiAlert("Lỗi kết nối máy chủ trong lúc phục hồi dữ liệu!");
+          document.querySelectorAll("button, input").forEach(btn => btn.disabled = false);
+        }
+      }
+    }
+
+    function appendLog(logBox, text) {
+      logBox.innerHTML += text + "<br>";
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+  </script>
+</body>
+
+</html>

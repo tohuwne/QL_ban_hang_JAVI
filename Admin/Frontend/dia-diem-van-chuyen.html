@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>DANH MỤC ĐỊA ĐIỂM · JAVI COFFEE</title>
+  <link rel="stylesheet" href="/css/global.css?v=20261022-directory-grid">
+  <link rel="stylesheet" href="/admin/css/sidebar.css?v=20261021-action-fit-2">
+  <link rel="stylesheet" href="/admin/css/website-admin.css?v=20261022-directory-grid">
+  <script src="/admin/js/auth.js?v=20261021-form-unified"></script>
+  <script src="/admin/js/report-filters.js?v=20261021-action-fit-2"></script>
+  <script src="/admin/js/delivery-admin.js" defer></script>
+<script src="/admin/js/grid-files.js" defer></script><script src="/admin/js/ui-consistency.js?v=20261021-form-unified" defer></script><link rel="stylesheet" href="/admin/css/admin-design.css">
+<script defer src="/admin/js/admin-design.js"></script>
+</head>
+<body>
+  <div class="sidebar"></div>
+
+  <main class="main-content" style="display:flex;flex-direction:column;min-height:0">
+    <div class="page-header">
+      <h2><i class="ri-map-pin-line"></i> DANH MỤC ĐỊA ĐIỂM</h2>
+    </div>
+
+    <!-- ===== 3 TABS ===== -->
+    <div class="web-tabs" role="tablist">
+      <button role="tab" aria-selected="true"  aria-controls="panelProvince" id="tabProvince">Tỉnh / Thành phố</button>
+      <button role="tab" aria-selected="false" aria-controls="panelWard"     id="tabWard">Phường / Xã</button>
+      <button role="tab" aria-selected="false" aria-controls="panelShipping" id="tabShipping">Phí giao hàng</button>
+    </div>
+
+    <!-- ===== TAB 1: TỈNH THÀNH ===== -->
+    <div class="web-tab-panel commerce-settings" role="tabpanel" id="panelProvince" aria-labelledby="tabProvince">
+      <div class="directory-toolbar">
+        <input type="text" id="searchProvince" placeholder="Tìm tỉnh / thành phố…" aria-label="Tìm kiếm">
+        <button class="btn" id="addProvince"><i class="fas fa-plus"></i> Thêm tỉnh thành</button>
+      </div>
+      <div id="msgProvince" role="status"></div>
+      <div class="table-responsive">
+        <table id="tblProvince">
+          <thead>
+            <tr>
+              
+              <th>Mã tỉnh thành</th>
+              <th>Tên tỉnh / thành phố</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="2" style="text-align:center">Đang tải…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== TAB 2: PHƯỜNG / XÃ ===== -->
+    <div class="web-tab-panel commerce-settings" role="tabpanel" id="panelWard" aria-labelledby="tabWard" hidden>
+      <div class="directory-toolbar">
+        <select id="filterWardProvince" aria-label="Lọc theo tỉnh">
+          <option value="">Tất cả tỉnh / thành</option>
+        </select>
+        <input type="text" id="searchWard" placeholder="Tìm phường / xã…" aria-label="Tìm kiếm">
+        <button class="btn" id="addWard"><i class="fas fa-plus"></i> Thêm phường / xã</button>
+      </div>
+      <div id="msgWard" role="status"></div>
+      <div class="table-responsive">
+        <table id="tblWard">
+          <thead>
+            <tr>
+              
+              <th>Mã phường/xã</th>
+              <th>Tên phường / xã</th>
+              <th>Thuộc tỉnh / thành</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="3" style="text-align:center">Đang tải…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== TAB 3: PHÍ GIAO HÀNG ===== -->
+    <div class="web-tab-panel commerce-settings" role="tabpanel" id="panelShipping" aria-labelledby="tabShipping" hidden>
+      <div class="directory-toolbar">
+        <input type="text" id="searchShipping" placeholder="Tìm khu vực…" aria-label="Tìm kiếm">
+        <button class="btn" id="addShipping"><i class="fas fa-plus"></i> Thêm phí giao hàng</button>
+      </div>
+      <div id="msgShipping" role="status"></div>
+      <div class="table-responsive">
+        <table id="tblShipping">
+          <thead>
+            <tr>
+              
+              <th>Khu vực</th>
+              <th>Phí vận chuyển</th>
+              <th>Miễn phí cho đơn từ</th>
+              <th>Trạng thái</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td colspan="4" style="text-align:center">Đang tải…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== MODAL CHUNG ===== -->
+    <div class="modal-overlay" id="deliveryModal" style="display:none"><div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="deliveryTitle">
+      <div class="modal-header">
+        <h3 id="deliveryTitle"></h3>
+        <button class="close-btn" id="closeEditor" type="button" aria-label="Đóng">×</button>
+      </div>
+      <!-- Form tỉnh thành -->
+        <form id="formProvince" hidden><div class="section-title">Thông tin tỉnh / thành phố</div>
+          <div class="form-group"><label for="delivery-code-1">Mã tỉnh thành <span class="required-mark">*</span></label><input id="delivery-code-1" name="code" type="number" min="1" max="2147483647" step="1" required></div>
+          <div class="form-group"><label for="delivery-name-2">Tên tỉnh / thành phố <span class="required-mark">*</span></label><input type="text" id="delivery-name-2" name="name" maxlength="100" required></div>
+          <p id="errProvince" role="status"></p>
+          <div class="modal-footer"><button class="btn directory-cancel" type="button" data-close-directory>Hủy</button><button class="btn" type="submit"><i class="fas fa-save" aria-hidden="true"></i> Lưu</button></div>
+        </form>
+
+        <!-- Form phường / xã -->
+        <form id="formWard" hidden><div class="section-title">Thông tin phường / xã</div>
+          <div class="form-group"><label for="delivery-code-3">Mã phường / xã <span class="required-mark">*</span></label><input id="delivery-code-3" name="code" type="number" min="1" max="2147483647" step="1" required></div>
+          <div class="form-group"><label for="delivery-name-4">Tên phường / xã <span class="required-mark">*</span></label><input type="text" id="delivery-name-4" name="name" maxlength="100" required></div>
+          <div class="form-group"><label for="delivery-parent-5">Thuộc tỉnh / thành phố <span class="required-mark">*</span></label><select id="delivery-parent-5" name="parent" required></select></div>
+          <p id="errWard" role="status"></p>
+          <div class="modal-footer"><button class="btn directory-cancel" type="button" data-close-directory>Hủy</button><button class="btn" type="submit"><i class="fas fa-save" aria-hidden="true"></i> Lưu</button></div>
+        </form>
+
+        <!-- Form phí giao hàng -->
+        <form id="formShipping" hidden><div class="section-title">Thông tin phí giao hàng</div>
+          <div class="form-group"><label for="delivery-province-6">Tỉnh / thành phố</label><select id="delivery-province-6" name="province"></select></div>
+          <div class="form-group"><label for="delivery-fee-7">Phí vận chuyển (đ) <span class="required-mark">*</span></label><input id="delivery-fee-7" name="fee" type="number" min="0" step="0.001" required></div>
+          <div class="form-group"><label for="delivery-free-8">Miễn phí cho đơn từ (đ)</label><input id="delivery-free-8" name="free" type="number" min="0" step="0.001" placeholder="Để trống nếu không áp dụng"></div>
+          <div class="form-group"><label for="delivery-active-9">Trạng thái</label><select id="delivery-active-9" name="active">
+              <option value="1">Hoạt động</option>
+              <option value="0">Tạm ngưng</option>
+            </select></div>
+          <p id="errShipping" role="status"></p>
+          <div class="modal-footer"><button class="btn directory-cancel" type="button" data-close-directory>Hủy</button><button class="btn" type="submit"><i class="fas fa-save" aria-hidden="true"></i> Lưu</button></div>
+        </form>
+    </div></div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tài khoản của bạn · JAVI COFFEE</title><link rel="stylesheet" href="/user/css/storefront.css"><link rel="stylesheet" href="/user/css/storefront-theme.css?v=20261022-content"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet"><script src="/user/js/storefront.js?v=20261022-content" defer></script></head>
+<body data-store-page="account"><div id="siteHeader"></div>
+<main class="wrap account-page">
+  <div class="account-page-heading"><div><div class="eyebrow">KHÔNG GIAN CỦA BẠN</div><h1>Tài khoản JAVI</h1></div><a class="button light" href="mua-hang.html">Tiếp tục mua sắm</a></div>
+  <section id="accountHero" class="account-hero" aria-label="Tổng quan tài khoản"><div class="loading">Đang tải thông tin</div></section>
+  <div class="account-layout">
+    <nav class="account-sidebar" aria-label="Tài khoản khách hàng">
+      <button type="button" data-account-section="profile" aria-current="page"><span data-icon="user"></span>Thông tin khách hàng</button>
+      <button type="button" data-account-section="orders"><span data-icon="bag"></span>Lịch sử mua hàng</button>
+      <button type="button" data-account-section="coupons"><span data-icon="ticket"></span>Mã giảm giá của tôi</button>
+    </nav>
+    <div class="account-main">
+      <section id="account-profile" class="account-panel"><div class="account-section-heading"><div class="eyebrow">HỒ SƠ CỦA BẠN</div><h2>Thông tin khách hàng</h2></div><dl id="accountDetails" class="account-details"></dl></section>
+      <section id="account-orders" class="account-panel" hidden><div class="account-section-heading"><div class="eyebrow">NHỮNG LỰA CHỌN CÙNG JAVI</div><h2>Lịch sử mua hàng</h2></div><div id="accountOrders" aria-live="polite"></div><div class="account-pagination"><button id="ordersPrev" class="button light" type="button">Trang trước</button><span id="ordersPage"></span><button id="ordersNext" class="button light" type="button">Trang sau</button></div></section>
+      <section id="account-coupons" class="account-panel" hidden><div class="account-section-heading"><div class="eyebrow">ƯU ĐÃI DÀNH CHO BẠN</div><h2>Mã giảm giá của tôi</h2><p>Nhập mã bạn nhận được từ JAVI để lưu vào tài khoản và dùng khi mua hàng</p></div><form id="claimCouponForm" class="claim-coupon-form"><label for="claimCouponCode">Mã giảm giá</label><div><input id="claimCouponCode" maxlength="30" required autocomplete="off" placeholder="Nhập mã được JAVI cung cấp"><button class="button" type="submit">Lưu mã</button></div></form><p id="claimCouponMessage" role="status"></p><div id="accountCoupons" class="account-coupons"></div></section>
+    </div>
+  </div>
+</main>
+<div id="siteFooter"></div><div id="storeToast" class="toast" role="status" hidden></div>
+</body></html>

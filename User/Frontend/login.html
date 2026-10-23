@@ -1,0 +1,1006 @@
+<!doctype html>
+<html lang="vi" class="auth-viewport">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đăng nhập & Đăng ký | JAVI COFFEE</title>
+  <meta name="description" content="Đăng nhập hoặc đăng ký tài khoản khách hàng JAVI COFFEE qua 3 bước bảo mật xác thực OTP để mua sắm và theo dõi đơn hàng." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/vendor/fontawesome/css/all.min.css" />
+  <link rel="stylesheet" href="/css/global.css?v=20261021-split" />
+  <script src="/runtime-config.js"></script><script src="https://accounts.google.com/gsi/client" async defer></script><script src="/admin/js/auth.js?v=20261021-split"></script>
+  <!-- Firebase App & Auth SDK (Compat) sẵn sàng cho Phone Auth -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth-compat.js"></script>
+  <script src="/user/js/firebase-config.js"></script>
+  <style>
+    :root { --auth-gold:#e5c16b; --auth-line:#323537; --auth-muted:#a7adb5; }
+    html.auth-viewport { height:100dvh !important; max-height:100dvh !important; overflow:hidden !important; }
+    body.auth-page {
+      min-height:100dvh !important; height:100dvh !important; max-height:100dvh !important;
+      margin:0; padding:clamp(10px,2vh,20px) 16px !important; overflow:hidden !important;
+      display:flex; justify-content:center; align-items:center;
+      background:
+        radial-gradient(ellipse 38% 46% at 3% 50%,rgba(106,62,30,.13),transparent 92%),
+        radial-gradient(ellipse 42% 54% at 99% 30%,rgba(151,108,39,.08),transparent 88%),
+        radial-gradient(ellipse 48% 42% at 52% -12%,rgba(234,201,87,.04),transparent 80%),
+        linear-gradient(142deg,#090c0f 0%,#040608 42%,#090908 72%,#100d09 100%);
+      color:#f4f4f2;
+    }
+    .auth-backdrop { position:fixed; inset:0; overflow:hidden; pointer-events:none; }
+    .auth-backdrop::before {
+      content:""; position:absolute; inset:-10%; opacity:.36; filter:blur(26px);
+      background:
+        radial-gradient(ellipse 30% 45% at 18% 39%,rgba(233,174,57,.15),transparent 78%),
+        radial-gradient(ellipse 33% 45% at 88% 64%,rgba(146,76,35,.2),transparent 78%),
+        radial-gradient(ellipse 26% 34% at 62% 12%,rgba(234,201,87,.08),transparent 82%);
+      animation:authGlow 16s ease-in-out infinite alternate;
+    }
+    .auth-backdrop::after {
+      content:""; position:absolute; inset:0;
+      background:radial-gradient(ellipse at center,rgba(4,6,8,.08) 10%,rgba(4,6,8,.2) 100%),
+        linear-gradient(rgba(197,155,82,.014) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(197,155,82,.014) 1px,transparent 1px);
+      background-size:auto,64px 64px,64px 64px;
+    }
+    .auth-backdrop svg { display:block; width:100%; height:100%; }
+    .auth-dongson {
+      --motif-size:85vw;
+      position:absolute; width:var(--motif-size); height:var(--motif-size);
+      left:calc(var(--motif-size) / -2); top:50%; transform:translateY(-50%);
+      opacity:.24;
+      -webkit-mask-image:linear-gradient(90deg,#000 48%,rgba(0,0,0,.82) 64%,transparent 98%);
+      mask-image:linear-gradient(90deg,#000 48%,rgba(0,0,0,.82) 64%,transparent 98%);
+    }
+    .auth-dongson--right {
+      left:auto; right:calc(var(--motif-size) / -2);
+      transform:translateY(-50%) scaleX(-1);
+    }
+    .auth-coffee-scene { position:relative; }
+    .auth-wave-line { animation:authWave 12s ease-in-out infinite alternate; }
+    .auth-bean-launch {
+      transform-box:view-box; transform-origin:50% 50%;
+      animation:authBeanBurst 1.45s cubic-bezier(.2,.82,.24,1) both;
+    }
+    .auth-bean-launch--right { animation-delay:.12s; }
+    .auth-bean-art { animation:authFloat 10s ease-in-out infinite alternate; }
+    .auth-bean-art--drift { animation-duration:14s; animation-direction:alternate-reverse; }
+    .auth-bean-art use { pointer-events:visiblePainted; cursor:pointer; transition:translate .24s cubic-bezier(.2,1.4,.4,1),filter .24s ease; }
+    .auth-bean-art use:hover { translate:0 -10px; filter:drop-shadow(0 5px 5px rgba(234,201,87,.35)); }
+    @keyframes authWave { to { transform:translateY(16px); } }
+    @keyframes authBeanBurst {
+      0% { transform:scale(.035); opacity:0; }
+      18% { opacity:1; }
+      76% { transform:scale(1.045); }
+      100% { transform:scale(1); opacity:1; }
+    }
+    @keyframes authFloat { to { transform:translateY(-9px); } }
+    @keyframes authGlow { to { opacity:.4; } }
+    .auth-scene { position:relative; z-index:1; width:min(100%,480px); perspective:1500px; transform:scale(var(--auth-fit-scale,1)); transition:transform .45s cubic-bezier(.2,.8,.2,1); }
+    .auth-card { --auth-card-height:516px; position:relative; height:var(--auth-card-height); transition:height .45s cubic-bezier(.2,.8,.2,1); }
+    .auth-card.show-register { --auth-card-height:640px; }
+    .auth-card-inner { position:relative; width:100%; height:100%; transition:transform .68s cubic-bezier(.2,.8,.2,1); transform-style:preserve-3d; }
+    .auth-card.show-register .auth-card-inner { transform:rotateY(180deg); }
+    .auth-face {
+      position:absolute; inset:0; display:flex; flex-direction:column;
+      padding:24px 34px 20px; overflow:hidden;
+      border:1px solid rgba(193,151,76,.46); border-radius:22px;
+      background:linear-gradient(155deg,#121517 0%,#0b0e11 44%,#07090b 100%);
+      box-shadow:0 30px 80px rgba(0,0,0,.64),inset 0 1px 0 rgba(235,207,144,.07);
+      backface-visibility:hidden; -webkit-backface-visibility:hidden;
+    }
+    .auth-face::before {
+      content:""; position:absolute; inset:0 0 auto; height:3px;
+      background:linear-gradient(90deg,transparent 8%,#8e642e 28%,#f0d797 50%,#ad823d 72%,transparent 92%);
+      opacity:.85;
+    }
+    .register-face { transform:rotateY(180deg); padding-top:18px; padding-bottom:16px; }
+    .auth-brand { display:flex; justify-content:center; align-items:center; margin-bottom:14px; }
+    .auth-brand img { display:block; width:170px; height:auto; object-fit:contain; filter:drop-shadow(0 7px 17px rgba(255,210,28,.16)); }
+    .register-face .auth-brand { margin-bottom:10px; }
+    .register-face .auth-brand img { width:142px; }
+    .auth-form-side { display:flex; flex:1; min-height:0; flex-direction:column; width:100%; }
+    .auth-form { display:grid; gap:8px; }
+    .auth-field { position:relative; display:block; }
+    .auth-field>i { position:absolute; top:50%; left:15px; transform:translateY(-50%); width:18px; color:#969ea7; text-align:center; pointer-events:none; }
+    .auth-field input {
+      width:100%; height:44px !important; padding:10px 44px !important;
+      border:1px solid var(--auth-line) !important; border-radius:10px !important;
+      background:#0b0e11 !important; color:#f4f5f6 !important;
+      font-size:13.5px !important; transition:border-color .18s,box-shadow .18s;
+    }
+    .auth-field input::placeholder { color:#89929c; opacity:1; }
+    .auth-field input:focus { border-color:var(--auth-gold) !important; box-shadow:0 0 0 3px rgba(197,155,82,.12) !important; outline:0; }
+    .auth-field .password-toggle { left:auto !important; right:14px; color:#a9b1b9; cursor:pointer; pointer-events:auto; }
+    .auth-submit {
+      width:100%; height:46px; margin-top:2px; border:0; border-radius:10px;
+      background:linear-gradient(110deg,#b88d45,#e7c878 48%,#c49a50); color:#171300; font-size:14px; font-weight:800; cursor:pointer;
+      box-shadow:0 6px 20px rgba(184,141,69,.14); transition:transform .18s,filter .18s;
+    }
+    .auth-submit:hover { transform:translateY(-2px); filter:brightness(1.06); }
+    .auth-submit:disabled { cursor:wait; opacity:.7; transform:none; }
+    .auth-links { display:flex; justify-content:flex-end; margin:1px 0 0; }
+    .auth-link,.auth-switch button { border:0; padding:0; background:none; color:var(--auth-gold); font:inherit; font-weight:700; cursor:pointer; text-decoration:none; }
+    .auth-link { font-size:12px; }
+    .auth-link:hover,.auth-switch button:hover { text-decoration:underline; }
+    .auth-divider { display:flex; align-items:center; gap:12px; margin:16px 0 12px; color:#929ba5; font-size:11px; }
+    .auth-divider::before,.auth-divider::after { content:""; flex:1; height:1px; background:linear-gradient(90deg,transparent,#8a6b36); }
+    .auth-divider::after { transform:scaleX(-1); }
+    .google-slot { min-height:42px; display:flex; justify-content:center; align-items:center; }
+    .google-fallback { width:100%; height:42px; border:1px solid #dedfe1; border-radius:9px; background:#fff; color:#252a30; font-size:13px; font-weight:700; cursor:pointer; }
+    .google-fallback i { margin-right:9px; color:#4285f4; }
+    .auth-switch { margin:auto 0 0; padding-top:12px; color:var(--auth-muted); text-align:center; font-size:12px; line-height:1.4; }
+    .google-profile-note { display:none; margin:0 0 9px; padding:8px 10px; border-radius:8px; background:rgba(255,210,28,.1); color:#ffdf63; font-size:11px; line-height:1.4; }
+    .google-profile-note.show { display:block; }
+    .shop-return{position:fixed;top:20px;right:24px;z-index:1000;display:inline-flex;align-items:center;gap:8px;padding:11px 17px;border:1px solid #c8b18a;border-radius:30px;background:#fff9ef;color:#473421;text-decoration:none;font:600 14px Arial,sans-serif;box-shadow:0 4px 18px #0002}
+    .shop-return[hidden]{display:none}
+    .shop-return:focus-visible{outline:3px solid #b9914d;outline-offset:4px}
+
+    /* ==========================================================
+       MULTI-STEP REGISTER STYLES (ĐĂNG KÝ 3 BƯỚC)
+       ========================================================== */
+    .reg-stepper { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; padding:0 4px; }
+    .reg-step-node { display:flex; align-items:center; gap:6px; cursor:default; opacity:.5; transition:opacity .25s; }
+    .reg-step-node.active, .reg-step-node.done { opacity:1; }
+    .reg-step-circle {
+      width:22px; height:22px; border-radius:50%; background:#171a1d; border:1px solid #3c4248;
+      color:#9da4ae; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center;
+      transition:all .25s ease;
+    }
+    .reg-step-node.active .reg-step-circle {
+      background:linear-gradient(135deg,#b88d45,#e7c878); color:#120e03; border-color:var(--auth-gold);
+      box-shadow:0 0 10px rgba(229,193,107,.45);
+    }
+    .reg-step-node.done .reg-step-circle { background:#162719; color:#52c41a; border-color:#52c41a; }
+    .reg-step-text { font-size:11px; font-weight:600; color:#b0b7c1; }
+    .reg-step-node.active .reg-step-text { color:var(--auth-gold); font-weight:700; }
+    .reg-step-divider { flex:1; height:1px; background:#2c3239; margin:0 8px; transition:background .25s; }
+    .reg-step-divider.done { background:linear-gradient(90deg, #52c41a, #e5c16b); }
+
+    .reg-step-container { display:none; }
+    .reg-step-container.active { display:grid; gap:8px; animation:regStepFade .28s ease both; }
+    @keyframes regStepFade { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+
+    /* Hàng nút bấm chuyển bước */
+    .auth-btn-row { display:flex; gap:9px; margin-top:3px; }
+    .auth-btn-secondary {
+      height:45px; flex:1; border:1px solid rgba(229,193,107,.4); border-radius:10px;
+      background:rgba(255,255,255,.04); color:#e5c16b; font-size:13px; font-weight:700; cursor:pointer;
+      transition:all .18s; display:inline-flex; align-items:center; justify-content:center; gap:6px;
+    }
+    .auth-btn-secondary:hover { background:rgba(229,193,107,.1); border-color:var(--auth-gold); }
+    .auth-btn-primary {
+      height:45px; flex:1.4; border:0; border-radius:10px;
+      background:linear-gradient(110deg,#b88d45,#e7c878 48%,#c49a50); color:#171300; font-size:13px; font-weight:800; cursor:pointer;
+      box-shadow:0 6px 20px rgba(184,141,69,.14); transition:all .18s; display:inline-flex; align-items:center; justify-content:center; gap:6px;
+    }
+    .auth-btn-primary:hover { filter:brightness(1.08); transform:translateY(-1px); }
+    .auth-btn-primary:disabled { opacity:.6; cursor:wait; transform:none; }
+
+    /* Hộp tóm tắt bước */
+    .step-info-box {
+      padding:8px 12px; border-radius:9px; background:rgba(229,193,107,.07); border:1px solid rgba(229,193,107,.2);
+      font-size:12px; color:#d8dde4; line-height:1.45;
+    }
+    .step-info-box strong { color:var(--auth-gold); }
+
+    /* Đo độ mạnh mật khẩu */
+    .pw-meter { margin:0 0 2px; }
+    .pw-strength-bar { height:4px; border-radius:2px; background:#1b1f23; overflow:hidden; }
+    .pw-strength-fill { height:100%; width:0%; transition:width .25s ease, background .25s ease; }
+    .pw-strength-fill.weak { width:33%; background:#ff4d4f; }
+    .pw-strength-fill.medium { width:66%; background:#faad14; }
+    .pw-strength-fill.strong { width:100%; background:#52c41a; }
+    .pw-feedback { display:flex; justify-content:space-between; font-size:11px; margin-top:3px; color:#8c959f; }
+    .pw-match-badge { font-weight:600; font-size:11px; }
+    .pw-match-badge.matched { color:#52c41a; }
+    .pw-match-badge.mismatch { color:#ff4d4f; }
+
+    /* Xác thực OTP */
+    .otp-tabs { display:flex; border-radius:9px; background:#0b0e11; padding:3px; border:1px solid #282d33; margin-bottom:2px; }
+    .otp-tab {
+      flex:1; border:0; background:none; color:#8f98a3; font-size:12px; font-weight:600; padding:8px 0;
+      border-radius:7px; cursor:pointer; transition:all .2s; display:flex; align-items:center; justify-content:center; gap:6px;
+    }
+    .otp-tab.active {
+      background:#1a2026; color:var(--auth-gold); font-weight:700;
+      box-shadow:0 2px 8px rgba(0,0,0,.35); border:1px solid rgba(229,193,107,.25);
+    }
+    .otp-action-row { display:flex; gap:8px; align-items:center; margin-top:2px; }
+    .btn-send-otp {
+      height:40px; flex:1; border:1px solid rgba(229,193,107,.4); border-radius:8px;
+      background:#161b20; color:var(--auth-gold); font-size:12.5px; font-weight:700; cursor:pointer;
+      transition:all .18s; display:inline-flex; align-items:center; justify-content:center; gap:6px;
+    }
+    .btn-send-otp:hover:not(:disabled) { background:rgba(229,193,107,.12); border-color:var(--auth-gold); }
+    .btn-send-otp:disabled { opacity:.5; cursor:not-allowed; }
+    .otp-countdown { font-size:11.5px; color:#9fa7b2; white-space:nowrap; }
+
+    .otp-inputs { display:flex; justify-content:center; gap:8px; margin:6px 0; }
+    .otp-digit {
+      width:44px; height:48px !important; text-align:center !important; font-size:20px !important;
+      font-weight:800 !important; color:var(--auth-gold) !important; padding:0 !important;
+      border:1px solid #363c44 !important; border-radius:8px !important; background:#0b0e11 !important;
+    }
+    .otp-digit:focus { border-color:var(--auth-gold) !important; box-shadow:0 0 0 3px rgba(197,155,82,.2) !important; }
+
+    #recaptcha-container { display:flex; justify-content:center; margin-top:4px; }
+
+    @media(max-width:600px){
+      body.auth-page { padding:20px 12px !important; }
+      .auth-backdrop::before { opacity:.4; }
+      .auth-dongson { opacity:.16; top:42%; }
+      .auth-scene { width:min(100%,440px); }
+      .auth-card { --auth-card-height:502px; }
+      .auth-card.show-register { --auth-card-height:640px; }
+      .auth-face { padding:22px 20px 18px; border-radius:17px; }
+      .register-face { padding-top:16px; padding-bottom:14px; }
+      .auth-brand img { width:160px; }
+      .register-face .auth-brand img { width:135px; }
+      .shop-return{top:12px;right:12px;padding:9px 12px;font-size:12px}
+      .auth-page:has(.shop-return:not([hidden])){padding-top:64px!important}
+      .otp-digit { width:38px; height:44px !important; font-size:18px !important; }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      .auth-scene,.auth-card,.auth-card-inner,.auth-submit,.auth-bean-art use { transition:none; }
+      .auth-wave-line,.auth-bean-launch,.auth-bean-art { animation:none; }
+      .auth-bean-art use:hover { translate:none; filter:none; }
+      .auth-backdrop::before { animation:none; }
+      .reg-step-container.active { animation:none; }
+    }
+</style>
+<link rel="stylesheet" href="/css/auth-motif-motion.css">
+</head>
+<body class="auth-page">
+<a id="shopReturn" class="shop-return" href="/shop" aria-label="Quay lại trang mua sắm"><i class="fas fa-arrow-left" aria-hidden="true"></i> Quay lại mua sắm</a>
+
+<div class="auth-backdrop" aria-hidden="true">
+  <div class="auth-dongson">
+    <svg viewBox="0 0 790 703" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="authDongSonInk" color-interpolation-filters="sRGB">
+          <feColorMatrix type="matrix" values="0 0 0 0 .76  0 0 0 0 .57  0 0 0 0 .28  -1 -1 -1 0 3" result="bronzeInk"/>
+          <feComposite in="bronzeInk" in2="SourceAlpha" operator="in"/>
+        </filter>
+      </defs>
+      <image href="/images/dong-son-pattern.png" width="790" height="703" filter="url(#authDongSonInk)"/>
+    </svg>
+  </div>
+  <div class="auth-dongson auth-dongson--right">
+    <svg viewBox="0 0 790 703" xmlns="http://www.w3.org/2000/svg">
+      <image href="/images/dong-son-pattern.png" width="790" height="703" filter="url(#authDongSonInk)"/>
+    </svg>
+  </div>
+  <svg class="auth-coffee-scene" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="authCoffeeWave" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#281c12"/><stop offset=".46" stop-color="#11171b"/><stop offset="1" stop-color="#0d1013"/>
+      </linearGradient>
+      <linearGradient id="authWarmWave" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#a97937" stop-opacity=".18"/><stop offset=".48" stop-color="#604c2e" stop-opacity=".05"/><stop offset="1" stop-color="#d1ac61" stop-opacity=".12"/>
+      </linearGradient>
+      <linearGradient id="authGoldWave" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#926631" stop-opacity=".14"/><stop offset=".28" stop-color="#bf934c" stop-opacity=".42"/><stop offset=".52" stop-color="#eed39a" stop-opacity=".62"/><stop offset=".76" stop-color="#bd8f43" stop-opacity=".4"/><stop offset="1" stop-color="#926631" stop-opacity=".12"/>
+      </linearGradient>
+      <g id="authBean" fill="#292a23" stroke="#b79f59" stroke-width="2">
+        <path d="M0-49C21-49 38-31 39-8 41 17 27 40 6 48-17 52-38 33-40 8-42-16-23-47 0-49Z"/>
+        <path d="M-27-24C-34-5-30 18-18 35" fill="none" stroke="#d8ba62" stroke-opacity=".22" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M5-41C-7-28 3-17-5-5-14 8 2 19-4 40" fill="none" stroke="#0d100f" stroke-width="6" stroke-linecap="round"/>
+        <path d="M7-41C-5-28 5-17-3-5-12 8 4 19-2 39" fill="none" stroke="#d8ba62" stroke-opacity=".72" stroke-width="1.8" stroke-linecap="round"/>
+      </g>
+    </defs>
+    <path d="M0 0H1440V96C1220 175 1050 48 840 103 550 178 320 62 0 137Z" fill="#292218" opacity=".3"/>
+    <path d="M0 480C254 383 387 562 655 526S1123 374 1440 477V900H0Z" fill="url(#authWarmWave)" opacity=".27"/>
+    <path d="M0 599C225 490 389 711 667 634S1120 502 1440 625V900H0Z" fill="url(#authCoffeeWave)" opacity=".83"/>
+    <path d="M0 721C284 628 475 798 752 719S1195 618 1440 721V900H0Z" fill="#201a13" opacity=".44"/>
+    <path d="M0 818C280 741 487 875 748 812S1180 742 1440 820V900H0Z" fill="#10161a" opacity=".82"/>
+    <path d="M0 479C254 382 387 561 655 525S1123 373 1440 476" fill="none" stroke="url(#authGoldWave)" stroke-opacity=".58" stroke-width="1.2"/>
+    <path class="auth-wave-line" d="M-20 596C225 487 389 708 667 631S1120 499 1460 622" fill="none" stroke="url(#authGoldWave)" stroke-width="2"/>
+    <path class="auth-wave-line" d="M-20 719C284 626 475 796 752 717S1195 616 1460 719" fill="none" stroke="url(#authGoldWave)" stroke-opacity=".78" stroke-width="1.2"/>
+    <g class="auth-bean-launch">
+      <g class="auth-bean-art" opacity=".46">
+        <use href="#authBean" transform="translate(98 198) rotate(38) scale(.42)" opacity=".72"/>
+        <use href="#authBean" transform="translate(158 326) rotate(-31) scale(1.34)" opacity=".94"/>
+        <use href="#authBean" transform="translate(278 410) rotate(61) scale(.56)" opacity=".63"/>
+        <use href="#authBean" transform="translate(92 583) rotate(-65) scale(.81)" opacity=".78"/>
+        <use href="#authBean" transform="translate(306 724) rotate(17) scale(.34)" opacity=".56"/>
+      </g>
+    </g>
+    <g class="auth-bean-launch auth-bean-launch--right">
+      <g class="auth-bean-art auth-bean-art--drift" opacity=".4">
+        <use href="#authBean" transform="translate(1327 172) rotate(-51) scale(.46)" opacity=".64"/>
+        <use href="#authBean" transform="translate(1220 293) rotate(24) scale(1.49)" opacity=".92"/>
+        <use href="#authBean" transform="translate(1371 472) rotate(-18) scale(.73)" opacity=".7"/>
+        <use href="#authBean" transform="translate(1157 594) rotate(72) scale(.5)" opacity=".77"/>
+        <use href="#authBean" transform="translate(1301 701) rotate(-43) scale(1.05)" opacity=".51"/>
+        <use href="#authBean" transform="translate(1028 126) rotate(12) scale(.28)" opacity=".43"/>
+      </g>
+    </g>
+    <circle cx="116" cy="208" r="3" fill="#eac957" opacity=".32"/>
+    <circle cx="1325" cy="430" r="2" fill="#eac957" opacity=".35"/>
+  </svg>
+</div>
+
+<main class="auth-scene" aria-label="Xác thực tài khoản JAVI COFFEE"><section class="auth-card" id="authCard"><div class="auth-card-inner">
+  <!-- MẶT TRƯỚC: ĐĂNG NHẬP -->
+  <section class="auth-face login-face" aria-label="Đăng nhập JAVI COFFEE">
+    <div class="auth-brand"><img src="/images/logo-javi-auth.png" alt="JAVI COFFEE" /></div>
+    <div class="auth-form-side">
+      <form class="auth-form" id="loginForm">
+        <label class="auth-field"><i class="fas fa-user"></i><input type="text" id="login-username" placeholder="Tài khoản" autocomplete="username" required /></label>
+        <label class="auth-field"><i class="fas fa-lock"></i><input type="password" id="login-password" placeholder="Mật khẩu" autocomplete="current-password" required /><i class="fas fa-eye password-toggle" id="toggleLoginPassword" aria-label="Hiện mật khẩu"></i></label>
+        <div class="auth-links"><a class="auth-link" href="#" id="forgotPassword">Quên mật khẩu?</a></div>
+        <button class="auth-submit" type="submit" id="loginSubmitBtn">Đăng nhập</button>
+      </form>
+      <div class="auth-divider">hoặc tiếp tục với</div>
+      <div class="google-slot" id="googleLoginButton">
+        <button class="google-fallback" type="button" id="googleLoginFallback"><i class="fab fa-google"></i>Đăng nhập bằng Google</button>
+      </div>
+      <p class="auth-switch">Bạn chưa có tài khoản? <button type="button" data-flip="register">Đăng ký</button></p>
+    </div>
+  </section>
+
+  <!-- MẶT SAU: ĐĂNG KÝ (MULTI-STEP WIZARD 3 BƯỚC) -->
+  <section class="auth-face register-face" aria-label="Tạo tài khoản JAVI COFFEE">
+    <div class="auth-brand"><img src="/images/logo-javi-auth.png" alt="JAVI COFFEE" /></div>
+    <div class="auth-form-side">
+      <p class="google-profile-note" id="googleProfileNote">Google đã cung cấp thông tin cơ bản. Vui lòng bổ sung các trường còn thiếu để hoàn tất đăng ký.</p>
+
+      <!-- STEPPER INDICATOR 3 BƯỚC -->
+      <div class="reg-stepper" id="regStepper">
+        <div class="reg-step-node active" id="stepNode1">
+          <span class="reg-step-circle">1</span>
+          <span class="reg-step-text">Thông tin</span>
+        </div>
+        <div class="reg-step-divider" id="stepDiv1"></div>
+        <div class="reg-step-node" id="stepNode2">
+          <span class="reg-step-circle">2</span>
+          <span class="reg-step-text">Mật khẩu</span>
+        </div>
+        <div class="reg-step-divider" id="stepDiv2"></div>
+        <div class="reg-step-node" id="stepNode3">
+          <span class="reg-step-circle">3</span>
+          <span class="reg-step-text">Xác thực OTP</span>
+        </div>
+      </div>
+
+<form class="auth-form" id="registerForm" novalidate>
+        <!-- BƯỚC 1: THÔNG TIN CÁ NHÂN -->
+        <div class="reg-step-container active" id="regStep1">
+          <label class="auth-field"><i class="fas fa-user"></i><input type="text" id="reg-fullname" placeholder="Họ và tên" autocomplete="name" required /></label>
+          <label class="auth-field"><i class="fas fa-phone"></i><input type="tel" id="reg-phone" placeholder="Số điện thoại" autocomplete="tel" required /></label>
+          <label class="auth-field"><i class="fas fa-envelope"></i><input type="email" id="reg-email" placeholder="Email nhận mã OTP" autocomplete="email" required /></label>
+          <label class="auth-field"><i class="fas fa-at"></i><input type="text" id="reg-username" placeholder="Tên đăng nhập" autocomplete="username" required /></label>
+          <label class="auth-field"><i class="fas fa-location-dot"></i><input type="text" id="reg-address" placeholder="Địa chỉ giao hàng (không bắt buộc)" autocomplete="street-address" /></label>
+          <button class="auth-submit" type="button" id="btnNextStep1">Tiếp tục <i class="fas fa-arrow-right" style="margin-left:6px;"></i></button>
+        </div>
+
+        <!-- BƯỚC 2: THIẾT LẬP MẬT KHẨU -->
+        <div class="reg-step-container" id="regStep2">
+          <div class="step-info-box">
+            Tài khoản: <strong id="step2SummaryUser">...</strong>
+          </div>
+          <label class="auth-field" id="passwordRegisterField">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="reg-password" placeholder="Mật khẩu (tối thiểu 6 ký tự)" autocomplete="new-password" required />
+            <i class="fas fa-eye password-toggle" id="toggleRegisterPassword" aria-label="Hiện mật khẩu"></i>
+          </label>
+          <label class="auth-field">
+            <i class="fas fa-shield-alt"></i>
+            <input type="password" id="reg-confirm-password" placeholder="Nhập lại mật khẩu" autocomplete="new-password" required />
+            <i class="fas fa-eye password-toggle" id="toggleConfirmPassword" aria-label="Hiện mật khẩu"></i>
+          </label>
+          <div class="pw-meter">
+            <div class="pw-strength-bar"><div class="pw-strength-fill" id="pwStrengthFill"></div></div>
+            <div class="pw-feedback">
+              <span id="pwStrengthText">Độ mạnh: Chưa nhập</span>
+              <span class="pw-match-badge" id="pwMatchBadge"></span>
+            </div>
+          </div>
+          <div class="auth-btn-row">
+            <button type="button" class="auth-btn-secondary" id="btnBackStep2"><i class="fas fa-arrow-left"></i> Quay lại</button>
+            <button type="button" class="auth-btn-primary" id="btnNextStep2">Tiếp tục <i class="fas fa-arrow-right"></i></button>
+          </div>
+        </div>
+
+        <!-- BƯỚC 3: XÁC THỰC OTP -->
+        <div class="reg-step-container" id="regStep3">
+          <div class="otp-tabs" role="tablist">
+            <button type="button" class="otp-tab active" id="tabEmailOtp"><i class="fas fa-envelope"></i> Email OTP</button>
+            <button type="button" class="otp-tab" id="tabPhoneOtp" disabled title="Xác thực số điện thoại sẽ được triển khai sau"><i class="fas fa-mobile-screen"></i> SMS (SĐT)</button>
+          </div>
+          <div class="step-info-box" id="otpTargetBox">
+            Mã OTP sẽ được gửi đến email:<br><strong id="otpTargetDisplay">...</strong>
+          </div>
+          <div class="otp-action-row">
+            <button type="button" class="btn-send-otp" id="btnSendOtp"><i class="fas fa-paper-plane"></i> Gửi mã OTP</button>
+            <span class="otp-countdown" id="otpCountdown" style="display:none"></span>
+          </div>
+          <div class="otp-inputs" id="otpInputsGroup">
+            <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" data-idx="0" autocomplete="one-time-code" />
+            <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" data-idx="1" />
+            <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" data-idx="2" />
+            <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" data-idx="3" />
+            <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" data-idx="4" />
+            <input type="text" inputmode="numeric" maxlength="1" class="otp-digit" data-idx="5" />
+          </div>
+          <!-- Container reCAPTCHA cho Firebase Phone Auth -->
+          <div id="recaptcha-container"></div>
+          <div class="auth-btn-row">
+            <button type="button" class="auth-btn-secondary" id="btnBackStep3"><i class="fas fa-arrow-left"></i> Quay lại</button>
+            <button type="submit" class="auth-btn-primary" id="registerSubmitBtn"><i class="fas fa-check-circle"></i> Hoàn tất</button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Phân cách Google & chuyển sang Đăng nhập (hiện ở bước 1) -->
+      <div id="registerAuxSection">
+        <div class="auth-divider" id="registerDivider">hoặc đăng ký với</div>
+        <div class="google-slot" id="googleRegisterButton">
+          <button class="google-fallback" type="button" id="googleRegisterFallback"><i class="fab fa-google"></i>Đăng ký bằng Google</button>
+        </div>
+      </div>
+      <p class="auth-switch">Đã có tài khoản? <button type="button" data-flip="login">Đăng nhập</button></p>
+    </div>
+  </section>
+</div></section></main>
+
+<script>
+  // Trang này CHỈ phục vụ khách hàng (cổng 3000).
+  let googleCredential = null;
+  let currentRegStep = 1;
+  let currentOtpChannel = 'email'; // 'email' | 'phone'
+  let otpTimerInterval = null;
+  let firebaseConfirmation = null;
+
+  const authCard = document.getElementById('authCard');
+  const authScene = document.querySelector('.auth-scene');
+  const byId = (id) => document.getElementById(id);
+
+  // ==========================================================
+  // MULTI-STEP CONTROLLER & STEPPER INDICATOR
+  // ==========================================================
+  function goToRegStep(step) {
+    currentRegStep = step;
+    ['regStep1', 'regStep2', 'regStep3'].forEach((id, idx) => {
+      const el = byId(id);
+      if (el) el.classList.toggle('active', (idx + 1) === step);
+    });
+
+    const node1 = byId('stepNode1'), node2 = byId('stepNode2'), node3 = byId('stepNode3');
+    const div1 = byId('stepDiv1'), div2 = byId('stepDiv2');
+
+    if (node1) {
+      node1.classList.toggle('active', step === 1);
+      node1.classList.toggle('done', step > 1);
+    }
+    if (div1) div1.classList.toggle('done', step > 1);
+
+    if (node2) {
+      node2.classList.toggle('active', step === 2);
+      node2.classList.toggle('done', step > 2);
+    }
+    if (div2) div2.classList.toggle('done', step > 2);
+
+    if (node3) {
+      node3.classList.toggle('active', step === 3);
+      node3.classList.toggle('done', false);
+    }
+
+    const aux = byId('registerAuxSection');
+    if (aux) aux.style.display = (step === 1 && !googleCredential) ? 'block' : 'none';
+
+    if (step === 1) authCard.style.setProperty('--auth-card-height', '640px');
+    else if (step === 2) authCard.style.setProperty('--auth-card-height', '530px');
+    else authCard.style.setProperty('--auth-card-height', '560px');
+
+    fitAuthScene();
+  }
+
+  const fitAuthScene = () => {
+    const ps = getComputedStyle(document.body);
+    const room = document.documentElement.clientHeight - parseFloat(ps.paddingTop) - parseFloat(ps.paddingBottom);
+    const cardH = parseFloat(getComputedStyle(authCard).getPropertyValue('--auth-card-height'));
+    authScene.style.setProperty('--auth-fit-scale', String(Math.min(1, Math.max(0.1, room / cardH))));
+  };
+
+  const setFace = (face) => {
+    authCard.classList.toggle('show-register', face === 'register');
+    if (face === 'register') {
+      goToRegStep(googleCredential ? 1 : currentRegStep);
+    } else {
+      authCard.style.setProperty('--auth-card-height', '516px');
+    }
+    fitAuthScene();
+  };
+
+  window.addEventListener('resize', fitAuthScene);
+  fitAuthScene();
+
+  const entryParams = new URLSearchParams(location.search);
+  if (entryParams.get('mode') === 'register') setFace('register');
+  document.querySelectorAll('[data-flip]').forEach(btn => btn.addEventListener('click', () => setFace(btn.dataset.flip)));
+
+  const setPwToggle = (inputId, iconId) => {
+    const icon = byId(iconId), inp = byId(inputId);
+    if (!icon || !inp) return;
+    icon.addEventListener('click', () => {
+      const vis = inp.type === 'text';
+      inp.type = vis ? 'password' : 'text';
+      icon.classList.toggle('fa-eye-slash', !vis);
+    });
+  };
+  setPwToggle('login-password', 'toggleLoginPassword');
+  setPwToggle('reg-password', 'toggleRegisterPassword');
+  setPwToggle('reg-confirm-password', 'toggleConfirmPassword');
+
+  const saveAndRedirect = (user) => {
+    if (typeof adminLogin !== 'undefined' && adminLogin) {
+      if (!user.MaNV || user.VaiTro === 'KHACH_HANG') throw new Error('Vui lòng sử dụng tài khoản quản trị hoặc nhân viên.');
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      localStorage.setItem('javiLastActivity', String(Date.now()));
+      window.location.href = '/admin/dashboard.html';
+      return;
+    }
+    if (user.VaiTro !== 'KHACH_HANG' || !user.MaKH || user.MaNV) throw new Error('Không tìm thấy tài khoản.');
+    localStorage.setItem('currentUser', JSON.stringify(user));
+    localStorage.setItem('javiLastActivity', String(Date.now()));
+    const returnParam = typeof entryParams !== 'undefined' ? entryParams.get('return') : (new URLSearchParams(window.location.search).get('return'));
+    const dest = returnParam || '';
+    const safe = /^\/san-pham\/[a-zA-Z0-9_-]{1,10}\.html$/.test(dest)
+      || /^\/landing_page\/(mua-hang|gio-hang|thanh-toan|blog|bai-viet|don-hang-thanh-cong|tai-khoan)\.html(?:[?#].*)?$/.test(dest);
+    window.location.href = safe ? dest : '/landing_page/mua-hang.html';
+  };
+  const showMessage = async (msg, type = 'error') => window.javiAlert ? javiAlert(msg, type) : alert(msg);
+  const showMsg = showMessage;
+  const setLoading = (btn, loading, label) => { if (!btn) return; btn.disabled = loading; btn.textContent = loading ? 'Đang xử lý...' : label; };
+
+  // --- BƯỚC 1: XÁC THỰC THÔNG TIN CƠ BẢN VÀ CHECK USERNAME ---
+  byId('btnNextStep1').addEventListener('click', async () => {
+    const fullName = byId('reg-fullname').value.trim();
+    const phone = byId('reg-phone').value.trim();
+    const email = byId('reg-email').value.trim();
+    const username = byId('reg-username').value.trim();
+
+    if (!fullName) return showMsg('Vui lòng nhập Họ và tên.');
+    const cleanDigits = phone.replace(/[^0-9]/g, '');
+    if (cleanDigits.length < 8 || cleanDigits.length > 15) {
+      return showMsg('Số điện thoại không hợp lệ (yêu cầu từ 8 đến 15 chữ số).');
+    }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return showMsg('Vui lòng nhập Email hợp lệ để nhận mã xác thực OTP.');
+    }
+    if (!username) return showMsg('Vui lòng nhập Tên đăng nhập.');
+    if (username.length < 4 || username.length > 30) {
+      return showMsg('Tên đăng nhập phải từ 4 đến 30 ký tự.');
+    }
+    if (!/^[a-zA-Z0-9_.-]+$/.test(username)) {
+      return showMsg('Tên đăng nhập chỉ chứa chữ cái, chữ số, gạch dưới (_) hoặc gạch ngang (-).');
+    }
+
+    if (googleCredential) { updateOtpTargetDisplay(); goToRegStep(3); focusFirstOtpDigit(); return; }
+
+    // Kiểm tra tên đăng nhập và SĐT trên server
+    const btn = byId('btnNextStep1');
+    setLoading(btn, true, 'Kiểm tra...');
+    try {
+      const r = await fetch('/api/register/check-step1', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, phone, email })
+      });
+      if (r.ok) {
+        const d = await r.json();
+        if (!d.success) throw new Error(d.message);
+      } else if (r.status === 400) {
+        const d = await r.json();
+        throw new Error(d.message);
+      }
+      byId('step2SummaryUser').textContent = `${username} (${email})`;
+      goToRegStep(2);
+      byId('reg-password').focus();
+    } catch (err) {
+      if (err.message && !err.message.includes('API') && !err.message.includes('xử lý')) {
+        return showMsg(err.message);
+      }
+      byId('step2SummaryUser').textContent = `${username} (${email})`;
+      goToRegStep(2);
+      byId('reg-password').focus();
+    } finally {
+      setLoading(btn, false, 'Tiếp tục <i class="fas fa-arrow-right" style="margin-left:6px;"></i>');
+      btn.innerHTML = 'Tiếp tục <i class="fas fa-arrow-right" style="margin-left:6px;"></i>';
+    }
+  });
+
+  // --- BƯỚC 2: MẬT KHẨU & ĐỘ MẠNH & SO KHỚP ---
+  const evalPassword = () => {
+    const pw = byId('reg-password').value;
+    const confirm = byId('reg-confirm-password').value;
+    const fill = byId('pwStrengthFill');
+    const txt = byId('pwStrengthText');
+    const match = byId('pwMatchBadge');
+
+    // Tính điểm mật khẩu
+    let score = 0;
+    if (pw.length >= 6) score += 1;
+    if (pw.length >= 9) score += 1;
+    if (/[A-Z]/.test(pw)) score += 1;
+    if (/[0-9]/.test(pw)) score += 1;
+    if (/[^A-Za-z0-9]/.test(pw)) score += 1;
+
+    fill.className = 'pw-strength-fill';
+    if (!pw) {
+      txt.textContent = 'Độ mạnh: Chưa nhập';
+    } else if (score <= 2) {
+      fill.classList.add('weak');
+      txt.textContent = 'Độ mạnh: Yếu';
+    } else if (score <= 4) {
+      fill.classList.add('medium');
+      txt.textContent = 'Độ mạnh: Trung bình';
+    } else {
+      fill.classList.add('strong');
+      txt.textContent = 'Độ mạnh: Rất mạnh';
+    }
+
+    if (!confirm) {
+      match.textContent = '';
+      match.className = 'pw-match-badge';
+    } else if (pw === confirm) {
+      match.textContent = '✓ Khớp mật khẩu';
+      match.className = 'pw-match-badge matched';
+    } else {
+      match.textContent = '✕ Chưa khớp';
+      match.className = 'pw-match-badge mismatch';
+    }
+  };
+
+  byId('reg-password').addEventListener('input', evalPassword);
+  byId('reg-confirm-password').addEventListener('input', evalPassword);
+
+  byId('btnBackStep2').addEventListener('click', () => goToRegStep(1));
+  byId('btnNextStep2').addEventListener('click', () => {
+    const pw = byId('reg-password').value;
+    const confirm = byId('reg-confirm-password').value;
+
+    if (!pw || pw.length < 6) return showMsg('Mật khẩu phải có độ dài tối thiểu 6 ký tự.');
+    if (pw !== confirm) return showMsg('Mật khẩu nhập lại không trùng khớp.');
+
+    // Cập nhật thông tin nhận OTP ở bước 3
+    updateOtpTargetDisplay();
+    goToRegStep(3);
+    focusFirstOtpDigit();
+  });
+
+  // --- BƯỚC 3: XÁC THỰC OTP ---
+  const updateOtpTargetDisplay = () => {
+    const email = byId('reg-email').value.trim();
+    const phone = byId('reg-phone').value.trim();
+    const box = byId('otpTargetBox');
+    const display = byId('otpTargetDisplay');
+
+    if (currentOtpChannel === 'email') {
+      const parts = email.split('@');
+      const masked = parts[0].length > 3 ? parts[0].slice(0, 3) + '***@' + parts[1] : email;
+      box.innerHTML = `Mã OTP sẽ được gửi đến email:<br><strong>${masked}</strong>`;
+    } else {
+      const masked = phone.length >= 10 ? phone.slice(0, 3) + '****' + phone.slice(-3) : phone;
+      box.innerHTML = `Mã OTP sẽ gửi qua SMS đến số điện thoại:<br><strong>${masked}</strong>`;
+    }
+  };
+
+  byId('tabEmailOtp').addEventListener('click', () => {
+    currentOtpChannel = 'email';
+    byId('tabEmailOtp').classList.add('active');
+    byId('tabPhoneOtp').classList.remove('active');
+    updateOtpTargetDisplay();
+  });
+
+  byId('tabPhoneOtp').addEventListener('click', () => {
+    currentOtpChannel = 'phone';
+    byId('tabPhoneOtp').classList.add('active');
+    byId('tabEmailOtp').classList.remove('active');
+    updateOtpTargetDisplay();
+  });
+
+  // Đếm ngược gửi lại OTP
+  const startOtpCountdown = (seconds = 60) => {
+    const btn = byId('btnSendOtp');
+    const cd = byId('otpCountdown');
+    btn.disabled = true;
+    cd.style.display = 'inline-block';
+    let remain = seconds;
+    cd.textContent = `Gửi lại sau (${remain}s)`;
+
+    if (otpTimerInterval) clearInterval(otpTimerInterval);
+    otpTimerInterval = setInterval(() => {
+      remain -= 1;
+      if (remain <= 0) {
+        clearInterval(otpTimerInterval);
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-rotate-right"></i> Gửi lại mã OTP';
+        cd.style.display = 'none';
+      } else {
+        cd.textContent = `Gửi lại sau (${remain}s)`;
+      }
+    }, 1000);
+  };
+
+  // Gửi OTP
+  byId('btnSendOtp').addEventListener('click', async () => {
+    const btn = byId('btnSendOtp');
+    const fullName = byId('reg-fullname').value.trim();
+    const email = byId('reg-email').value.trim();
+    const phone = byId('reg-phone').value.trim();
+
+    if (currentOtpChannel === 'email') {
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi...';
+      try {
+        const r = await fetch('/api/otp/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, fullName })
+        });
+        if (r.ok) {
+          const d = await r.json();
+          showMsg(d.message || 'Mã OTP đã được gửi đến email của bạn!', 'success');
+          if (d.devOtp) {
+            console.log('%c[DEV OTP CODE]: ' + d.devOtp, 'background: #b88d45; color: #fff; font-size: 16px; padding: 4px 8px;');
+          }
+        } else {
+          const demoCode = Math.floor(100000 + Math.random() * 900000).toString();
+          window.demoOtpCode = demoCode;
+          showMsg(`Mã OTP xác nhận của bạn là: ${demoCode} (Chế độ xem trước). Vui lòng nhập mã để hoàn tất.`, 'info');
+        }
+        startOtpCountdown(45);
+        focusFirstOtpDigit();
+      } catch (err) {
+        const demoCode = Math.floor(100000 + Math.random() * 900000).toString();
+        window.demoOtpCode = demoCode;
+        showMsg(`Mã OTP xác nhận của bạn là: ${demoCode} (Chế độ xem trước). Vui lòng nhập mã để hoàn tất.`, 'info');
+        startOtpCountdown(45);
+        focusFirstOtpDigit();
+      }
+    } else {
+      // Luồng Firebase Phone Auth SMS
+      if (window.FIREBASE_CONFIG && window.FIREBASE_CONFIG.apiKey && window.firebase) {
+        try {
+          btn.disabled = true;
+          btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Kết nối Firebase...';
+
+          if (!firebase.apps.length) {
+            firebase.initializeApp(window.FIREBASE_CONFIG);
+          }
+
+          let intlPhone = phone.trim().replace(/[\s.-]/g, '');
+          if (!intlPhone.startsWith('+')) {
+            if (intlPhone.startsWith('0')) intlPhone = '+84' + intlPhone.slice(1);
+            else if (intlPhone.startsWith('84')) intlPhone = '+' + intlPhone;
+            else intlPhone = '+84' + intlPhone;
+          }
+
+          if (window.recaptchaVerifier) {
+            try { window.recaptchaVerifier.clear(); } catch (_) {}
+            window.recaptchaVerifier = null;
+          }
+          const rcContainer = byId('recaptcha-container');
+          if (rcContainer) rcContainer.innerHTML = '';
+
+          window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+            size: 'invisible',
+            callback: () => {}
+          });
+
+          const confirmationResult = await firebase.auth().signInWithPhoneNumber(intlPhone, window.recaptchaVerifier);
+          firebaseConfirmation = confirmationResult;
+          showMsg('Đã gửi mã xác thực tới ' + intlPhone, 'success');
+          startOtpCountdown(60);
+          focusFirstOtpDigit();
+        } catch (fbErr) {
+          console.error('Firebase Phone Auth Error:', fbErr);
+          let errMsg = fbErr.message || 'Lỗi gửi SMS từ Firebase.';
+          if (fbErr.code === 'auth/invalid-phone-number') errMsg = 'Số điện thoại không đúng định dạng quốc tế.';
+          else if (fbErr.code === 'auth/quota-exceeded') errMsg = 'Hạn mức gửi SMS miễn phí của Firebase hôm nay đã hết.';
+          else if (fbErr.code === 'auth/captcha-check-failed') errMsg = 'Xác minh reCAPTCHA thất bại, vui lòng thử lại.';
+          else if (fbErr.code === 'auth/operation-not-allowed') errMsg = 'Chưa bật Phone Authentication trong Firebase Console (Authentication -> Sign-in method -> Phone).';
+          showMsg(errMsg, 'error');
+          if (window.recaptchaVerifier && typeof window.recaptchaVerifier.clear === 'function') {
+            try { window.recaptchaVerifier.clear(); window.recaptchaVerifier = null; } catch(_) {}
+          }
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fas fa-paper-plane"></i> Thử lại';
+        }
+      } else {
+        showMsg('Chưa tìm thấy cấu hình Firebase trong `User/Frontend/js/firebase-config.js`.', 'info');
+      }
+    }
+  });
+
+  // Xử lý 6 ô nhập mã OTP (auto-focus, backspace, paste)
+  const otpDigits = document.querySelectorAll('.otp-digit');
+  const focusFirstOtpDigit = () => { if (otpDigits[0]) otpDigits[0].focus(); };
+  const getEnteredOtp = () => Array.from(otpDigits).map(input => input.value.trim()).join('');
+
+  otpDigits.forEach((input, idx) => {
+    input.addEventListener('input', (e) => {
+      const val = e.target.value.replace(/[^0-9]/g, '');
+      e.target.value = val ? val[val.length - 1] : '';
+      if (e.target.value && idx < otpDigits.length - 1) {
+        otpDigits[idx + 1].focus();
+      }
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && !input.value && idx > 0) {
+        otpDigits[idx - 1].focus();
+      }
+    });
+
+    input.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const pasteData = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '').slice(0, 6);
+      pasteData.split('').forEach((ch, i) => {
+        if (otpDigits[i]) otpDigits[i].value = ch;
+      });
+      const nextIdx = Math.min(pasteData.length, otpDigits.length - 1);
+      if (otpDigits[nextIdx]) otpDigits[nextIdx].focus();
+    });
+  });
+
+  byId('btnBackStep3').addEventListener('click', () => goToRegStep(2));
+
+  // ==========================================================
+  // XỬ LÝ SUBMIT FORM ĐĂNG NHẬP
+  // ==========================================================
+  byId('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = byId('loginSubmitBtn'); setLoading(btn, true, 'Đăng nhập');
+    try {
+      const r = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          TenDangNhap: byId('login-username').value,
+          MatKhau: byId('login-password').value
+        })
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.message);
+      saveAndRedirect(d.data);
+    } catch (err) {
+      showMsg(err.message || 'Không thể đăng nhập.');
+    } finally {
+      setLoading(btn, false, 'Đăng nhập');
+    }
+  });
+
+  // ==========================================================
+  // XỬ LÝ SUBMIT HOÀN TẤT ĐĂNG KÝ (BƯỚC 3)
+  // ==========================================================
+  byId('registerForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (currentRegStep !== 3) return;
+
+    const otpCode = getEnteredOtp();
+    if (otpCode.length < 6) {
+      return showMsg('Vui lòng nhập đầy đủ mã xác thực OTP 6 chữ số.');
+    }
+
+    const btn = byId('registerSubmitBtn');
+    setLoading(btn, true, 'Đang xác thực...');
+
+    try {
+      // Nếu là luồng Firebase SĐT và có confirmationResult:
+      let firebaseToken = null;
+      if (currentOtpChannel === 'phone') {
+        if (!firebaseConfirmation) {
+          return showMsg('Vui lòng bấm "Gửi mã OTP" để nhận mã xác thực qua SMS trước.');
+        }
+        try {
+          const result = await firebaseConfirmation.confirm(otpCode);
+          firebaseToken = await result.user.getIdToken();
+        } catch (fbVerErr) {
+          console.error('Firebase confirm error:', fbVerErr);
+          let vMsg = 'Mã OTP SMS không chính xác hoặc đã hết hạn.';
+          if (fbVerErr.code === 'auth/invalid-verification-code') vMsg = 'Mã OTP không chính xác. Vui lòng kiểm tra lại tin nhắn SMS.';
+          else if (fbVerErr.code === 'auth/code-expired') vMsg = 'Mã OTP đã hết hạn. Vui lòng bấm gửi lại mã mới.';
+          return showMsg(vMsg, 'error');
+        }
+      }
+
+      const payload = {
+        fullName: byId('reg-fullname').value.trim(),
+        phone: byId('reg-phone').value.trim(),
+        email: byId('reg-email').value.trim(),
+        username: byId('reg-username').value.trim(),
+        password: byId('reg-password').value.trim(),
+        address: byId('reg-address').value.trim(),
+        otp: otpCode,
+        otpType: currentOtpChannel,
+        firebaseToken
+      };
+
+      if(googleCredential)payload.credential=googleCredential;
+      const r = await fetch(googleCredential?'/api/google/register':'/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.message);
+
+      if (d.data) {
+        await showMsg(d.message || 'Đăng ký thành công! Đang chuyển hướng...', 'success');
+        saveAndRedirect(d.data);
+      } else {
+        await showMsg(d.message, 'success');
+        setFace('login');
+        byId('login-username').value = payload.username;
+      }
+    } catch (err) {
+      showMsg(err.message || 'Không thể tạo tài khoản.');
+    } finally {
+      setLoading(btn, false, 'Hoàn tất');
+      btn.innerHTML = '<i class="fas fa-check-circle"></i> Hoàn tất';
+    }
+  });
+
+  // ==========================================================
+  // GOOGLE AUTHENTICATION INTEGRATION
+  // ==========================================================
+  window.handleGoogleCredential = async (gr) => {
+    try {
+      const r = await fetch('/api/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ credential: gr.credential })
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.message);
+      if (d.data) return saveAndRedirect(d.data);
+
+      googleCredential = gr.credential;
+      setFace('register');
+      goToRegStep(1);
+
+      const p = d.profile || {};
+      byId('reg-fullname').value = p.fullName || '';
+      byId('reg-email').value = p.email || '';
+      byId('reg-username').value = p.username || '';
+
+      byId('googleProfileNote').classList.add('show');
+      byId('registerAuxSection').style.display = 'none';
+      byId('btnNextStep1').innerHTML = '<i class="fab fa-google"></i> Hoàn tất đăng ký bằng Google';
+    } catch (err) {
+      showMsg(err.message || 'Không thể xác thực Google.');
+    }
+  };
+
+  async function setupGoogle() {
+    try {
+      const cfg = await fetch('/api/google-config').then(r => r.json());
+      if (!cfg.clientId || !window.google) return;
+      google.accounts.id.initialize({ client_id: cfg.clientId, callback: window.handleGoogleCredential });
+      ['googleLoginButton', 'googleRegisterButton'].forEach(id => {
+        const slot = byId(id);
+        if (!slot) return;
+        slot.innerHTML = '';
+        google.accounts.id.renderButton(slot, {
+          theme: 'outline',
+          size: 'large',
+          width: Math.min(400, Math.floor(slot.getBoundingClientRect().width || 360)),
+          text: id === 'googleRegisterButton' ? 'signup_with' : 'signin_with',
+          locale: 'vi'
+        });
+      });
+    } catch (err) {
+      console.warn('Google Sign-In chưa được cấu hình.', err);
+    }
+  }
+
+  document.querySelectorAll('.google-fallback').forEach(btn => btn.addEventListener('click', () => showMsg('Đăng nhập bằng Google hiện chưa khả dụng. Vui lòng thử lại sau.', 'info')));
+  byId('forgotPassword').addEventListener('click', (e) => { e.preventDefault(); showMsg('Vui lòng liên hệ quản trị viên để hỗ trợ đặt lại mật khẩu.', 'info'); });
+  window.addEventListener('load', setupGoogle);
+</script>
+</body>
+</html>

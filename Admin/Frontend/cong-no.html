@@ -1,0 +1,600 @@
+﻿<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tổng Hợp Công Nợ - JAVI COFFEE</title>
+
+    <link rel="stylesheet" href="/css/global.css?v=20261022-directory-grid" />
+    <link rel="stylesheet" href="/admin/css/sidebar.css?v=20261021-action-fit-2" />
+    <link
+      rel="stylesheet"
+      href="/vendor/fontawesome/css/all.min.css"
+    />
+    <script src="/admin/js/auth.js?v=20261021-form-unified"></script>
+    <script src="/admin/js/report-filters.js?v=20261021-action-fit-2"></script>
+    <style>
+      .action-btn {
+        padding: 6px 12px;
+        font-size: 12px;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+        background-color: #17a2b8; /* info color */
+        color: #fff;
+        transition: opacity 0.2s;
+      }
+      .action-btn:hover {
+        opacity: 0.8;
+      }
+      /* Modal styles */
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 2000;
+        justify-content: center;
+        align-items: center;
+      }
+      .modal-content {
+        background-color: var(--color-bg-surface);
+        padding: 30px;
+        border-radius: 8px;
+        border: 1px solid var(--color-border);
+        position: relative;
+      }
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        border-bottom: 1px solid var(--color-border);
+        padding-bottom: 10px;
+      }
+      .close-btn {
+        background: none;
+        border: none;
+        color: var(--color-text-muted);
+        font-size: 28px;
+        cursor: pointer;
+      }
+      .status-success {
+        color: #28a745;
+        font-weight: 600;
+      }
+      .status-danger {
+        color: #dc3545;
+        font-weight: 600;
+      }
+    </style>
+      <!-- Google Fonts: 2 font chuẩn xuyên suốt hệ thống (Hỗ trợ 100% tiếng Việt) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+<script src="/admin/js/grid-files.js" defer></script><script src="/admin/js/ui-consistency.js?v=20261021-form-unified" defer></script><link rel="stylesheet" href="/admin/css/admin-design.css">
+<script defer src="/admin/js/admin-design.js"></script>
+</head>
+  <body>
+    <div class="sidebar"></div>
+
+    <div class="main-content">
+      <div class="page-header">
+        <h2><i class="fas fa-book"></i> TỔNG HỢP CÔNG NỢ KHÁCH HÀNG</h2>
+        <button class="btn" onclick="window.location.href = 'phieu-thu.html'">
+          <i class="fas fa-hand-holding-usd"></i> Tới Phiếu Thu Thu Tiền
+        </button>
+      </div>
+
+      <form class="report-filters" onsubmit="event.preventDefault(); filterCN()">
+        <label>Trạng thái công nợ<select id="debtStatus"><option value="">Tất cả</option><option value="outstanding">Còn nợ</option><option value="paid">Đã hết nợ</option></select></label>
+        <label>Dư nợ từ (VNĐ)<input type="number" id="debtMin" min="0" placeholder="Không giới hạn" /></label>
+        <label>Dư nợ đến (VNĐ)<input type="number" id="debtMax" min="0" placeholder="Không giới hạn" /></label>
+        <button class="btn" type="submit"><i class="fas fa-filter"></i> Xem</button>
+      </form>
+
+      <!-- Bảng Dữ Liệu -->
+      <div class="table-responsive">
+        <table id="congNoTable">
+          <thead>
+            <tr>
+<th>Khách hàng</th>
+              <th>Số Điện Thoại</th>
+              <th>Số Hóa Đơn Nợ</th>
+              <th>Tổng Tiền Nợ (Gốc)</th>
+              <th>Đã Hoàn Trả</th>
+              <th>Số Dư Còn Nợ</th>
+              <th>Hành Động</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="7" style="text-align: center">
+                Đang tải dữ liệu...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    
+      
+    </div>
+
+    <!-- MODAL XEM HÓA ĐƠN CỦA KHÁCH HÀNG -->
+    <div class="modal-overlay" id="customerInvoicesModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-file-invoice"></i> Danh Sách Hóa Đơn Nợ</h3>
+          <button class="close-btn" onclick="closeInvoicesModal()">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body detail-body">
+          <div class="voucher-info-grid" id="debtCustomerInfo">
+            <div class="voucher-info-item"><span class="voucher-label">Khách hàng</span><span class="voucher-value" id="modal-tenKH"></span></div>
+            <div class="voucher-info-item"><span class="voucher-label">Loại khách hàng</span><span class="voucher-value" id="debt-customer-type"></span></div>
+            <div class="voucher-info-item"><span class="voucher-label">Số điện thoại</span><span class="voucher-value" id="debt-customer-phone"></span></div>
+            <div class="voucher-info-item"><span class="voucher-label">Email</span><span class="voucher-value" id="debt-customer-email"></span></div>
+            <div class="voucher-info-item"><span class="voucher-label">Giới tính</span><span class="voucher-value" id="debt-customer-gender"></span></div>
+            <div class="voucher-info-item"><span class="voucher-label">Địa chỉ</span><span class="voucher-value" id="debt-customer-address"></span></div>
+          </div>
+          <div
+            class="table-responsive"
+            style="overflow-x: auto; max-height: 60vh; overflow-y: auto"
+          >
+            <table
+              id="customerInvoicesTable"
+              style="width: 100%; white-space: nowrap"
+            >
+              <thead>
+                <tr>
+                  <th>Mã Đơn</th>
+                  <th>Mã HĐ</th>
+                  <th>Ngày Lập</th>
+                  <th>Tổng Tiền</th>
+                  <th>Trạng Thái TT</th>
+                  <th>Đã Trả</th>
+                  <th>Còn Nợ</th>
+                  <th>Hành Động</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL LẬP PHIẾU THU (Thu Nợ Khách Hàng) -->
+    <div class="modal-overlay" id="receiptModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>
+            <i class="fas fa-hand-holding-usd"></i> Lập Phiếu Thu Nợ
+          </h3>
+          <button class="close-btn" onclick="closeReceiptModal()">
+            &times;
+          </button>
+        </div>
+        <form id="receiptForm">
+          <div class="section-title">Đơn hàng và công nợ</div>
+          <div class="form-row" style="display: flex; gap: 15px">
+            <div class="form-group readonly" style="flex: 1">
+              <label>Mã Đơn Hàng</label>
+              <input
+                type="text"
+                id="thuMaDH"
+                readonly
+                style="
+                  width: 100%;
+                  padding: 8px;
+                  border-radius: 4px;
+                  border: 1px solid #333;
+                  background: #222;
+                  color: #fff;
+                "
+              />
+            </div>
+            <div class="form-group readonly" style="flex: 1">
+              <label>Mã Hóa Đơn</label>
+              <input
+                type="text"
+                id="thuMaHD"
+                readonly
+                style="
+                  width: 100%;
+                  padding: 8px;
+                  border-radius: 4px;
+                  border: 1px solid #333;
+                  background: #222;
+                  color: #fff;
+                "
+              />
+            </div>
+            <div class="form-group readonly" style="flex: 1">
+              <label>Mã Sổ Nợ</label>
+              <input
+                type="text"
+                id="thuMaCN"
+                readonly
+                style="
+                  width: 100%;
+                  padding: 8px;
+                  border-radius: 4px;
+                  border: 1px solid #333;
+                  background: #222;
+                  color: #fff;
+                "
+              />
+            </div>
+          </div>
+          <div
+            class="form-row"
+            style="display: flex; gap: 15px; margin-top: 10px"
+          >
+            <div class="form-group readonly" style="flex: 2">
+              <label>Tổng Tiền Đang Nợ (VNĐ)</label>
+              <input
+                type="text"
+                id="thuTongNo"
+                readonly
+                style="
+                  width: 100%;
+                  padding: 8px;
+                  border-radius: 4px;
+                  border: 1px solid #333;
+                  background: #222;
+                  color: #ff4d4d;
+                  font-weight: bold;
+                "
+              />
+            </div>
+          </div>
+          <div
+            class="form-row"
+            style="
+              border-top: 1px dashed var(--color-border);
+              padding-top: 15px;
+              margin-top: 10px;
+              display: flex;
+              gap: 15px;
+            "
+          >
+            <div class="form-group" style="flex: 1">
+              <label
+                >Số Tiền Thực Thu (VNĐ) <span style="color: red">*</span></label
+              >
+              <input
+                type="number"
+                step="any"
+                id="thuSoTien"
+                placeholder="Nhập số tiền khách trả đợt này..."
+                required
+                style="
+                  width: 100%;
+                  padding: 8px;
+                  border-radius: 4px;
+                  border: 1px solid #333;
+                  background: #222;
+                  color: #fff;
+                "
+              />
+            </div>
+          </div>
+          <div
+            class="form-row"
+            style="display: flex; gap: 15px; margin-top: 10px"
+          >
+            <div class="form-group" style="flex: 1">
+              <label
+                >Hình Thức Thanh Toán <span style="color: red">*</span></label
+              >
+              <select
+                id="thuHinhThuc"
+                required
+                style="
+                  width: 100%;
+                  padding: 8px;
+                  border-radius: 4px;
+                  border: 1px solid #333;
+                  background: #222;
+                  color: #fff;
+                "
+              >
+                <option value="Chuyển khoản">Chuyển khoản</option>
+                <option value="Tiền mặt">Tiền mặt</option>
+              </select>
+            </div>
+            <div class="form-group" style="flex: 1">
+              <label>Nhân Viên Thu <span style="color: red">*</span></label>
+              <input
+                type="text"
+                id="thuMaNV"
+                placeholder="Tìm nhân viên..."
+                required
+                style="
+                  width: 100%;
+                  padding: 8px;
+                  border-radius: 4px;
+                  border: 1px solid #333;
+                  background: #222;
+                  color: #fff;
+                "
+              />
+            </div>
+          </div>
+          <div class="form-group" style="margin-top: 10px">
+            <label>Ghi Chú</label>
+            <input
+              type="text"
+              id="thuGhiChu"
+              placeholder="Ví dụ: Thu tiền mặt đợt 1..."
+              style="
+                width: 100%;
+                padding: 8px;
+                border-radius: 4px;
+                border: 1px solid #333;
+                background: #222;
+                color: #fff;
+              "
+            />
+          </div>
+          <div
+            style="
+              display: flex;
+              justify-content: flex-end;
+              gap: 10px;
+              margin-top: 20px;
+            "
+          >
+            <button
+              type="button"
+              class="btn"
+              style="background-color: #333; color: #fff"
+              onclick="closeReceiptModal()"
+            >
+              Hủy Bỏ
+            </button>
+            <button
+              type="submit"
+              class="btn"
+              style="background-color: #dc3545; color: white"
+            >
+              Xác Nhận Thu Tiền
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      // Load nhân viên for autocomplete
+      async function loadDataForForm() {
+        try {
+          const resNV = await fetch("/api/nhan-vien");
+          const dataNV = await resNV.json();
+          if (dataNV.success) {
+            const listNV = dataNV.data.map(
+              (nv) => `${nv.MaNV} - ${nv.HoTenNV}`,
+            );
+            if (window.setupAutocomplete) setupAutocomplete("thuMaNV", listNV);
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      function openReceiptModal(maDH, maHD, tongNo, maCN) {
+        document.getElementById("receiptForm").reset();
+        document.getElementById("thuMaDH").value = maDH;
+        document.getElementById("thuMaHD").value = maHD;
+        document.getElementById("thuMaCN").value = maCN || "";
+        document.getElementById("thuTongNo").value =
+          new Intl.NumberFormat("vi-VN").format(tongNo) + " đ";
+        document.getElementById("thuSoTien").value = tongNo;
+
+        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        if (currentUser) {
+          document.getElementById("thuMaNV").value =
+            `${currentUser.MaNV} - ${currentUser.HoTenNV}`;
+        }
+        document.getElementById("receiptModal").style.display = "flex";
+      }
+
+      function closeReceiptModal() {
+        document.getElementById("receiptModal").style.display = "none";
+      }
+
+      document
+        .getElementById("receiptForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const currentUser =
+            JSON.parse(localStorage.getItem("currentUser")) || {};
+          const maNV =
+            document.getElementById("thuMaNV").value.split(" - ")[0].trim() ||
+            currentUser.MaNV;
+          const payload = {
+            maCN: document.getElementById("thuMaCN").value,
+            soTienThucThu: document.getElementById("thuSoTien").value,
+            hinhThucTT: document.getElementById("thuHinhThuc").value,
+            ghiChu: document.getElementById("thuGhiChu").value,
+            maNV: maNV || "NV001",
+          };
+          if (!payload.maCN) return alert("Lỗi: Không tìm thấy Mã Công Nợ.");
+          try {
+            const res = await fetch("/api/phieu-thu", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+            const data = await res.json();
+            if (data.success) {
+              alert(data.message || "Thu nợ thành công!");
+              closeReceiptModal();
+              const debtModal=document.getElementById('customerInvoicesModal');
+              if(debtModal.dataset.customerId)viewCustomerInvoices(debtModal.dataset.customerId,debtModal.dataset.customerName);
+              loadCongNo();
+            } else alert("Lỗi: " + data.message);
+          } catch (err) {
+            alert("Lỗi Server khi thực hiện thu nợ!");
+          }
+        });
+
+      // Gọi API đổ dữ liệu sổ Công Nợ
+      async function loadCongNo() {
+        try {
+          const res = await fetch("/api/cong-no", { cache: "no-store" });
+          const data = await res.json();
+
+          if (data.success) {
+            console.log("Dữ liệu Công Nợ:", data.data);
+            const tbody = document.querySelector("#congNoTable tbody");
+            let html = "";
+
+            // Sắp xếp theo Mã KH giảm dần (mới nhất lên đầu)
+            data.data.sort((a, b) => b.MaKH.localeCompare(a.MaKH));
+
+            data.data.forEach((item) => {
+              // Highlighting màu cho dư nợ
+              let noClass =
+                item.TongConNo > 0
+                  ? "color: #dc3545; font-weight: bold;"
+                  : "color: #28a745; font-weight: bold;";
+
+              html += `<tr data-debt="${Number(item.TongConNo || 0)}">
+                
+<td>${formatCustomer(item.MaKH, item.TenKH)}</td>
+                <td>${item.SoDTKH || "N/A"}</td>
+                <td>${item.SoPhieuNo} Hóa đơn</td>
+                <td>${new Intl.NumberFormat("vi-VN").format(item.TongTienNo || 0)} đ</td>
+                <td>${new Intl.NumberFormat("vi-VN").format(item.TongDaTra || 0)} đ</td>
+                <td style="${noClass}">${new Intl.NumberFormat("vi-VN").format(item.TongConNo || 0)} đ</td>
+                <td style="text-align: right;">
+                  <button class="action-btn" onclick="viewCustomerInvoices('${item.MaKH}', '${item.TenKH}')">
+                      <i class="fas fa-eye"></i></button>
+                </td>
+              </tr>`;
+            });
+
+            // Nút "Thu Nợ" mình để chuyển hướng sang Phiếu thu, do cơ chế thu sẽ dựa vào Mã Hóa Đơn/Phiếu bên hoa-don.html
+
+            tbody.innerHTML =
+              html ||
+              '<tr><td colspan="7" style="text-align:center;">Chưa có dữ liệu công nợ</td></tr>';
+            applyDebtFilters(false);
+          } else {
+            console.error("Lỗi API:", data.message);
+            alert("Lỗi từ Server: " + data.message);
+          }
+        } catch (error) {
+          console.error("Lỗi:", error);
+          alert(
+            "Không thể kết nối đến API Công nợ. Vui lòng khởi động lại Server!",
+          );
+        }
+      }
+
+      function filterCN() { applyDebtFilters(); }
+
+      function closeInvoicesModal() {
+        document.getElementById("customerInvoicesModal").style.display = "none";
+      }
+
+      const debtEscape=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      let debtDetailVersion=0;
+      async function viewCustomerInvoices(maKH, tenKH) {
+        const version=++debtDetailVersion;
+        const modal = document.getElementById("customerInvoicesModal");
+        const tenKH_El = document.getElementById("modal-tenKH");
+        const tableBody = document.querySelector(
+          "#customerInvoicesTable tbody",
+        );
+
+        modal.dataset.customerId=String(maKH).trim();modal.dataset.customerName=tenKH;
+        tenKH_El.textContent = `(${String(maKH).trim()}) ${tenKH}`;
+        for(const id of ['debt-customer-type','debt-customer-phone','debt-customer-email','debt-customer-gender','debt-customer-address'])document.getElementById(id).textContent='';
+        tableBody.innerHTML =
+          '<tr><td colspan="8" style="text-align:center;">Đang tải dữ liệu hóa đơn...</td></tr>';
+        modal.style.display = "flex";
+
+        try {
+          const safeMaKH = encodeURIComponent(String(maKH).trim());
+          const res = await fetch(`/api/cong-no/khach-hang/${safeMaKH}`);
+          const data = await res.json();
+          if(version!==debtDetailVersion)return;
+          if(!res.ok||!data.success)throw new Error(data.message||"Không tải được công nợ.");
+          const customer=data.customer;
+          if(customer){
+            tenKH_El.textContent=`(${String(customer.MaKH||maKH).trim()}) ${customer.TenKH||tenKH}`;modal.dataset.customerName=customer.TenKH||tenKH;
+            for(const [id,key] of [['debt-customer-type','TenLoaiKH'],['debt-customer-phone','SoDTKH'],['debt-customer-email','EmailKH'],['debt-customer-gender','GioiTinhKH'],['debt-customer-address','DiaChiKH']])document.getElementById(id).textContent=String(customer[key]??'').trim();
+          }
+
+          if (
+            data.success &&
+            Array.isArray(data.data) &&
+            data.data.length > 0
+          ) {
+            let html = "";
+
+            // Sắp xếp theo Mã HD giảm dần (mới nhất lên đầu)
+            data.data.sort((a, b) => {
+              const maHDA = Array.isArray(a.MaHD) ? a.MaHD[0] : a.MaHD || "";
+              const maHDB = Array.isArray(b.MaHD) ? b.MaHD[0] : b.MaHD || "";
+              return String(maHDB).localeCompare(String(maHDA));
+            });
+
+            data.data.forEach((cn) => {
+              const statusClass =
+                cn.SoDuCN > 0 ? "status-danger" : "status-success";
+              const statusText =
+                cn.TrangThaiCN || (cn.SoDuCN > 0 ? "Còn nợ" : "Hoàn tất");
+              const maHD_str = String(
+                Array.isArray(cn.MaHD) ? cn.MaHD[0] : cn.MaHD || "Trống",
+              );
+              const maDH_str = String(
+                Array.isArray(cn.MaDH) ? cn.MaDH[0] : cn.MaDH || "Trống",
+              );
+
+              html += `
+                    <tr>
+                        
+<td>${debtEscape(maDH_str.trim())}</td>
+                        <td>${debtEscape(maHD_str.trim())}</td>
+                        <td>${new Date(cn.NgayGhiNhan).toLocaleDateString("vi-VN")}</td>
+                        <td>${new Intl.NumberFormat("vi-VN").format(cn.TongNo)} đ</td>
+                        <td class="${statusClass}">${debtEscape(statusText)}</td>
+                        <td>${new Intl.NumberFormat("vi-VN").format(cn.SoTienDaTra)} đ</td>
+                        <td style="font-weight: bold; color: #dc3545;">${new Intl.NumberFormat("vi-VN").format(cn.SoDuCN)} đ</td>
+                        <td>
+                          ${cn.SoDuCN > 0 ? `<button class="action-btn btn-pay debt-collect" title="Thu nợ" aria-label="Thu nợ" data-order="${debtEscape(maDH_str.trim())}" data-invoice="${debtEscape(maHD_str.trim())}" data-balance="${Number(cn.SoDuCN)||0}" data-debt="${debtEscape(String(Array.isArray(cn.MaCN)?cn.MaCN[0]:cn.MaCN||'').trim())}" onclick="openReceiptModal(this.dataset.order,this.dataset.invoice,Number(this.dataset.balance),this.dataset.debt)"><i class="fas fa-hand-holding-dollar" aria-hidden="true"></i></button>` : ""}
+                        </td>
+                    </tr>
+                `;
+            });
+            tableBody.innerHTML = html;
+          } else {
+            tableBody.innerHTML =
+              '<tr><td colspan="8" style="text-align:center;">Khách hàng này không có công nợ nào.</td></tr>';
+          }
+        } catch (error) {
+          if(version!==debtDetailVersion)return;
+          console.error("Lỗi khi tải công nợ của khách hàng:", error);
+          tableBody.innerHTML =
+            '<tr><td colspan="8" style="text-align:center;">Lỗi khi tải dữ liệu. Vui lòng thử lại.</td></tr>';
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        loadDataForForm();
+        loadCongNo();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,13 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
+const context={};vm.createContext(context);vm.runInContext(fs.readFileSync('Admin/Frontend/js/pos-customer.js','utf8'),context);
+const customers=[{MaKH:'KH000001 ',SoDTKH:'0903111018',TenKH:'Liên'},{MaKH:'KH000002',SoDTKH:'0912 345 678',TenKH:'Giang'}];
+const match=q=>context.findPosCustomers(customers,q);
+assert.equal(match('kh000001')[0],customers[0]);
+assert.equal(match('0903 111 018')[0],customers[0]);
+assert.equal(match('+84 903 111 018')[0],customers[0]);
+assert.equal(match('0912345678')[0],customers[1]);
+for(const query of ['Liên','KH0000','0903','',null,'abc0903111018','0999999999'])assert.equal(match(query).length,0);
+customers.push({MaKH:'KH000003',SoDTKH:'0903111018'});
+assert.equal(match('0903111018').length,2);
+assert.equal(match('KH000001').length,1);
+console.log('PASS: POS exact customer code/phone, country prefix, no name/partial matching and duplicate-phone detection.');

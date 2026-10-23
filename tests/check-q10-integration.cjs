@@ -1,0 +1,21 @@
+const assert=require('assert/strict'),fs=require('fs');require('dotenv').config({quiet:true});process.env.DB_NAME='JAVI_COFFEE_TEST_FIXES_20261022';process.env.SMTP_PASS='';process.env.OTP_DEV_MODE='true';process.env.AUTH_SECRET='q10-test-only';
+const {sql,poolPromise}=require('../Shared/Backend/config/database');const {createApp}=require('../app');const {createToken}=require('../Shared/Backend/middleware/auth');
+(async()=>{const pool=await poolPromise;await pool.request().query(fs.readFileSync('docs/sql/Q10_NANG_CAP_GIU_DU_LIEU.sql','utf8'));const server=createApp('user').listen(0),admin=createApp('admin').listen(0);await Promise.all([new Promise(r=>server.on('listening',r)),new Promise(r=>admin.on('listening',r))]);
+const base='http://localhost:'+server.address().port+'/api',ab='http://localhost:'+admin.address().port+'/api';let n=0;const stamp=String(Date.now()).slice(-7);const user='ql'+stamp;
+async function call(url,body,token,method='POST'){const r=await fetch(url,{method,headers:{'Content-Type':'application/json',...(token?{Authorization:'Bearer '+token}:{})},...(method==='GET'?{}:{body:JSON.stringify(body)})});return {status:r.status,...await r.json()};}
+async function fixture(phone,email){await pool.request().input('Phone',sql.VarChar(50),phone).input('Email',sql.VarChar(100),email).query("INSERT INTO KHACH_HANG(TenKH,SoDTKH,EmailKH,DiaChiKH,MaLoaiKH) VALUES(N'Q10 hồ sơ gốc',@Phone,@Email,N'Địa chỉ gốc','L01')");return (await pool.request().input('P',sql.VarChar(50),phone).query('SELECT * FROM KHACH_HANG WHERE SoDTKH=@P')).recordset[0];}
+async function register(username,phone,email){const otp=await call(base+'/otp/send-email',{email});assert(otp.devOtp);return call(base+'/register',{username,password:'Q10test2026!',fullName:'Không ghi đè',phone,email,address:'Không ghi đè',otpType:'email',otp:otp.devOtp});}
+try{
+const phone='09'+stamp+'1',email=user+'@local.test',kh=await fixture(phone,'old-'+email);const before=(await pool.request().query('SELECT COUNT(*) n FROM KHACH_HANG')).recordset[0].n;
+let bad=await call(base+'/register',{username:user,password:'Q10test2026!',fullName:'Đổi tên',phone,email,otpType:'email',otp:'000000'});assert.equal(bad.status,400);n++;
+let original=(await pool.request().input('KH',sql.Char(8),kh.MaKH).query('SELECT * FROM KHACH_HANG WHERE MaKH=@KH')).recordset[0];assert.equal(original.EmailKH,kh.EmailKH);n++;
+const auto=await register(user,'+84'+phone.slice(1),email);assert.equal(auto.status,200);assert.equal(auto.data.MaKH,kh.MaKH);assert.equal(auto.data.TenKH,'Không ghi đè');assert.equal(auto.data.EmailKH,email);assert.equal(auto.data.DiaChiKH,'Không ghi đè');assert.equal((await pool.request().query('SELECT COUNT(*) n FROM KHACH_HANG')).recordset[0].n,before);n+=6;
+const saved=(await pool.request().input('KH',sql.Char(8),kh.MaKH).query('SELECT * FROM KHACH_HANG WHERE MaKH=@KH')).recordset[0];assert.equal(saved.MaLoaiKH,kh.MaLoaiKH);assert.equal(saved.SoDTKH,phone);n+=2;
+const duplicate=await register(user+'dup',phone,user+'dup@local.test');assert.equal(duplicate.status,400);const unchanged=(await pool.request().input('KH',sql.Char(8),kh.MaKH).query('SELECT * FROM KHACH_HANG WHERE MaKH=@KH')).recordset[0];assert.equal(unchanged.EmailKH,email);n+=2;
+const empty=await fixture('09'+stamp+'2','');const next=await register(user+'blank',empty.SoDTKH,user+'blank@local.test');assert.equal(next.status,200);assert.equal(next.data.MaKH,empty.MaKH);n+=2;
+const newuser=await register(user+'new','09'+stamp+'3',user+'new@local.test');assert.equal(newuser.status,200);assert.notEqual(newuser.data.MaKH,kh.MaKH);n+=2;
+const login=await call(base+'/login',{username:user,password:'Q10test2026!'});assert.equal(login.data.MaKH,kh.MaKH);assert.equal(login.data.EmailKH,email);n+=2;
+const step=await call(base+'/register/check-step1',{username:user+'step',phone});assert.equal(step.status,400);n++;
+console.log('PASS Q10 simplified: '+n+' assertions via HTTP/SQL, isolated test database.');fs.mkdirSync('outputs/q10',{recursive:true});fs.writeFileSync('outputs/q10/test-result.json',JSON.stringify({passed:n,database:process.env.DB_NAME,flow:'OTP email + phone match + update profile, no review queue',at:new Date().toISOString()},null,2));
+}finally{server.close();admin.close();await pool.close();}
+})().catch(e=>{console.error(e);process.exitCode=1;});

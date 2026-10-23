@@ -1,0 +1,44 @@
+const assert=require('assert/strict');
+const ExcelJS=require('../node_modules/exceljs');
+const workbook=require('../Admin/Backend/services/import-workbook');
+const {schema}=require('../Admin/Backend/services/import-schema');
+const {validate,groups}=require('../Admin/Backend/services/import-validation');
+const row=(values,line=2)=>({line,values,errors:[],parseErrors:[]});
+(async()=>{
+ const def=schema['san-pham'];
+ const lookup={MaLoaiSP:[{id:'CFH',name:'Cà phê hạt'}]};
+ const buffer=await workbook.template(def,lookup);
+ const book=new ExcelJS.Workbook();await book.xlsx.load(buffer);
+ assert.equal(book.getWorksheet('Danh muc').state,'veryHidden');
+ const sheet=book.getWorksheet('Nhap lieu');
+ assert.equal(sheet.getCell('H2').dataValidation.type,'list');
+ const listName=sheet.getCell('H2').dataValidation.formulae[0];
+ assert(book.definedNames.getRanges(listName).ranges[0].includes('Danh muc'));
+ assert.equal(sheet.getCell('F2').dataValidation.type,'decimal');
+ sheet.getRow(2).values=['CFH01','Cà phê','Gói',0.5,'',150000,5,'CFH',''];
+ let parsed=await workbook.parse(Buffer.from(await book.xlsx.writeBuffer()),def);
+ assert.equal(parsed.length,1);assert.equal(parsed[0].line,2);
+ let result=validate(def,parsed,[],lookup,'skip');assert.deepEqual(result[0].errors,[]);
+ sheet.getCell('F2').value={formula:'1+1',result:2};
+ parsed=await workbook.parse(Buffer.from(await book.xlsx.writeBuffer()),def);assert(parsed[0].errors.some(e=>e.includes('công thức')));
+ const type=schema['loai-sp'];
+ result=validate(type,[row({MaLoaiSP:'CFH',TenLoaiSP:'Mới'})],[{MaLoaiSP:'CFH',TenLoaiSP:'Cũ'}],{},'skip');assert.equal(result[0].action,'skip');
+ result=validate(type,[row({MaLoaiSP:'CFH',TenLoaiSP:''})],[{MaLoaiSP:'CFH',TenLoaiSP:'Cũ'}],{},'update');assert.equal(result[0].data.TenLoaiSP,'Cũ');assert.deepEqual(result[0].errors,[]);
+ result=validate(type,[row({MaLoaiSP:'CFH',TenLoaiSP:'A'}),row({MaLoaiSP:'cfh',TenLoaiSP:'B'},3)],[],{},'skip');assert(result.every(r=>r.errors.some(e=>e.includes('trùng'))));
+ result=validate(type,[row({MaLoaiSP:'LONG',TenLoaiSP:''})],[],{},'skip');assert.equal(result[0].errors.length,2);
+ const coupon=schema['ma-giam-gia'];
+ const values={MaGiamGia:'JAVI',TenMaGiamGia:'Ưu đãi',MoTa:'',LoaiGiam:'percent',GiaTri:'101',DonToiThieu:'0',GiamToiDa:'',BatDau:'2026-02-30',KetThuc:'',MaLoaiKH:'',MaSP:'',SoLuong:'',ChoPhepKetHop:'0',TrangThai:'Hoạt động'};
+ result=validate(coupon,[row(values)],[],{},'skip');assert(result[0].errors.some(e=>e.includes('100')));assert(result[0].errors.some(e=>e.includes('YYYY-MM-DD')));
+ const order=schema['don-hang'];
+ result=validate(order,[row({MaDH:'DH000001'})],[{MaDH:'DH000001'}],{},'update');assert(result[0].errors.some(e=>e.includes('không thể ghi đè')));
+ const groupRows=[{line:2,data:{MaDH:'DON01',MaSP:'CFH01',MaKH:'KH1',MaNV:'NV1',TrangThaiDonHang:'Chờ giao'},errors:[]},{line:3,data:{MaDH:'DON01',MaSP:'CFH02',MaKH:'KH2',MaNV:'NV1',TrangThaiDonHang:'Chờ giao'},errors:[]}];
+ assert.equal(groups(order,groupRows).length,1);assert(groupRows[1].errors.length);
+ const output=await workbook.exportGrid('test',['Mã','Tên'],[['001','=HYPERLINK("evil")']]);
+ const exported=new ExcelJS.Workbook();await exported.xlsx.load(output);assert.equal(exported.worksheets[0].getCell('A2').value,'001');assert.equal(typeof exported.worksheets[0].getCell('B2').value,'string');
+ for(const [id,definition] of Object.entries(schema)){
+  const html=require('fs').readFileSync('Admin/Frontend/import-'+id+'.html','utf8');
+  assert(!html.includes('iframe'));assert(!html.includes('import-help'));assert(html.includes('data-import-module="'+id+'"'));
+  assert(definition.sourceForm);
+ }
+ console.log('PASS: XLSX template/dropdown, round-trip, formulas blocked, errors, duplicate policies, grouping, text-safe export, 16 import pages.');
+})().catch(e=>{console.error(e);process.exitCode=1;});

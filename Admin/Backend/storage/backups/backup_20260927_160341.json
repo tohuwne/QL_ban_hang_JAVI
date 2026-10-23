@@ -1,0 +1,2927 @@
+{
+  "backup_time": "2026-09-27T09:03:41.677Z",
+  "database": "BH_WEB2",
+  "tables": {
+    "LOAI_SAN_PHAM": [
+      {
+        "MaLoaiSP": "BBI",
+        "TenLoaiSP": "Bao bì & Vật tư tiêu hao"
+      },
+      {
+        "MaLoaiSP": "CFH",
+        "TenLoaiSP": "Cà phê rang hạt"
+      },
+      {
+        "MaLoaiSP": "CFT",
+        "TenLoaiSP": "Cà phê thô"
+      },
+      {
+        "MaLoaiSP": "CFX",
+        "TenLoaiSP": "Cà phê rang xay"
+      },
+      {
+        "MaLoaiSP": "MOR",
+        "TenLoaiSP": "Mật ong rừng"
+      },
+      {
+        "MaLoaiSP": "MPH",
+        "TenLoaiSP": "Máy pha"
+      }
+    ],
+    "LOAI_KHACH_HANG": [
+      {
+        "MaLoaiKH": "L01",
+        "TenLoaiKH": "Khách lẻ",
+        "TyLeChietKhau": 0
+      },
+      {
+        "MaLoaiKH": "S01",
+        "TenLoaiKH": "Khách sỉ",
+        "TyLeChietKhau": 0.05
+      },
+      {
+        "MaLoaiKH": "V01",
+        "TenLoaiKH": "Khách VIP",
+        "TyLeChietKhau": 0.1
+      }
+    ],
+    "NHA_CUNG_CAP": [
+      {
+        "MaNCC": "NCC01",
+        "TenNCC": "Nông trại Cà phê Javi Đà Lạt",
+        "SoDTNCC": "02633111222",
+        "EmailNCC": "dalat@javi.com",
+        "DiaChiNCC": "Xuân Thọ, TP. Đà Lạt",
+        "GhiChu": "Cung cấp cà phê Arabica nhân thô"
+      },
+      {
+        "MaNCC": "NCC02",
+        "TenNCC": "Hợp tác xã Cà phê Cư M'gar",
+        "SoDTNCC": "02623444555",
+        "EmailNCC": "cumgar@coffee.vn",
+        "DiaChiNCC": "Huyện Cư M'gar, Đắk Lắk",
+        "GhiChu": "Nguồn Robusta thô chủ lực"
+      },
+      {
+        "MaNCC": "NCC03",
+        "TenNCC": "Tổng công ty Bao bì Tín Phát",
+        "SoDTNCC": "02838999888",
+        "EmailNCC": "contact@tinphatpack.com",
+        "DiaChiNCC": "KCN Tân Bình, TP. HCM",
+        "GhiChu": "Cung cấp cốc ly và bao bì túi giấy"
+      },
+      {
+        "MaNCC": "NCC04",
+        "TenNCC": "Mật ong rừng Tây Nguyên Group",
+        "SoDTNCC": "0918223344",
+        "EmailNCC": "taynguyenhoney@gmail.com",
+        "DiaChiNCC": "Gia Nghĩa, Đắk Nông",
+        "GhiChu": "Mật ong thô tự nhiên"
+      },
+      {
+        "MaNCC": "NCC05",
+        "TenNCC": "Nhà phân phối Máy pha Javi Toàn Cầu",
+        "SoDTNCC": "02839991111",
+        "EmailNCC": "machinery@javi.vn",
+        "DiaChiNCC": "Quận 7, TP. HCM",
+        "GhiChu": "Nhập khẩu máy pha chính hãng"
+      },
+      {
+        "MaNCC": "NCC06",
+        "TenNCC": "Cơ sở Nông sản sạch Lâm Đồng",
+        "SoDTNCC": "0905123456",
+        "EmailNCC": "lamdongclean@gmail.com",
+        "DiaChiNCC": "Bảo Lộc, Lâm Đồng",
+        "GhiChu": "Cà phê thô và mật ong secondary"
+      },
+      {
+        "MaNCC": "NCC07",
+        "TenNCC": "Nhà in Bao Bì Xanh",
+        "SoDTNCC": "0988224466",
+        "EmailNCC": "inbox@baobixanh.vn",
+        "DiaChiNCC": "Bình Chánh, TP. HCM",
+        "GhiChu": "In túi tote quà tặng"
+      },
+      {
+        "MaNCC": "NCC08",
+        "TenNCC": "Nông trại Robusta Buôn Ma Thuột",
+        "SoDTNCC": "02623888999",
+        "EmailNCC": "bmt@robustafarm.vn",
+        "DiaChiNCC": "TP. Buôn Ma Thuột",
+        "GhiChu": "Hạt Robusta sàng 18 chất lượng cao"
+      },
+      {
+        "MaNCC": "NCC09",
+        "TenNCC": "Công ty Thiết bị Cơ điện Hoàng Long",
+        "SoDTNCC": "02437776666",
+        "EmailNCC": "hoanglong@me.com",
+        "DiaChiNCC": "Thanh Xuân, Hà Nội",
+        "GhiChu": "Linh kiện máy pha thay thế"
+      },
+      {
+        "MaNCC": "NCC10",
+        "TenNCC": "Hợp tác xã Mật Ong Gia Lai",
+        "SoDTNCC": "02693555666",
+        "EmailNCC": "gialai@honeyhtx.com",
+        "DiaChiNCC": "Chư Prông, Gia Lai",
+        "GhiChu": "Mật ong hoa cà phê"
+      },
+      {
+        "MaNCC": "NCC11",
+        "TenNCC": "Tổng kho Vật tư Cà phê Sài Gòn",
+        "SoDTNCC": "0933445566",
+        "EmailNCC": "kho@vattucafe.vn",
+        "DiaChiNCC": "Quận 12, TP. HCM",
+        "GhiChu": "Ống hút, màng bọc, muỗng nhựa"
+      },
+      {
+        "MaNCC": "NCC12",
+        "TenNCC": "Nông sản Hữu cơ Đắk Mil",
+        "SoDTNCC": "0944001122",
+        "EmailNCC": "dakmil@organic.vn",
+        "DiaChiNCC": "Đắk Mil, Đắk Nông",
+        "GhiChu": "Cà phê Cherry đặc sản thô"
+      },
+      {
+        "MaNCC": "NCC13",
+        "TenNCC": "Công ty TNHH Nhựa Đại Đồng Tiến",
+        "SoDTNCC": "02838555444",
+        "EmailNCC": "sales@daidongtien.com.vn",
+        "DiaChiNCC": "Quận 5, TP. HCM",
+        "GhiChu": "Khay nhựa phụ trợ kho"
+      },
+      {
+        "MaNCC": "NCC14",
+        "TenNCC": "Xưởng Gỗ Quà Tặng Việt",
+        "SoDTNCC": "0902888999",
+        "EmailNCC": "xuonggo@quatang.vn",
+        "DiaChiNCC": "Thuận An, Bình Dương",
+        "GhiChu": "Gia công hộp quà gỗ đựng cà phê"
+      },
+      {
+        "MaNCC": "NCC15",
+        "TenNCC": "Đại lý Cà phê Cầu Đất",
+        "SoDTNCC": "0912999000",
+        "EmailNCC": "caudat@farm.vn",
+        "DiaChiNCC": "Cầu Đất, TP. Đà Lạt",
+        "GhiChu": "Arabica Cầu Đất thô cao cấp"
+      },
+      {
+        "MaNCC": "NCC16",
+        "TenNCC": "Công ty Tem Nhãn Toàn Diện",
+        "SoDTNCC": "0908776655",
+        "EmailNCC": "temnhan@tdpack.com",
+        "DiaChiNCC": "Tân Phú, TP. HCM",
+        "GhiChu": "Decal cuộn dán bao bì"
+      },
+      {
+        "MaNCC": "NCC17",
+        "TenNCC": "Hợp tác xã Nông nghiệp Sơn La",
+        "SoDTNCC": "02123855855",
+        "EmailNCC": "sonla@cafe.vn",
+        "DiaChiNCC": "Mai Sơn, Sơn La",
+        "GhiChu": "Arabica vùng cao phía Bắc"
+      },
+      {
+        "MaNCC": "NCC18",
+        "TenNCC": "Nhà phân phối Ly giấy ECO",
+        "SoDTNCC": "0938112233",
+        "EmailNCC": "eco@lygiay.vn",
+        "DiaChiNCC": "Thủ Đức, TP. HCM",
+        "GhiChu": "Ly giấy thân thiện môi trường"
+      },
+      {
+        "MaNCC": "NCC19",
+        "TenNCC": "Cơ khí Chế tạo Máy rang Javi Tech",
+        "SoDTNCC": "02837334455",
+        "EmailNCC": "tech@javi.vn",
+        "DiaChiNCC": "Khu công nghệ cao, Q9",
+        "GhiChu": "Thiết bị bảo trì dây chuyền xay"
+      },
+      {
+        "MaNCC": "NCC20",
+        "TenNCC": "Vật tư nông nghiệp Tây Nguyên",
+        "SoDTNCC": "02623777888",
+        "EmailNCC": "vattutn@gmail.com",
+        "DiaChiNCC": "Ea Kar, Đắk Lắk",
+        "GhiChu": "Bao tải đay lưu kho thô"
+      }
+    ],
+    "SAN_PHAM": [
+      {
+        "MaSP": "BBI01",
+        "TenSP": "Ly nhựa PP 500ml",
+        "DonViTinh": "Cái",
+        "TrongLuong": null,
+        "GiaBan": 1500,
+        "SoLuongTon": 4950,
+        "SoLuongKD": 4950,
+        "GhiChu": null,
+        "MaLoaiSP": "BBI"
+      },
+      {
+        "MaSP": "BBI02",
+        "TenSP": "Ly giấy 250ml",
+        "DonViTinh": "Cái",
+        "TrongLuong": null,
+        "GiaBan": 2000,
+        "SoLuongTon": 4000,
+        "SoLuongKD": 4000,
+        "GhiChu": null,
+        "MaLoaiSP": "BBI"
+      },
+      {
+        "MaSP": "BBI03",
+        "TenSP": "Nắp cầu nhựa 500ml",
+        "DonViTinh": "Cái",
+        "TrongLuong": null,
+        "GiaBan": 300,
+        "SoLuongTon": 4999,
+        "SoLuongKD": 4999,
+        "GhiChu": null,
+        "MaLoaiSP": "BBI"
+      },
+      {
+        "MaSP": "BBI05",
+        "TenSP": "Hộp quà tặng cứng",
+        "DonViTinh": "Hộp",
+        "TrongLuong": null,
+        "GiaBan": 15000,
+        "SoLuongTon": 499,
+        "SoLuongKD": 479,
+        "GhiChu": null,
+        "MaLoaiSP": "BBI"
+      },
+      {
+        "MaSP": "BBI06",
+        "TenSP": "Túi tote họa tiết",
+        "DonViTinh": "Cái",
+        "TrongLuong": null,
+        "GiaBan": 25000,
+        "SoLuongTon": 300,
+        "SoLuongKD": 290,
+        "GhiChu": null,
+        "MaLoaiSP": "BBI"
+      },
+      {
+        "MaSP": "CFH31",
+        "TenSP": "Cà phê ĐẬM MẠNH (1kg - HẠT)",
+        "DonViTinh": "Kg",
+        "TrongLuong": 1,
+        "GiaBan": 395000,
+        "SoLuongTon": 149,
+        "SoLuongKD": 139,
+        "GhiChu": null,
+        "MaLoaiSP": "CFH"
+      },
+      {
+        "MaSP": "CFH32",
+        "TenSP": "Cà phê ĐẬM MẠNH (200gr - HẠT)",
+        "DonViTinh": "Kg",
+        "TrongLuong": 0.2,
+        "GiaBan": 79000,
+        "SoLuongTon": 288,
+        "SoLuongKD": 278,
+        "GhiChu": null,
+        "MaLoaiSP": "CFH"
+      },
+      {
+        "MaSP": "CFH35",
+        "TenSP": "Cà phê ĐẬM MẠNH (500gr - HẠT)",
+        "DonViTinh": "Kg",
+        "TrongLuong": 0.5,
+        "GiaBan": 197500,
+        "SoLuongTon": 199,
+        "SoLuongKD": 189,
+        "GhiChu": null,
+        "MaLoaiSP": "CFH"
+      },
+      {
+        "MaSP": "CFH41",
+        "TenSP": "Cà phê ĐẬM NGỌT (1kg - HẠT)",
+        "DonViTinh": "Kg",
+        "TrongLuong": 1,
+        "GiaBan": 495000,
+        "SoLuongTon": 100,
+        "SoLuongKD": 95,
+        "GhiChu": null,
+        "MaLoaiSP": "CFH"
+      },
+      {
+        "MaSP": "CFH42",
+        "TenSP": "Cà phê ĐẬM NGỌT (200gr - HẠT)",
+        "DonViTinh": "Kg",
+        "TrongLuong": 0.2,
+        "GiaBan": 99000,
+        "SoLuongTon": 250,
+        "SoLuongKD": 240,
+        "GhiChu": null,
+        "MaLoaiSP": "CFH"
+      },
+      {
+        "MaSP": "CFH45",
+        "TenSP": "Cà phê ĐẬM NGỌT (500gr - HẠT)",
+        "DonViTinh": "Kg",
+        "TrongLuong": 0.5,
+        "GiaBan": 247500,
+        "SoLuongTon": 150,
+        "SoLuongKD": 145,
+        "GhiChu": null,
+        "MaLoaiSP": "CFH"
+      },
+      {
+        "MaSP": "CFH71",
+        "TenSP": "Cà phê CÂN BẰNG (1kg - HẠT)",
+        "DonViTinh": "Kg",
+        "TrongLuong": 1,
+        "GiaBan": 645000,
+        "SoLuongTon": 80,
+        "SoLuongKD": 75,
+        "GhiChu": null,
+        "MaLoaiSP": "CFH"
+      },
+      {
+        "MaSP": "CFH72",
+        "TenSP": "Cà phê CÂN BẰNG (200gr - HẠT)",
+        "DonViTinh": "Kg",
+        "TrongLuong": 0.2,
+        "GiaBan": 129000,
+        "SoLuongTon": 180,
+        "SoLuongKD": 170,
+        "GhiChu": null,
+        "MaLoaiSP": "CFH"
+      },
+      {
+        "MaSP": "CFH75",
+        "TenSP": "Cà phê CÂN BẰNG (500gr - HẠT)",
+        "DonViTinh": "Kg",
+        "TrongLuong": 0.5,
+        "GiaBan": 322500,
+        "SoLuongTon": 120,
+        "SoLuongKD": 115,
+        "GhiChu": null,
+        "MaLoaiSP": "CFH"
+      },
+      {
+        "MaSP": "CFH81",
+        "TenSP": "Cà phê THƠM NGỌT (1kg - HẠT)",
+        "DonViTinh": "Kg",
+        "TrongLuong": 1,
+        "GiaBan": 995000,
+        "SoLuongTon": 50,
+        "SoLuongKD": 44,
+        "GhiChu": null,
+        "MaLoaiSP": "CFH"
+      },
+      {
+        "MaSP": "CFH82",
+        "TenSP": "Cà phê THƠM NGỌT (200gr - HẠT)",
+        "DonViTinh": "Kg",
+        "TrongLuong": 0.2,
+        "GiaBan": 199000,
+        "SoLuongTon": 98,
+        "SoLuongKD": 92,
+        "GhiChu": null,
+        "MaLoaiSP": "CFH"
+      },
+      {
+        "MaSP": "CFH85",
+        "TenSP": "Cà phê THƠM NGỌT (500gr - HẠT)",
+        "DonViTinh": "Kg",
+        "TrongLuong": 0.5,
+        "GiaBan": 497500,
+        "SoLuongTon": 70,
+        "SoLuongKD": 65,
+        "GhiChu": null,
+        "MaLoaiSP": "CFH"
+      },
+      {
+        "MaSP": "CFX31",
+        "TenSP": "Cà phê ĐẬM MẠNH (1kg - XAY)",
+        "DonViTinh": "Kg",
+        "TrongLuong": 1,
+        "GiaBan": 395000,
+        "SoLuongTon": 120,
+        "SoLuongKD": 110,
+        "GhiChu": null,
+        "MaLoaiSP": "CFX"
+      },
+      {
+        "MaSP": "CFX32",
+        "TenSP": "Cà phê ĐẬM MẠNH (200gr - XAY)",
+        "DonViTinh": "Kg",
+        "TrongLuong": 0.2,
+        "GiaBan": 79000,
+        "SoLuongTon": 250,
+        "SoLuongKD": 240,
+        "GhiChu": null,
+        "MaLoaiSP": "CFX"
+      },
+      {
+        "MaSP": "CFX35",
+        "TenSP": "Cà phê ĐẬM MẠNH (500gr - XAY)",
+        "DonViTinh": "Kg",
+        "TrongLuong": 0.5,
+        "GiaBan": 197500,
+        "SoLuongTon": 180,
+        "SoLuongKD": 175,
+        "GhiChu": null,
+        "MaLoaiSP": "CFX"
+      },
+      {
+        "MaSP": "CFX41",
+        "TenSP": "Cà phê ĐẬM NGỌT (1kg - XAY)",
+        "DonViTinh": "Kg",
+        "TrongLuong": 1,
+        "GiaBan": 495000,
+        "SoLuongTon": 90,
+        "SoLuongKD": 85,
+        "GhiChu": null,
+        "MaLoaiSP": "CFX"
+      },
+      {
+        "MaSP": "CFX42",
+        "TenSP": "Cà phê ĐẬM NGỌT (200gr - XAY)",
+        "DonViTinh": "Kg",
+        "TrongLuong": 0.2,
+        "GiaBan": 99000,
+        "SoLuongTon": 200,
+        "SoLuongKD": 190,
+        "GhiChu": null,
+        "MaLoaiSP": "CFX"
+      },
+      {
+        "MaSP": "CFX45",
+        "TenSP": "Cà phê ĐẬM NGỌT (500gr - XAY)",
+        "DonViTinh": "Kg",
+        "TrongLuong": 0.5,
+        "GiaBan": 247500,
+        "SoLuongTon": 140,
+        "SoLuongKD": 135,
+        "GhiChu": null,
+        "MaLoaiSP": "CFX"
+      },
+      {
+        "MaSP": "CFX71",
+        "TenSP": "Cà phê CÂN BẰNG (1kg - XAY)",
+        "DonViTinh": "Kg",
+        "TrongLuong": 1,
+        "GiaBan": 645000,
+        "SoLuongTon": 70,
+        "SoLuongKD": 64,
+        "GhiChu": null,
+        "MaLoaiSP": "CFX"
+      },
+      {
+        "MaSP": "CFX72",
+        "TenSP": "Cà phê CÂN BẰNG (200gr - XAY)",
+        "DonViTinh": "Kg",
+        "TrongLuong": 0.2,
+        "GiaBan": 129000,
+        "SoLuongTon": 160,
+        "SoLuongKD": 155,
+        "GhiChu": null,
+        "MaLoaiSP": "CFX"
+      },
+      {
+        "MaSP": "CFX75",
+        "TenSP": "Cà phê CÂN BẰNG (500gr - XAY)",
+        "DonViTinh": "Kg",
+        "TrongLuong": 0.5,
+        "GiaBan": 322500,
+        "SoLuongTon": 110,
+        "SoLuongKD": 105,
+        "GhiChu": null,
+        "MaLoaiSP": "CFX"
+      },
+      {
+        "MaSP": "CFX81",
+        "TenSP": "Cà phê THƠM NGỌT (1kg - XAY)",
+        "DonViTinh": "Kg",
+        "TrongLuong": 1,
+        "GiaBan": 995000,
+        "SoLuongTon": 40,
+        "SoLuongKD": 35,
+        "GhiChu": null,
+        "MaLoaiSP": "CFX"
+      },
+      {
+        "MaSP": "CFX82",
+        "TenSP": "Cà phê THƠM NGỌT (200gr - XAY)",
+        "DonViTinh": "Kg",
+        "TrongLuong": 0.2,
+        "GiaBan": 199000,
+        "SoLuongTon": 90,
+        "SoLuongKD": 83,
+        "GhiChu": null,
+        "MaLoaiSP": "CFX"
+      },
+      {
+        "MaSP": "CFX85",
+        "TenSP": "Cà phê THƠM NGỌT (500gr - XAY)",
+        "DonViTinh": "Kg",
+        "TrongLuong": 0.5,
+        "GiaBan": 497500,
+        "SoLuongTon": 60,
+        "SoLuongKD": 55,
+        "GhiChu": null,
+        "MaLoaiSP": "CFX"
+      },
+      {
+        "MaSP": "MPF05",
+        "TenSP": "JAVI PRO 2F05",
+        "DonViTinh": "Máy",
+        "TrongLuong": null,
+        "GiaBan": 19900000,
+        "SoLuongTon": 9,
+        "SoLuongKD": 6,
+        "GhiChu": null,
+        "MaLoaiSP": "MPH"
+      },
+      {
+        "MaSP": "MPI49",
+        "TenSP": "JAVI PRO I4.9",
+        "DonViTinh": "Máy",
+        "TrongLuong": null,
+        "GiaBan": 59800000,
+        "SoLuongTon": 4,
+        "SoLuongKD": 3,
+        "GhiChu": null,
+        "MaLoaiSP": "MPH"
+      },
+      {
+        "MaSP": "MPM30",
+        "TenSP": "JAVI M30",
+        "DonViTinh": "Máy",
+        "TrongLuong": null,
+        "GiaBan": 279000000,
+        "SoLuongTon": 1,
+        "SoLuongKD": 0,
+        "GhiChu": null,
+        "MaLoaiSP": "MPH"
+      },
+      {
+        "MaSP": "MPST8",
+        "TenSP": "JAVI PRO S4.99",
+        "DonViTinh": "Máy",
+        "TrongLuong": null,
+        "GiaBan": 89000000,
+        "SoLuongTon": 3,
+        "SoLuongKD": 3,
+        "GhiChu": null,
+        "MaLoaiSP": "MPH"
+      },
+      {
+        "MaSP": "MPTD9",
+        "TenSP": "JAVI PRO TD 4.9",
+        "DonViTinh": "Máy",
+        "TrongLuong": null,
+        "GiaBan": 49600000,
+        "SoLuongTon": 4,
+        "SoLuongKD": 3,
+        "GhiChu": null,
+        "MaLoaiSP": "MPH"
+      },
+      {
+        "MaSP": "NVCFT",
+        "TenSP": "Cà phê Robusta Thô",
+        "DonViTinh": "Kg",
+        "TrongLuong": 1,
+        "GiaBan": 65000,
+        "SoLuongTon": 994,
+        "SoLuongKD": 994,
+        "GhiChu": null,
+        "MaLoaiSP": "CFT"
+      },
+      {
+        "MaSP": "NVMOR",
+        "TenSP": "Mật ong rừng nguyên chất",
+        "DonViTinh": "Lít",
+        "TrongLuong": 1,
+        "GiaBan": 150000,
+        "SoLuongTon": 100,
+        "SoLuongKD": 94,
+        "GhiChu": null,
+        "MaLoaiSP": "MOR"
+      }
+    ],
+    "KHACH_HANG": [
+      {
+        "MaKH": "KH001",
+        "TenKH": "Nguyễn Thanh Tùng",
+        "SoDTKH": "0903111001",
+        "EmailKH": "tung.nt@gmail.com",
+        "GioiTinhKH": "Nam",
+        "DiaChiKH": "20 Phan Xích Long, PN",
+        "MaLoaiKH": "L01"
+      },
+      {
+        "MaKH": "KH002",
+        "TenKH": "Lê Thị Hương Giang",
+        "SoDTKH": "0903111002",
+        "EmailKH": "giang.le@gmail.com",
+        "GioiTinhKH": "Nữ",
+        "DiaChiKH": "55 Lê Lợi, Q1",
+        "MaLoaiKH": "L01"
+      },
+      {
+        "MaKH": "KH003",
+        "TenKH": "Trần Đình Khôi",
+        "SoDTKH": "0903111003",
+        "EmailKH": "khoi.tr@gmail.com",
+        "GioiTinhKH": "Nam",
+        "DiaChiKH": "1A Nguyễn Văn Cừ, Q5",
+        "MaLoaiKH": "S01"
+      },
+      {
+        "MaKH": "KH004",
+        "TenKH": "Phan Văn Tài",
+        "SoDTKH": "0903111004",
+        "EmailKH": "tai.p@gmail.com",
+        "GioiTinhKH": "Nam",
+        "DiaChiKH": "100 Hoàng Văn Thụ, TB",
+        "MaLoaiKH": "L01"
+      },
+      {
+        "MaKH": "KH005",
+        "TenKH": "Đỗ Thanh Mai",
+        "SoDTKH": "0903111005",
+        "EmailKH": "mai.do@gmail.com",
+        "GioiTinhKH": "Nữ",
+        "DiaChiKH": "300 CMT8, Q10",
+        "MaLoaiKH": "L01"
+      },
+      {
+        "MaKH": "KH006",
+        "TenKH": "Hoàng Anh Thư",
+        "SoDTKH": "0903111006",
+        "EmailKH": "thu.h@gmail.com",
+        "GioiTinhKH": "Nữ",
+        "DiaChiKH": "45 Bùi Thị Xuân, Q1",
+        "MaLoaiKH": "S01"
+      },
+      {
+        "MaKH": "KH007",
+        "TenKH": "Võ Trung Kiên",
+        "SoDTKH": "0903111007",
+        "EmailKH": "kien.vo@gmail.com",
+        "GioiTinhKH": "Nam",
+        "DiaChiKH": "15 Nguyễn Chí Thanh, Q5",
+        "MaLoaiKH": "S01"
+      },
+      {
+        "MaKH": "KH008",
+        "TenKH": "Ngô Tấn Lộc",
+        "SoDTKH": "0903111008",
+        "EmailKH": "loc.ngo@gmail.com",
+        "GioiTinhKH": "Nam",
+        "DiaChiKH": "77 Lê Quang Định, BT",
+        "MaLoaiKH": "L01"
+      },
+      {
+        "MaKH": "KH009",
+        "TenKH": "Bùi Thị Ngọc",
+        "SoDTKH": "0903111009",
+        "EmailKH": "ngoc.b@gmail.com",
+        "GioiTinhKH": "Nữ",
+        "DiaChiKH": "22 Sư Vạn Hạnh, Q10",
+        "MaLoaiKH": "L01"
+      },
+      {
+        "MaKH": "KH010",
+        "TenKH": "Dương Chí Dũng",
+        "SoDTKH": "0903111010",
+        "EmailKH": "dung.d@gmail.com",
+        "GioiTinhKH": "Nam",
+        "DiaChiKH": "90 Hậu Giang, Q6",
+        "MaLoaiKH": "S01"
+      },
+      {
+        "MaKH": "KH011",
+        "TenKH": "Phạm Minh Triết",
+        "SoDTKH": "0903111011",
+        "EmailKH": "triet.pham@gmail.com",
+        "GioiTinhKH": "Nam",
+        "DiaChiKH": "Quận 7, HCM",
+        "MaLoaiKH": "L01"
+      },
+      {
+        "MaKH": "KH012",
+        "TenKH": "Vũ Hoàng Trọng",
+        "SoDTKH": "0903111012",
+        "EmailKH": "trong.vu@gmail.com",
+        "GioiTinhKH": "Nam",
+        "DiaChiKH": "Quận 8, HCM",
+        "MaLoaiKH": "S01"
+      },
+      {
+        "MaKH": "KH013",
+        "TenKH": "Trần Kim Tuyến",
+        "SoDTKH": "0903111013",
+        "EmailKH": "tuyen.tran@gmail.com",
+        "GioiTinhKH": "Nữ",
+        "DiaChiKH": "Quận 9, HCM",
+        "MaLoaiKH": "L01"
+      },
+      {
+        "MaKH": "KH014",
+        "TenKH": "Nguyễn Thúy Vân",
+        "SoDTKH": "0903111014",
+        "EmailKH": "van.nguyen@gmail.com",
+        "GioiTinhKH": "Nữ",
+        "DiaChiKH": "Quận 10, HCM",
+        "MaLoaiKH": "L01"
+      },
+      {
+        "MaKH": "KH015",
+        "TenKH": "Đặng Quốc Hải",
+        "SoDTKH": "0903111015",
+        "EmailKH": "hai.dang@gmail.com",
+        "GioiTinhKH": "Nam",
+        "DiaChiKH": "Quận 11, HCM",
+        "MaLoaiKH": "S01"
+      },
+      {
+        "MaKH": "KH016",
+        "TenKH": "Trịnh Đăng Khoa",
+        "SoDTKH": "0903111016",
+        "EmailKH": "khoa.trinh@gmail.com",
+        "GioiTinhKH": "Nam",
+        "DiaChiKH": "Quận 12, HCM",
+        "MaLoaiKH": "L01"
+      },
+      {
+        "MaKH": "KH017",
+        "TenKH": "Đỗ Diễm My",
+        "SoDTKH": "0903111017",
+        "EmailKH": "my.do@gmail.com",
+        "GioiTinhKH": "Nữ",
+        "DiaChiKH": "Bình Chánh, HCM",
+        "MaLoaiKH": "S01"
+      },
+      {
+        "MaKH": "KH018",
+        "TenKH": "Vũ Kim Liên",
+        "SoDTKH": "0903111018",
+        "EmailKH": "lien.vu@gmail.com",
+        "GioiTinhKH": "Nữ",
+        "DiaChiKH": "Nhà Bè, HCM",
+        "MaLoaiKH": "L01"
+      },
+      {
+        "MaKH": "KH019",
+        "TenKH": "Võ Hoàng Hùng",
+        "SoDTKH": "0903111019",
+        "EmailKH": "hung.vo@gmail.com",
+        "GioiTinhKH": "Nam",
+        "DiaChiKH": "Hóc Môn, HCM",
+        "MaLoaiKH": "L01"
+      },
+      {
+        "MaKH": "KH020",
+        "TenKH": "Phan Văn Giang",
+        "SoDTKH": "0903111020",
+        "EmailKH": "giang.phan@gmail.com",
+        "GioiTinhKH": "Nam",
+        "DiaChiKH": "Cần Giờ, HCM",
+        "MaLoaiKH": "S01"
+      },
+      {
+        "MaKH": "KH021",
+        "TenKH": "Nguyễn Nhi",
+        "SoDTKH": "0989301617",
+        "EmailKH": "",
+        "GioiTinhKH": "Nữ",
+        "DiaChiKH": "123 đường Nguyễn Ái Quốc",
+        "MaLoaiKH": "S01"
+      },
+      {
+        "MaKH": "KH022",
+        "TenKH": "Nguyễn Thiên",
+        "SoDTKH": "0903111014",
+        "EmailKH": "Nguyenthien123@gmail.com",
+        "GioiTinhKH": "Nam",
+        "DiaChiKH": "123 Võ Văn Ngân",
+        "MaLoaiKH": "L01"
+      },
+      {
+        "MaKH": "KH023",
+        "TenKH": "Nguyễn Thiên",
+        "SoDTKH": "0903111007",
+        "EmailKH": "Nguyenminhthu.invn@gmail.com",
+        "GioiTinhKH": "Nam",
+        "DiaChiKH": "123 Võ Văn Ngân",
+        "MaLoaiKH": "S01"
+      }
+    ],
+    "NHAN_VIEN": [
+      {
+        "MaNV": "NV001",
+        "HoTenNV": "Lê Văn Phát",
+        "CCCD": "123456789001",
+        "GioiTinh": "Nam",
+        "ChucVu": "Quản lý",
+        "SoDTNV": "0901234567",
+        "EmailNV": "phat.le@javi.vn",
+        "DiaChiNV": "11 Trương Định, Q3",
+        "TrangThai": "Đang làm việc"
+      },
+      {
+        "MaNV": "NV002",
+        "HoTenNV": "Phạm Thị Linh",
+        "CCCD": "123456789002",
+        "GioiTinh": "Nữ",
+        "ChucVu": "Bán hàng",
+        "SoDTNV": "0907654321",
+        "EmailNV": "linh.pham@javi.vn",
+        "DiaChiNV": "25 Trần Hưng Đạo, Q1",
+        "TrangThai": "Đang làm việc"
+      },
+      {
+        "MaNV": "NV003",
+        "HoTenNV": "Nguyễn Hoàng Sơn",
+        "CCCD": "123456789003",
+        "GioiTinh": "Nam",
+        "ChucVu": "Kế toán",
+        "SoDTNV": "0912345678",
+        "EmailNV": "son.nguyen@javi.vn",
+        "DiaChiNV": "78 Nguyễn Huệ, Q1",
+        "TrangThai": "Đang làm việc"
+      },
+      {
+        "MaNV": "NV004",
+        "HoTenNV": "Trần Thu Hiền",
+        "CCCD": "123456789004",
+        "GioiTinh": "Nữ",
+        "ChucVu": "Kho",
+        "SoDTNV": "0987654321",
+        "EmailNV": "hien.tran@javi.vn",
+        "DiaChiNV": "99 Lý Thường Kiệt, TB",
+        "TrangThai": "Đang làm việc"
+      },
+      {
+        "MaNV": "NV005",
+        "HoTenNV": "Vũ Đình Khang",
+        "CCCD": "123456789005",
+        "GioiTinh": "Nam",
+        "ChucVu": "Bán hàng",
+        "SoDTNV": "0977889900",
+        "EmailNV": "khang.vu@javi.vn",
+        "DiaChiNV": "12 Huỳnh Tấn Phát, Q7",
+        "TrangThai": "Đang làm việc"
+      },
+      {
+        "MaNV": "NV006",
+        "HoTenNV": "Lý Hoàng Nam",
+        "CCCD": "123456789006",
+        "GioiTinh": "Nam",
+        "ChucVu": "Kho",
+        "SoDTNV": "0901010101",
+        "EmailNV": "nam.ly@javi.vn",
+        "DiaChiNV": "200 Cộng Hòa, TB",
+        "TrangThai": "Đang làm việc"
+      },
+      {
+        "MaNV": "NV007",
+        "HoTenNV": "Võ Thị Thanh Thảo",
+        "CCCD": "123456789007",
+        "GioiTinh": "Nữ",
+        "ChucVu": "Bán hàng",
+        "SoDTNV": "0919445566",
+        "EmailNV": "thao.vo@javi.vn",
+        "DiaChiNV": "33 Hai Bà Trưng, Q1",
+        "TrangThai": "Đang làm việc"
+      },
+      {
+        "MaNV": "NV008",
+        "HoTenNV": "Đỗ Minh Quân",
+        "CCCD": "123456789008",
+        "GioiTinh": "Nam",
+        "ChucVu": "Kế toán",
+        "SoDTNV": "0911223344",
+        "EmailNV": "quan.do@javi.vn",
+        "DiaChiNV": "88 Phạm Văn Đồng, Thủ Đức",
+        "TrangThai": "Đang làm việc"
+      },
+      {
+        "MaNV": "NV009",
+        "HoTenNV": "Mai Văn Đức",
+        "CCCD": "123456789009",
+        "GioiTinh": "Nam",
+        "ChucVu": "Quản lý",
+        "SoDTNV": "0909112233",
+        "EmailNV": "duc.mai@javi.vn",
+        "DiaChiNV": "50 Đinh Tiên Hoàng, BT",
+        "TrangThai": "Đang làm việc"
+      },
+      {
+        "MaNV": "NV010",
+        "HoTenNV": "Cao Minh Trí",
+        "CCCD": "123456789010",
+        "GioiTinh": "Nam",
+        "ChucVu": "Quản lý",
+        "SoDTNV": "0988776655",
+        "EmailNV": "tri.cao@javi.vn",
+        "DiaChiNV": "45 Nam Kỳ Khởi Nghĩa, Q3",
+        "TrangThai": "Đang làm việc"
+      },
+      {
+        "MaNV": "NV011",
+        "HoTenNV": "Nguyễn Thị Kim",
+        "CCCD": "123456789011",
+        "GioiTinh": "Nữ",
+        "ChucVu": "Bán hàng",
+        "SoDTNV": "0901000111",
+        "EmailNV": "kim@javi.vn",
+        "DiaChiNV": "Q4, HCM",
+        "TrangThai": "Đang làm việc"
+      },
+      {
+        "MaNV": "NV012",
+        "HoTenNV": "Trần Anh Tuấn",
+        "CCCD": "123456789012",
+        "GioiTinh": "Nam",
+        "ChucVu": "Kho",
+        "SoDTNV": "0901000222",
+        "EmailNV": "tuan@javi.vn",
+        "DiaChiNV": "Gò Vấp, HCM",
+        "TrangThai": "Đang làm việc"
+      },
+      {
+        "MaNV": "NV013",
+        "HoTenNV": "Lê Ngọc Hân",
+        "CCCD": "123456789013",
+        "GioiTinh": "Nữ",
+        "ChucVu": "Kế toán",
+        "SoDTNV": "0901000333",
+        "EmailNV": "han@javi.vn",
+        "DiaChiNV": "Q5, HCM",
+        "TrangThai": "Đang làm việc"
+      },
+      {
+        "MaNV": "NV014",
+        "HoTenNV": "Phan Bửu Long",
+        "CCCD": "123456789014",
+        "GioiTinh": "Nam",
+        "ChucVu": "Bán hàng",
+        "SoDTNV": "0901000444",
+        "EmailNV": "long@javi.vn",
+        "DiaChiNV": "Q8, HCM",
+        "TrangThai": "Đang làm việc"
+      },
+      {
+        "MaNV": "NV015",
+        "HoTenNV": "Đặng Thu Hà",
+        "CCCD": "123456789015",
+        "GioiTinh": "Nữ",
+        "ChucVu": "Bán hàng",
+        "SoDTNV": "0901000555",
+        "EmailNV": "ha@javi.vn",
+        "DiaChiNV": "Q11, HCM",
+        "TrangThai": "Đang làm việc"
+      },
+      {
+        "MaNV": "NV016",
+        "HoTenNV": "Hồ Bảo Trâm",
+        "CCCD": "123456789016",
+        "GioiTinh": "Nữ",
+        "ChucVu": "Kho",
+        "SoDTNV": "0901000666",
+        "EmailNV": "tram@javi.vn",
+        "DiaChiNV": "Phú Nhuận, HCM",
+        "TrangThai": "Đang làm việc"
+      },
+      {
+        "MaNV": "NV017",
+        "HoTenNV": "Ngô Gia Bảo",
+        "CCCD": "123456789017",
+        "GioiTinh": "Nam",
+        "ChucVu": "Bán hàng",
+        "SoDTNV": "0901000777",
+        "EmailNV": "bao@javi.vn",
+        "DiaChiNV": "Bình Chánh, HCM",
+        "TrangThai": "Đang làm việc"
+      },
+      {
+        "MaNV": "NV018",
+        "HoTenNV": "Bùi Vĩnh Phát",
+        "CCCD": "123456789018",
+        "GioiTinh": "Nam",
+        "ChucVu": "Quản lý",
+        "SoDTNV": "0901000888",
+        "EmailNV": "phatb@javi.vn",
+        "DiaChiNV": "Hóc Môn, HCM",
+        "TrangThai": "Đang làm việc"
+      },
+      {
+        "MaNV": "NV019",
+        "HoTenNV": "Đỗ Thanh Bình",
+        "CCCD": "123456789019",
+        "GioiTinh": "Nữ",
+        "ChucVu": "Bán hàng",
+        "SoDTNV": "0901000999",
+        "EmailNV": "binh@javi.vn",
+        "DiaChiNV": "Nhà Bè, HCM",
+        "TrangThai": "Đang làm việc"
+      },
+      {
+        "MaNV": "NV020",
+        "HoTenNV": "Lưu Tiến Dũng",
+        "CCCD": "123456789020",
+        "GioiTinh": "Nam",
+        "ChucVu": "Kế toán",
+        "SoDTNV": "0901001000",
+        "EmailNV": "dung@javi.vn",
+        "DiaChiNV": "Q1, HCM",
+        "TrangThai": "Đang làm việc"
+      }
+    ],
+    "TAI_KHOAN": [
+      {
+        "TenDangNhap": "admin_duc",
+        "MatKhau": "123",
+        "MaNV": "NV009"
+      },
+      {
+        "TenDangNhap": "admin_phat",
+        "MatKhau": "javi123",
+        "MaNV": "NV001"
+      },
+      {
+        "TenDangNhap": "admin_tri",
+        "MatKhau": "123",
+        "MaNV": "NV010"
+      },
+      {
+        "TenDangNhap": "hien.tran",
+        "MatKhau": "kho123",
+        "MaNV": "NV004"
+      },
+      {
+        "TenDangNhap": "ketoan_quan",
+        "MatKhau": "123",
+        "MaNV": "NV008"
+      },
+      {
+        "TenDangNhap": "kho_nam",
+        "MatKhau": "123",
+        "MaNV": "NV006"
+      },
+      {
+        "TenDangNhap": "linh.pham",
+        "MatKhau": "sale123",
+        "MaNV": "NV002"
+      },
+      {
+        "TenDangNhap": "sale_khang",
+        "MatKhau": "123",
+        "MaNV": "NV005"
+      },
+      {
+        "TenDangNhap": "sale_thao",
+        "MatKhau": "123",
+        "MaNV": "NV007"
+      },
+      {
+        "TenDangNhap": "son.nguyen",
+        "MatKhau": "ketoan123",
+        "MaNV": "NV003"
+      }
+    ],
+    "PHIEU_NHAP": [
+      {
+        "MaPN": "PN001",
+        "NgayNhap": "2026-03-01T08:30:00.000Z",
+        "SoHoaDonNCC": "HDNCC-001",
+        "TongTienNhap": 65000000,
+        "SoTienDaTraNCC": 130000000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "GhiChu": "Nhập Robusta thô đầu tháng",
+        "MaNV": "NV004",
+        "MaNCC": "NCC02"
+      },
+      {
+        "MaPN": "PN002",
+        "NgayNhap": "2026-03-02T09:15:00.000Z",
+        "SoHoaDonNCC": "HDNCC-002",
+        "TongTienNhap": 39500000,
+        "SoTienDaTraNCC": 79000000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "GhiChu": "Nhập Arabica Đà Lạt",
+        "MaNV": "NV004",
+        "MaNCC": "NCC01"
+      },
+      {
+        "MaPN": "PN003",
+        "NgayNhap": "2026-03-05T14:00:00.000Z",
+        "SoHoaDonNCC": "HDNCC-003",
+        "TongTienNhap": 7500000,
+        "SoTienDaTraNCC": 15000000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "GhiChu": "Nhập ly nhựa PP",
+        "MaNV": "NV006",
+        "MaNCC": "NCC03"
+      },
+      {
+        "MaPN": "PN004",
+        "NgayNhap": "2026-03-07T10:30:00.000Z",
+        "SoHoaDonNCC": "HDNCC-004",
+        "TongTienNhap": 15000000,
+        "SoTienDaTraNCC": 30000000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "GhiChu": "Nhập mật ong rừng thô",
+        "MaNV": "NV006",
+        "MaNCC": "NCC04"
+      },
+      {
+        "MaPN": "PN005",
+        "NgayNhap": "2026-03-10T11:00:00.000Z",
+        "SoHoaDonNCC": "HDNCC-005",
+        "TongTienNhap": 248000000,
+        "SoTienDaTraNCC": 496000000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "GhiChu": "Lô máy pha cao cấp Javi",
+        "MaNV": "NV004",
+        "MaNCC": "NCC05"
+      },
+      {
+        "MaPN": "PN006",
+        "NgayNhap": "2026-03-12T15:30:00.000Z",
+        "SoHoaDonNCC": "HDNCC-006",
+        "TongTienNhap": 8000000,
+        "SoTienDaTraNCC": 16000000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "GhiChu": "Túi tote quà tặng",
+        "MaNV": "NV012",
+        "MaNCC": "NCC07"
+      },
+      {
+        "MaPN": "PN007",
+        "NgayNhap": "2026-03-15T09:00:00.000Z",
+        "SoHoaDonNCC": "HDNCC-007",
+        "TongTienNhap": 3000000,
+        "SoTienDaTraNCC": 6000000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "GhiChu": "Tem nhãn decal dán bao bì",
+        "MaNV": "NV012",
+        "MaNCC": "NCC16"
+      },
+      {
+        "MaPN": "PN008",
+        "NgayNhap": "2026-03-18T16:20:00.000Z",
+        "SoHoaDonNCC": "HDNCC-008",
+        "TongTienNhap": 45000000,
+        "SoTienDaTraNCC": 90000000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "GhiChu": "Nhập thêm Robusta BMT sàng 18",
+        "MaNV": "NV016",
+        "MaNCC": "NCC08"
+      },
+      {
+        "MaPN": "PN009",
+        "NgayNhap": "2026-03-20T13:45:00.000Z",
+        "SoHoaDonNCC": "HDNCC-009",
+        "TongTienNhap": 6000000,
+        "SoTienDaTraNCC": 6000000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "GhiChu": "Ly giấy thân thiện môi trường",
+        "MaNV": "NV016",
+        "MaNCC": "NCC18"
+      },
+      {
+        "MaPN": "PN010",
+        "NgayNhap": "2026-03-22T10:00:00.000Z",
+        "SoHoaDonNCC": "HDNCC-010",
+        "TongTienNhap": 12000000,
+        "SoTienDaTraNCC": 24000000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "GhiChu": "Mật ong hoa cà phê Gia Lai",
+        "MaNV": "NV004",
+        "MaNCC": "NCC10"
+      },
+      {
+        "MaPN": "PN011",
+        "NgayNhap": "2026-03-25T14:10:00.000Z",
+        "SoHoaDonNCC": "HDNCC-011",
+        "TongTienNhap": 19750000,
+        "SoTienDaTraNCC": 39500000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "GhiChu": "Cà phê Arabica thô Sơn La",
+        "MaNV": "NV006",
+        "MaNCC": "NCC17"
+      },
+      {
+        "MaPN": "PN012",
+        "NgayNhap": "2026-03-28T11:30:00.000Z",
+        "SoHoaDonNCC": "HDNCC-012",
+        "TongTienNhap": 4000000,
+        "SoTienDaTraNCC": 8000000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "GhiChu": "Hộp quà tặng cứng cao cấp",
+        "MaNV": "NV006",
+        "MaNCC": "NCC14"
+      },
+      {
+        "MaPN": "PN013",
+        "NgayNhap": "2026-04-01T09:00:00.000Z",
+        "SoHoaDonNCC": "HDNCC-013",
+        "TongTienNhap": 32500000,
+        "SoTienDaTraNCC": 65000000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "GhiChu": "Nhập Robusta thô đợt 2",
+        "MaNV": "NV004",
+        "MaNCC": "NCC02"
+      },
+      {
+        "MaPN": "PN014",
+        "NgayNhap": "2026-04-03T10:30:00.000Z",
+        "SoHoaDonNCC": "HDNCC-014",
+        "TongTienNhap": 15000000,
+        "SoTienDaTraNCC": 30000000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "GhiChu": "Nhập bổ sung túi và phụ trợ",
+        "MaNV": "NV012",
+        "MaNCC": "NCC11"
+      },
+      {
+        "MaPN": "PN015",
+        "NgayNhap": "2026-04-05T13:00:00.000Z",
+        "SoHoaDonNCC": "HDNCC-015",
+        "TongTienNhap": 59800000,
+        "SoTienDaTraNCC": 119600000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "GhiChu": "Nhập máy pha I4.9 phục vụ dự án",
+        "MaNV": "NV016",
+        "MaNCC": "NCC05"
+      },
+      {
+        "MaPN": "PN016",
+        "NgayNhap": "2026-04-08T14:45:00.000Z",
+        "SoHoaDonNCC": "HDNCC-016",
+        "TongTienNhap": 7500000,
+        "SoTienDaTraNCC": 0,
+        "TrangThaiThanhToan": "Chưa thanh toán",
+        "GhiChu": "Hộp quà tặng bổ sung",
+        "MaNV": "NV004",
+        "MaNCC": "NCC14"
+      },
+      {
+        "MaPN": "PN017",
+        "NgayNhap": "2026-04-10T16:00:00.000Z",
+        "SoHoaDonNCC": "HDNCC-017",
+        "TongTienNhap": 22500000,
+        "SoTienDaTraNCC": 45000000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "GhiChu": "Hạt cà phê Đắk Mil hữu cơ",
+        "MaNV": "NV006",
+        "MaNCC": "NCC12"
+      },
+      {
+        "MaPN": "PN018",
+        "NgayNhap": "2026-04-12T09:15:00.000Z",
+        "SoHoaDonNCC": "HDNCC-018",
+        "TongTienNhap": 4500000,
+        "SoTienDaTraNCC": 9000000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "GhiChu": "Bao tải đay lưu trữ thô",
+        "MaNV": "NV012",
+        "MaNCC": "NCC20"
+      },
+      {
+        "MaPN": "PN019",
+        "NgayNhap": "2026-04-15T11:00:00.000Z",
+        "SoHoaDonNCC": "HDNCC-019",
+        "TongTienNhap": 19750000,
+        "SoTienDaTraNCC": 39500000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "GhiChu": "Nhập Arabica Cầu Đất",
+        "MaNV": "NV016",
+        "MaNCC": "NCC15"
+      },
+      {
+        "MaPN": "PN020",
+        "NgayNhap": "2026-04-18T15:20:00.000Z",
+        "SoHoaDonNCC": "HDNCC-020",
+        "TongTienNhap": 3000000,
+        "SoTienDaTraNCC": 6000000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "GhiChu": "Khay nhựa phụ trợ bổ sung",
+        "MaNV": "NV004",
+        "MaNCC": "NCC13"
+      }
+    ],
+    "CT_PHIEU_NHAP": [
+      {
+        "MaPN": "PN001",
+        "MaSP": "NVCFT",
+        "SoLuong": 1000,
+        "GiaNhap": 65000
+      },
+      {
+        "MaPN": "PN002",
+        "MaSP": "CFH31",
+        "SoLuong": 100,
+        "GiaNhap": 395000
+      },
+      {
+        "MaPN": "PN003",
+        "MaSP": "BBI01",
+        "SoLuong": 5000,
+        "GiaNhap": 1500
+      },
+      {
+        "MaPN": "PN004",
+        "MaSP": "NVMOR",
+        "SoLuong": 100,
+        "GiaNhap": 150000
+      },
+      {
+        "MaPN": "PN005",
+        "MaSP": "MPM30",
+        "SoLuong": 1,
+        "GiaNhap": 248000000
+      },
+      {
+        "MaPN": "PN006",
+        "MaSP": "BBI06",
+        "SoLuong": 320,
+        "GiaNhap": 25000
+      },
+      {
+        "MaPN": "PN007",
+        "MaSP": "BBI03",
+        "SoLuong": 10000,
+        "GiaNhap": 300
+      },
+      {
+        "MaPN": "PN008",
+        "MaSP": "NVCFT",
+        "SoLuong": 692,
+        "GiaNhap": 65000
+      },
+      {
+        "MaPN": "PN009",
+        "MaSP": "BBI02",
+        "SoLuong": 3000,
+        "GiaNhap": 2000
+      },
+      {
+        "MaPN": "PN010",
+        "MaSP": "NVMOR",
+        "SoLuong": 80,
+        "GiaNhap": 150000
+      },
+      {
+        "MaPN": "PN011",
+        "MaSP": "NVCFT",
+        "SoLuong": 303,
+        "GiaNhap": 65000
+      },
+      {
+        "MaPN": "PN012",
+        "MaSP": "BBI05",
+        "SoLuong": 266,
+        "GiaNhap": 15000
+      },
+      {
+        "MaPN": "PN013",
+        "MaSP": "NVCFT",
+        "SoLuong": 500,
+        "GiaNhap": 65000
+      },
+      {
+        "MaPN": "PN014",
+        "MaSP": "BBI01",
+        "SoLuong": 10000,
+        "GiaNhap": 1500
+      },
+      {
+        "MaPN": "PN015",
+        "MaSP": "MPI49",
+        "SoLuong": 1,
+        "GiaNhap": 59800000
+      },
+      {
+        "MaPN": "PN016",
+        "MaSP": "BBI05",
+        "SoLuong": 500,
+        "GiaNhap": 15000
+      },
+      {
+        "MaPN": "PN017",
+        "MaSP": "NVCFT",
+        "SoLuong": 346,
+        "GiaNhap": 65000
+      },
+      {
+        "MaPN": "PN018",
+        "MaSP": "BBI01",
+        "SoLuong": 3000,
+        "GiaNhap": 1500
+      },
+      {
+        "MaPN": "PN019",
+        "MaSP": "CFH31",
+        "SoLuong": 50,
+        "GiaNhap": 395000
+      },
+      {
+        "MaPN": "PN020",
+        "MaSP": "BBI01",
+        "SoLuong": 2000,
+        "GiaNhap": 1500
+      }
+    ],
+    "DON_HANG": [
+      {
+        "MaDH": "DH001",
+        "NgayDat": "2026-04-01",
+        "TongTienDonHang": 500000,
+        "TongGiamGiaSP": 50000,
+        "TongTienSauGiam": 450000,
+        "TrangThaiDonHang": "Hoàn thành",
+        "MaNV": "NV002",
+        "MaKH": "KH001"
+      },
+      {
+        "MaDH": "DH002",
+        "NgayDat": "2026-04-02",
+        "TongTienDonHang": 49600000,
+        "TongGiamGiaSP": 1000000,
+        "TongTienSauGiam": 48600000,
+        "TrangThaiDonHang": "Hoàn thành",
+        "MaNV": "NV002",
+        "MaKH": "KH003"
+      },
+      {
+        "MaDH": "DH003",
+        "NgayDat": "2026-04-03",
+        "TongTienDonHang": 1000000,
+        "TongGiamGiaSP": 0,
+        "TongTienSauGiam": 1000000,
+        "TrangThaiDonHang": "Hoàn thành",
+        "MaNV": "NV005",
+        "MaKH": "KH002"
+      },
+      {
+        "MaDH": "DH004",
+        "NgayDat": "2026-04-04",
+        "TongTienDonHang": 150000,
+        "TongGiamGiaSP": 0,
+        "TongTienSauGiam": 150000,
+        "TrangThaiDonHang": "Hoàn thành",
+        "MaNV": "NV005",
+        "MaKH": "KH004"
+      },
+      {
+        "MaDH": "DH005",
+        "NgayDat": "2026-04-05",
+        "TongTienDonHang": 800000,
+        "TongGiamGiaSP": 40000,
+        "TongTienSauGiam": 760000,
+        "TrangThaiDonHang": "Hoàn thành",
+        "MaNV": "NV007",
+        "MaKH": "KH005"
+      },
+      {
+        "MaDH": "DH006",
+        "NgayDat": "2026-04-06",
+        "TongTienDonHang": 200000,
+        "TongGiamGiaSP": 0,
+        "TongTienSauGiam": 200000,
+        "TrangThaiDonHang": "Hoàn thành",
+        "MaNV": "NV007",
+        "MaKH": "KH006"
+      },
+      {
+        "MaDH": "DH007",
+        "NgayDat": "2026-04-07",
+        "TongTienDonHang": 279000000,
+        "TongGiamGiaSP": 5000000,
+        "TongTienSauGiam": 274000000,
+        "TrangThaiDonHang": "Hoàn thành",
+        "MaNV": "NV002",
+        "MaKH": "KH007"
+      },
+      {
+        "MaDH": "DH008",
+        "NgayDat": "2026-04-08",
+        "TongTienDonHang": 500000,
+        "TongGiamGiaSP": 0,
+        "TongTienSauGiam": 500000,
+        "TrangThaiDonHang": "Hoàn thành",
+        "MaNV": "NV011",
+        "MaKH": "KH008"
+      },
+      {
+        "MaDH": "DH009",
+        "NgayDat": "2026-04-09",
+        "TongTienDonHang": 300000,
+        "TongGiamGiaSP": 0,
+        "TongTienSauGiam": 300000,
+        "TrangThaiDonHang": "Hoàn thành",
+        "MaNV": "NV011",
+        "MaKH": "KH009"
+      },
+      {
+        "MaDH": "DH010",
+        "NgayDat": "2026-04-10",
+        "TongTienDonHang": 1200000,
+        "TongGiamGiaSP": 60000,
+        "TongTienSauGiam": 1140000,
+        "TrangThaiDonHang": "Hoàn thành",
+        "MaNV": "NV002",
+        "MaKH": "KH010"
+      },
+      {
+        "MaDH": "DH011",
+        "NgayDat": "2026-04-11",
+        "TongTienDonHang": 400000,
+        "TongGiamGiaSP": 0,
+        "TongTienSauGiam": 400000,
+        "TrangThaiDonHang": "Hoàn thành",
+        "MaNV": "NV014",
+        "MaKH": "KH011"
+      },
+      {
+        "MaDH": "DH012",
+        "NgayDat": "2026-04-12",
+        "TongTienDonHang": 650000,
+        "TongGiamGiaSP": 0,
+        "TongTienSauGiam": 650000,
+        "TrangThaiDonHang": "Hoàn thành",
+        "MaNV": "NV014",
+        "MaKH": "KH012"
+      },
+      {
+        "MaDH": "DH013",
+        "NgayDat": "2026-04-13",
+        "TongTienDonHang": 1500000,
+        "TongGiamGiaSP": 100000,
+        "TongTienSauGiam": 1400000,
+        "TrangThaiDonHang": "Hoàn thành",
+        "MaNV": "NV005",
+        "MaKH": "KH013"
+      },
+      {
+        "MaDH": "DH014",
+        "NgayDat": "2026-04-14",
+        "TongTienDonHang": 900000,
+        "TongGiamGiaSP": 0,
+        "TongTienSauGiam": 900000,
+        "TrangThaiDonHang": "Hoàn thành",
+        "MaNV": "NV007",
+        "MaKH": "KH014"
+      },
+      {
+        "MaDH": "DH015",
+        "NgayDat": "2026-04-15",
+        "TongTienDonHang": 50000000,
+        "TongGiamGiaSP": 2000000,
+        "TongTienSauGiam": 48000000,
+        "TrangThaiDonHang": "Hoàn thành",
+        "MaNV": "NV002",
+        "MaKH": "KH015"
+      },
+      {
+        "MaDH": "DH016",
+        "NgayDat": "2026-04-16",
+        "TongTienDonHang": 300000,
+        "TongGiamGiaSP": 0,
+        "TongTienSauGiam": 300000,
+        "TrangThaiDonHang": "Hoàn thành",
+        "MaNV": "NV011",
+        "MaKH": "KH016"
+      },
+      {
+        "MaDH": "DH017",
+        "NgayDat": "2026-04-17",
+        "TongTienDonHang": 2500000,
+        "TongGiamGiaSP": 125000,
+        "TongTienSauGiam": 2375000,
+        "TrangThaiDonHang": "Hoàn thành",
+        "MaNV": "NV015",
+        "MaKH": "KH017"
+      },
+      {
+        "MaDH": "DH018",
+        "NgayDat": "2026-04-18",
+        "TongTienDonHang": 100000,
+        "TongGiamGiaSP": 0,
+        "TongTienSauGiam": 100000,
+        "TrangThaiDonHang": "Hoàn thành",
+        "MaNV": "NV015",
+        "MaKH": "KH018"
+      },
+      {
+        "MaDH": "DH019",
+        "NgayDat": "2026-04-19",
+        "TongTienDonHang": 450000,
+        "TongGiamGiaSP": 0,
+        "TongTienSauGiam": 450000,
+        "TrangThaiDonHang": "Hoàn thành",
+        "MaNV": "NV017",
+        "MaKH": "KH019"
+      },
+      {
+        "MaDH": "DH020",
+        "NgayDat": "2026-04-20",
+        "TongTienDonHang": 89000000,
+        "TongGiamGiaSP": 1000000,
+        "TongTienSauGiam": 88000000,
+        "TrangThaiDonHang": "Hoàn thành",
+        "MaNV": "NV002",
+        "MaKH": "KH020"
+      },
+      {
+        "MaDH": "DH021",
+        "NgayDat": "2026-06-19",
+        "TongTienDonHang": 300,
+        "TongGiamGiaSP": 0,
+        "TongTienSauGiam": 300,
+        "TrangThaiDonHang": "Hoàn thành",
+        "MaNV": "NV001",
+        "MaKH": "KH001"
+      },
+      {
+        "MaDH": "DH022",
+        "NgayDat": "2026-06-19",
+        "TongTienDonHang": 20298000,
+        "TongGiamGiaSP": 1393000,
+        "TongTienSauGiam": 18905000,
+        "TrangThaiDonHang": "Hoàn thành",
+        "MaNV": "NV001",
+        "MaKH": "KH021"
+      },
+      {
+        "MaDH": "DH023",
+        "NgayDat": "2026-06-19",
+        "TongTienDonHang": 15000,
+        "TongGiamGiaSP": 0,
+        "TongTienSauGiam": 15000,
+        "TrangThaiDonHang": "Hoàn thành",
+        "MaNV": "NV001",
+        "MaKH": "KH001"
+      },
+      {
+        "MaDH": "DH025",
+        "NgayDat": "2026-06-20",
+        "TongTienDonHang": 20943000,
+        "TongGiamGiaSP": 2041942.5,
+        "TongTienSauGiam": 18901057.5,
+        "TrangThaiDonHang": "Chờ giao",
+        "MaNV": "NV001",
+        "MaKH": "KH021"
+      },
+      {
+        "MaDH": "DH026",
+        "NgayDat": "2026-06-24",
+        "TongTienDonHang": 65000,
+        "TongGiamGiaSP": 3250,
+        "TongTienSauGiam": 61750,
+        "TrangThaiDonHang": "Hoàn thành",
+        "MaNV": "NV001",
+        "MaKH": "KH021"
+      },
+      {
+        "MaDH": "DH027",
+        "NgayDat": "2026-06-24",
+        "TongTienDonHang": 150000,
+        "TongGiamGiaSP": 7500,
+        "TongTienSauGiam": 142500,
+        "TrangThaiDonHang": "Chờ giao",
+        "MaNV": "NV001",
+        "MaKH": "KH021"
+      },
+      {
+        "MaDH": "DH028",
+        "NgayDat": "2026-06-26",
+        "TongTienDonHang": 1194000,
+        "TongGiamGiaSP": 69152.5,
+        "TongTienSauGiam": 1124847.5,
+        "TrangThaiDonHang": "Chờ giao",
+        "MaNV": "NV001",
+        "MaKH": "KH023"
+      }
+    ],
+    "CT_DON_HANG": [
+      {
+        "MaDH": "DH001",
+        "MaSP": "CFH31",
+        "SoLuong": 1,
+        "GiamGiaSP": 0.1
+      },
+      {
+        "MaDH": "DH002",
+        "MaSP": "MPTD9",
+        "SoLuong": 1,
+        "GiamGiaSP": 0.0202
+      },
+      {
+        "MaDH": "DH003",
+        "MaSP": "CFH32",
+        "SoLuong": 12,
+        "GiamGiaSP": 0
+      },
+      {
+        "MaDH": "DH004",
+        "MaSP": "NVCFT",
+        "SoLuong": 1,
+        "GiamGiaSP": 0
+      },
+      {
+        "MaDH": "DH005",
+        "MaSP": "CFH31",
+        "SoLuong": 2,
+        "GiamGiaSP": 0.05
+      },
+      {
+        "MaDH": "DH006",
+        "MaSP": "CFH35",
+        "SoLuong": 1,
+        "GiamGiaSP": 0
+      },
+      {
+        "MaDH": "DH007",
+        "MaSP": "MPM30",
+        "SoLuong": 1,
+        "GiamGiaSP": 0.0179
+      },
+      {
+        "MaDH": "DH008",
+        "MaSP": "CFH31",
+        "SoLuong": 1,
+        "GiamGiaSP": 0
+      },
+      {
+        "MaDH": "DH009",
+        "MaSP": "CFH35",
+        "SoLuong": 1,
+        "GiamGiaSP": 0
+      },
+      {
+        "MaDH": "DH010",
+        "MaSP": "CFH31",
+        "SoLuong": 1,
+        "GiamGiaSP": 0.05
+      },
+      {
+        "MaDH": "DH011",
+        "MaSP": "BBI01",
+        "SoLuong": 100,
+        "GiamGiaSP": 0
+      },
+      {
+        "MaDH": "DH012",
+        "MaSP": "BBI01",
+        "SoLuong": 50,
+        "GiamGiaSP": 0
+      },
+      {
+        "MaDH": "DH013",
+        "MaSP": "CFH31",
+        "SoLuong": 2,
+        "GiamGiaSP": 0.0667
+      },
+      {
+        "MaDH": "DH014",
+        "MaSP": "CFH35",
+        "SoLuong": 3,
+        "GiamGiaSP": 0
+      },
+      {
+        "MaDH": "DH015",
+        "MaSP": "MPTD9",
+        "SoLuong": 1,
+        "GiamGiaSP": 0.04
+      },
+      {
+        "MaDH": "DH016",
+        "MaSP": "NVCFT",
+        "SoLuong": 5,
+        "GiamGiaSP": 0
+      },
+      {
+        "MaDH": "DH017",
+        "MaSP": "CFH31",
+        "SoLuong": 10,
+        "GiamGiaSP": 0.05
+      },
+      {
+        "MaDH": "DH018",
+        "MaSP": "BBI01",
+        "SoLuong": 50,
+        "GiamGiaSP": 0
+      },
+      {
+        "MaDH": "DH019",
+        "MaSP": "CFH31",
+        "SoLuong": 1,
+        "GiamGiaSP": 0
+      },
+      {
+        "MaDH": "DH020",
+        "MaSP": "MPTD9",
+        "SoLuong": 1,
+        "GiamGiaSP": 0.0112
+      },
+      {
+        "MaDH": "DH021",
+        "MaSP": "BBI03",
+        "SoLuong": 1,
+        "GiamGiaSP": 0
+      },
+      {
+        "MaDH": "DH022",
+        "MaSP": "CFH82",
+        "SoLuong": 2,
+        "GiamGiaSP": 1
+      },
+      {
+        "MaDH": "DH022",
+        "MaSP": "MPF05",
+        "SoLuong": 1,
+        "GiamGiaSP": 0
+      },
+      {
+        "MaDH": "DH023",
+        "MaSP": "BBI05",
+        "SoLuong": 1,
+        "GiamGiaSP": 0
+      },
+      {
+        "MaDH": "DH025",
+        "MaSP": "CFX71",
+        "SoLuong": 1,
+        "GiamGiaSP": 0
+      },
+      {
+        "MaDH": "DH025",
+        "MaSP": "CFX82",
+        "SoLuong": 2,
+        "GiamGiaSP": 0
+      },
+      {
+        "MaDH": "DH025",
+        "MaSP": "MPF05",
+        "SoLuong": 1,
+        "GiamGiaSP": 0
+      },
+      {
+        "MaDH": "DH026",
+        "MaSP": "NVCFT",
+        "SoLuong": 1,
+        "GiamGiaSP": 0
+      },
+      {
+        "MaDH": "DH027",
+        "MaSP": "NVMOR",
+        "SoLuong": 1,
+        "GiamGiaSP": 0
+      },
+      {
+        "MaDH": "DH028",
+        "MaSP": "CFH81",
+        "SoLuong": 1,
+        "GiamGiaSP": 0
+      },
+      {
+        "MaDH": "DH028",
+        "MaSP": "CFH82",
+        "SoLuong": 1,
+        "GiamGiaSP": 0.05
+      }
+    ],
+    "HOA_DON": [
+      {
+        "MaHD": "HD001",
+        "NgayLap": "2026-04-01",
+        "HinhThucThanhToan": "Tiền mặt",
+        "TongTienGiamGia": 50000,
+        "TongTienThanhToan": 450000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "MaNV": "NV003",
+        "MaDH": "DH001"
+      },
+      {
+        "MaHD": "HD002",
+        "NgayLap": "2026-04-02",
+        "HinhThucThanhToan": "Chuyển khoản",
+        "TongTienGiamGia": 1000000,
+        "TongTienThanhToan": 48600000,
+        "TrangThaiThanhToan": "Chưa thanh toán",
+        "MaNV": "NV003",
+        "MaDH": "DH002"
+      },
+      {
+        "MaHD": "HD003",
+        "NgayLap": "2026-04-03",
+        "HinhThucThanhToan": "Tiền mặt",
+        "TongTienGiamGia": 0,
+        "TongTienThanhToan": 1000000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "MaNV": "NV003",
+        "MaDH": "DH003"
+      },
+      {
+        "MaHD": "HD004",
+        "NgayLap": "2026-04-04",
+        "HinhThucThanhToan": "Tiền mặt",
+        "TongTienGiamGia": 0,
+        "TongTienThanhToan": 150000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "MaNV": "NV008",
+        "MaDH": "DH004"
+      },
+      {
+        "MaHD": "HD005",
+        "NgayLap": "2026-04-05",
+        "HinhThucThanhToan": "Chuyển khoản",
+        "TongTienGiamGia": 40000,
+        "TongTienThanhToan": 760000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "MaNV": "NV008",
+        "MaDH": "DH005"
+      },
+      {
+        "MaHD": "HD006",
+        "NgayLap": "2026-04-06",
+        "HinhThucThanhToan": "Chuyển khoản",
+        "TongTienGiamGia": 0,
+        "TongTienThanhToan": 200000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "MaNV": "NV013",
+        "MaDH": "DH006"
+      },
+      {
+        "MaHD": "HD007",
+        "NgayLap": "2026-04-07",
+        "HinhThucThanhToan": "Chuyển khoản",
+        "TongTienGiamGia": 5000000,
+        "TongTienThanhToan": 274000000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "MaNV": "NV013",
+        "MaDH": "DH007"
+      },
+      {
+        "MaHD": "HD008",
+        "NgayLap": "2026-04-08",
+        "HinhThucThanhToan": "Tiền mặt",
+        "TongTienGiamGia": 0,
+        "TongTienThanhToan": 500000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "MaNV": "NV020",
+        "MaDH": "DH008"
+      },
+      {
+        "MaHD": "HD009",
+        "NgayLap": "2026-04-09",
+        "HinhThucThanhToan": "Tiền mặt",
+        "TongTienGiamGia": 0,
+        "TongTienThanhToan": 300000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "MaNV": "NV020",
+        "MaDH": "DH009"
+      },
+      {
+        "MaHD": "HD010",
+        "NgayLap": "2026-04-10",
+        "HinhThucThanhToan": "Chuyển khoản",
+        "TongTienGiamGia": 60000,
+        "TongTienThanhToan": 1140000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "MaNV": "NV003",
+        "MaDH": "DH010"
+      },
+      {
+        "MaHD": "HD011",
+        "NgayLap": "2026-04-11",
+        "HinhThucThanhToan": "Tiền mặt",
+        "TongTienGiamGia": 0,
+        "TongTienThanhToan": 400000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "MaNV": "NV003",
+        "MaDH": "DH011"
+      },
+      {
+        "MaHD": "HD012",
+        "NgayLap": "2026-04-12",
+        "HinhThucThanhToan": "Chuyển khoản",
+        "TongTienGiamGia": 0,
+        "TongTienThanhToan": 650000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "MaNV": "NV008",
+        "MaDH": "DH012"
+      },
+      {
+        "MaHD": "HD013",
+        "NgayLap": "2026-04-13",
+        "HinhThucThanhToan": "Chuyển khoản",
+        "TongTienGiamGia": 100000,
+        "TongTienThanhToan": 1400000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "MaNV": "NV008",
+        "MaDH": "DH013"
+      },
+      {
+        "MaHD": "HD014",
+        "NgayLap": "2026-04-14",
+        "HinhThucThanhToan": "Tiền mặt",
+        "TongTienGiamGia": 0,
+        "TongTienThanhToan": 900000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "MaNV": "NV013",
+        "MaDH": "DH014"
+      },
+      {
+        "MaHD": "HD015",
+        "NgayLap": "2026-04-15",
+        "HinhThucThanhToan": "Chuyển khoản",
+        "TongTienGiamGia": 2000000,
+        "TongTienThanhToan": 48000000,
+        "TrangThaiThanhToan": "Chưa thanh toán",
+        "MaNV": "NV013",
+        "MaDH": "DH015"
+      },
+      {
+        "MaHD": "HD016",
+        "NgayLap": "2026-04-16",
+        "HinhThucThanhToan": "Tiền mặt",
+        "TongTienGiamGia": 0,
+        "TongTienThanhToan": 300000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "MaNV": "NV020",
+        "MaDH": "DH016"
+      },
+      {
+        "MaHD": "HD017",
+        "NgayLap": "2026-04-17",
+        "HinhThucThanhToan": "Chuyển khoản",
+        "TongTienGiamGia": 125000,
+        "TongTienThanhToan": 2375000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "MaNV": "NV020",
+        "MaDH": "DH017"
+      },
+      {
+        "MaHD": "HD018",
+        "NgayLap": "2026-04-18",
+        "HinhThucThanhToan": "Tiền mặt",
+        "TongTienGiamGia": 0,
+        "TongTienThanhToan": 100000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "MaNV": "NV003",
+        "MaDH": "DH018"
+      },
+      {
+        "MaHD": "HD019",
+        "NgayLap": "2026-04-19",
+        "HinhThucThanhToan": "Chuyển khoản",
+        "TongTienGiamGia": 0,
+        "TongTienThanhToan": 450000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "MaNV": "NV003",
+        "MaDH": "DH019"
+      },
+      {
+        "MaHD": "HD020",
+        "NgayLap": "2026-04-20",
+        "HinhThucThanhToan": "Chuyển khoản",
+        "TongTienGiamGia": 1000000,
+        "TongTienThanhToan": 88000000,
+        "TrangThaiThanhToan": "Chưa thanh toán",
+        "MaNV": "NV008",
+        "MaDH": "DH020"
+      },
+      {
+        "MaHD": "HD021",
+        "NgayLap": "2026-06-19",
+        "HinhThucThanhToan": "Tiền mặt",
+        "TongTienGiamGia": 0,
+        "TongTienThanhToan": 300,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "MaNV": "NV001",
+        "MaDH": "DH021"
+      },
+      {
+        "MaHD": "HD022",
+        "NgayLap": "2026-06-19",
+        "HinhThucThanhToan": "Tiền mặt",
+        "TongTienGiamGia": 0,
+        "TongTienThanhToan": 18905000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "MaNV": "NV001",
+        "MaDH": "DH022"
+      },
+      {
+        "MaHD": "HD023",
+        "NgayLap": "2026-06-19",
+        "HinhThucThanhToan": "Tiền mặt",
+        "TongTienGiamGia": 0,
+        "TongTienThanhToan": 15000,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "MaNV": "NV001",
+        "MaDH": "DH023"
+      },
+      {
+        "MaHD": "HD024",
+        "NgayLap": "2026-06-20",
+        "HinhThucThanhToan": "Tiền mặt",
+        "TongTienGiamGia": 0,
+        "TongTienThanhToan": 18901057.5,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "MaNV": "NV001",
+        "MaDH": "DH025"
+      },
+      {
+        "MaHD": "HD025",
+        "NgayLap": "2026-06-24",
+        "HinhThucThanhToan": "Tiền mặt",
+        "TongTienGiamGia": 0,
+        "TongTienThanhToan": 61750,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "MaNV": "NV001",
+        "MaDH": "DH026"
+      },
+      {
+        "MaHD": "HD026",
+        "NgayLap": "2026-06-26",
+        "HinhThucThanhToan": "Tiền mặt",
+        "TongTienGiamGia": 0,
+        "TongTienThanhToan": 1124847.5,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "MaNV": "NV001",
+        "MaDH": "DH028"
+      },
+      {
+        "MaHD": "HD027",
+        "NgayLap": "2026-09-27",
+        "HinhThucThanhToan": "Tiền mặt",
+        "TongTienGiamGia": 0,
+        "TongTienThanhToan": 142500,
+        "TrangThaiThanhToan": "Đã thanh toán",
+        "MaNV": "NV001",
+        "MaDH": "DH027"
+      }
+    ],
+    "PHIEU_XUAT": [
+      {
+        "MaPX": "PX001",
+        "NgayXuat": "2026-04-01",
+        "TrangThaiGiaoHang": "Đã giao hàng",
+        "MaNV": "NV004",
+        "MaDH": "DH001"
+      },
+      {
+        "MaPX": "PX002",
+        "NgayXuat": "2026-04-02",
+        "TrangThaiGiaoHang": "Đã giao hàng",
+        "MaNV": "NV004",
+        "MaDH": "DH002"
+      },
+      {
+        "MaPX": "PX003",
+        "NgayXuat": "2026-04-03",
+        "TrangThaiGiaoHang": "Đã giao hàng",
+        "MaNV": "NV006",
+        "MaDH": "DH003"
+      },
+      {
+        "MaPX": "PX004",
+        "NgayXuat": "2026-04-04",
+        "TrangThaiGiaoHang": "Đã giao hàng",
+        "MaNV": "NV006",
+        "MaDH": "DH004"
+      },
+      {
+        "MaPX": "PX005",
+        "NgayXuat": "2026-04-05",
+        "TrangThaiGiaoHang": "Đã giao hàng",
+        "MaNV": "NV012",
+        "MaDH": "DH005"
+      },
+      {
+        "MaPX": "PX006",
+        "NgayXuat": "2026-04-06",
+        "TrangThaiGiaoHang": "Đã giao hàng",
+        "MaNV": "NV012",
+        "MaDH": "DH006"
+      },
+      {
+        "MaPX": "PX007",
+        "NgayXuat": "2026-04-07",
+        "TrangThaiGiaoHang": "Đã giao hàng",
+        "MaNV": "NV016",
+        "MaDH": "DH007"
+      },
+      {
+        "MaPX": "PX008",
+        "NgayXuat": "2026-04-08",
+        "TrangThaiGiaoHang": "Đã giao hàng",
+        "MaNV": "NV016",
+        "MaDH": "DH008"
+      },
+      {
+        "MaPX": "PX009",
+        "NgayXuat": "2026-04-09",
+        "TrangThaiGiaoHang": "Đã giao hàng",
+        "MaNV": "NV004",
+        "MaDH": "DH009"
+      },
+      {
+        "MaPX": "PX010",
+        "NgayXuat": "2026-04-10",
+        "TrangThaiGiaoHang": "Đã giao hàng",
+        "MaNV": "NV006",
+        "MaDH": "DH010"
+      },
+      {
+        "MaPX": "PX011",
+        "NgayXuat": "2026-04-11",
+        "TrangThaiGiaoHang": "Đã giao hàng",
+        "MaNV": "NV012",
+        "MaDH": "DH011"
+      },
+      {
+        "MaPX": "PX012",
+        "NgayXuat": "2026-04-12",
+        "TrangThaiGiaoHang": "Đã giao hàng",
+        "MaNV": "NV016",
+        "MaDH": "DH012"
+      },
+      {
+        "MaPX": "PX013",
+        "NgayXuat": "2026-04-13",
+        "TrangThaiGiaoHang": "Đã giao hàng",
+        "MaNV": "NV004",
+        "MaDH": "DH013"
+      },
+      {
+        "MaPX": "PX014",
+        "NgayXuat": "2026-04-14",
+        "TrangThaiGiaoHang": "Đã giao hàng",
+        "MaNV": "NV006",
+        "MaDH": "DH014"
+      },
+      {
+        "MaPX": "PX015",
+        "NgayXuat": "2026-04-15",
+        "TrangThaiGiaoHang": "Đã giao hàng",
+        "MaNV": "NV012",
+        "MaDH": "DH015"
+      },
+      {
+        "MaPX": "PX016",
+        "NgayXuat": "2026-04-16",
+        "TrangThaiGiaoHang": "Đã giao hàng",
+        "MaNV": "NV016",
+        "MaDH": "DH016"
+      },
+      {
+        "MaPX": "PX017",
+        "NgayXuat": "2026-04-17",
+        "TrangThaiGiaoHang": "Đã giao hàng",
+        "MaNV": "NV004",
+        "MaDH": "DH017"
+      },
+      {
+        "MaPX": "PX018",
+        "NgayXuat": "2026-04-18",
+        "TrangThaiGiaoHang": "Đã giao hàng",
+        "MaNV": "NV006",
+        "MaDH": "DH018"
+      },
+      {
+        "MaPX": "PX019",
+        "NgayXuat": "2026-04-19",
+        "TrangThaiGiaoHang": "Đã giao hàng",
+        "MaNV": "NV012",
+        "MaDH": "DH019"
+      },
+      {
+        "MaPX": "PX020",
+        "NgayXuat": "2026-04-20",
+        "TrangThaiGiaoHang": "Đã giao hàng",
+        "MaNV": "NV016",
+        "MaDH": "DH020"
+      },
+      {
+        "MaPX": "PX021",
+        "NgayXuat": "2026-06-21",
+        "TrangThaiGiaoHang": "Giao hàng không thành công",
+        "MaNV": "NV001",
+        "MaDH": "DH025"
+      },
+      {
+        "MaPX": "PX022",
+        "NgayXuat": "2026-06-26",
+        "TrangThaiGiaoHang": "Đang giao hàng",
+        "MaNV": "NV001",
+        "MaDH": "DH028"
+      }
+    ],
+    "CONG_NO": [
+      {
+        "MaCN": "CN001",
+        "HanThanhToan": "2026-05-02",
+        "NgayGhiNhan": "2026-04-02",
+        "SoTienDaTra": 500000,
+        "TongNo": 48600000,
+        "SoDuCN": 48100000,
+        "TrangThaiCN": "Còn nợ",
+        "MaHD": "HD002"
+      },
+      {
+        "MaCN": "CN002",
+        "HanThanhToan": "2026-05-15",
+        "NgayGhiNhan": "2026-04-15",
+        "SoTienDaTra": 10000000,
+        "TongNo": 48000000,
+        "SoDuCN": 38000000,
+        "TrangThaiCN": "Còn nợ",
+        "MaHD": "HD015"
+      },
+      {
+        "MaCN": "CN003",
+        "HanThanhToan": "2026-05-20",
+        "NgayGhiNhan": "2026-04-20",
+        "SoTienDaTra": 0,
+        "TongNo": 88000000,
+        "SoDuCN": 88000000,
+        "TrangThaiCN": "Còn nợ",
+        "MaHD": "HD020"
+      },
+      {
+        "MaCN": "CN004",
+        "HanThanhToan": "2026-05-01",
+        "NgayGhiNhan": "2026-04-01",
+        "SoTienDaTra": 450000,
+        "TongNo": 450000,
+        "SoDuCN": 0,
+        "TrangThaiCN": "Hoàn tất",
+        "MaHD": "HD001"
+      },
+      {
+        "MaCN": "CN005",
+        "HanThanhToan": "2026-05-05",
+        "NgayGhiNhan": "2026-04-05",
+        "SoTienDaTra": 760000,
+        "TongNo": 760000,
+        "SoDuCN": 0,
+        "TrangThaiCN": "Hoàn tất",
+        "MaHD": "HD005"
+      },
+      {
+        "MaCN": "CN006",
+        "HanThanhToan": "2026-05-03",
+        "NgayGhiNhan": "2026-04-03",
+        "SoTienDaTra": 1000000,
+        "TongNo": 1000000,
+        "SoDuCN": 0,
+        "TrangThaiCN": "Hoàn tất",
+        "MaHD": "HD003"
+      },
+      {
+        "MaCN": "CN007",
+        "HanThanhToan": "2026-05-12",
+        "NgayGhiNhan": "2026-04-12",
+        "SoTienDaTra": 650000,
+        "TongNo": 650000,
+        "SoDuCN": 0,
+        "TrangThaiCN": "Hoàn tất",
+        "MaHD": "HD012"
+      },
+      {
+        "MaCN": "CN008",
+        "HanThanhToan": "2026-05-17",
+        "NgayGhiNhan": "2026-04-17",
+        "SoTienDaTra": 2375000,
+        "TongNo": 2375000,
+        "SoDuCN": 0,
+        "TrangThaiCN": "Hoàn tất",
+        "MaHD": "HD017"
+      },
+      {
+        "MaCN": "CN009",
+        "HanThanhToan": "2026-05-19",
+        "NgayGhiNhan": "2026-04-19",
+        "SoTienDaTra": 450000,
+        "TongNo": 450000,
+        "SoDuCN": 0,
+        "TrangThaiCN": "Hoàn tất",
+        "MaHD": "HD019"
+      },
+      {
+        "MaCN": "CN010",
+        "HanThanhToan": "2026-05-10",
+        "NgayGhiNhan": "2026-04-10",
+        "SoTienDaTra": 1140000,
+        "TongNo": 1140000,
+        "SoDuCN": 0,
+        "TrangThaiCN": "Hoàn tất",
+        "MaHD": "HD010"
+      },
+      {
+        "MaCN": "CN011",
+        "HanThanhToan": "2026-05-06",
+        "NgayGhiNhan": "2026-04-06",
+        "SoTienDaTra": 200000,
+        "TongNo": 200000,
+        "SoDuCN": 0,
+        "TrangThaiCN": "Hoàn tất",
+        "MaHD": "HD006"
+      },
+      {
+        "MaCN": "CN012",
+        "HanThanhToan": "2026-05-07",
+        "NgayGhiNhan": "2026-04-07",
+        "SoTienDaTra": 274000000,
+        "TongNo": 274000000,
+        "SoDuCN": 0,
+        "TrangThaiCN": "Hoàn tất",
+        "MaHD": "HD007"
+      },
+      {
+        "MaCN": "CN013",
+        "HanThanhToan": "2026-05-08",
+        "NgayGhiNhan": "2026-04-08",
+        "SoTienDaTra": 0,
+        "TongNo": 500000,
+        "SoDuCN": 500000,
+        "TrangThaiCN": "Còn nợ",
+        "MaHD": "HD008"
+      },
+      {
+        "MaCN": "CN014",
+        "HanThanhToan": "2026-05-09",
+        "NgayGhiNhan": "2026-04-09",
+        "SoTienDaTra": 300000,
+        "TongNo": 300000,
+        "SoDuCN": 0,
+        "TrangThaiCN": "Hoàn tất",
+        "MaHD": "HD009"
+      },
+      {
+        "MaCN": "CN015",
+        "HanThanhToan": "2026-05-11",
+        "NgayGhiNhan": "2026-04-11",
+        "SoTienDaTra": 400000,
+        "TongNo": 400000,
+        "SoDuCN": 0,
+        "TrangThaiCN": "Hoàn tất",
+        "MaHD": "HD011"
+      },
+      {
+        "MaCN": "CN016",
+        "HanThanhToan": "2026-05-13",
+        "NgayGhiNhan": "2026-04-13",
+        "SoTienDaTra": 1400000,
+        "TongNo": 1400000,
+        "SoDuCN": 0,
+        "TrangThaiCN": "Hoàn tất",
+        "MaHD": "HD013"
+      },
+      {
+        "MaCN": "CN017",
+        "HanThanhToan": "2026-05-14",
+        "NgayGhiNhan": "2026-04-14",
+        "SoTienDaTra": 900000,
+        "TongNo": 900000,
+        "SoDuCN": 0,
+        "TrangThaiCN": "Hoàn tất",
+        "MaHD": "HD014"
+      },
+      {
+        "MaCN": "CN018",
+        "HanThanhToan": "2026-05-16",
+        "NgayGhiNhan": "2026-04-16",
+        "SoTienDaTra": 0,
+        "TongNo": 300000,
+        "SoDuCN": 300000,
+        "TrangThaiCN": "Còn nợ",
+        "MaHD": "HD016"
+      },
+      {
+        "MaCN": "CN019",
+        "HanThanhToan": "2026-05-18",
+        "NgayGhiNhan": "2026-04-18",
+        "SoTienDaTra": 100000,
+        "TongNo": 100000,
+        "SoDuCN": 0,
+        "TrangThaiCN": "Hoàn tất",
+        "MaHD": "HD018"
+      },
+      {
+        "MaCN": "CN020",
+        "HanThanhToan": "2026-05-25",
+        "NgayGhiNhan": "2026-04-25",
+        "SoTienDaTra": 1140000,
+        "TongNo": 1140000,
+        "SoDuCN": 0,
+        "TrangThaiCN": "Hoàn tất",
+        "MaHD": "HD010"
+      },
+      {
+        "MaCN": "CN021",
+        "HanThanhToan": "2026-07-20",
+        "NgayGhiNhan": "2026-06-20",
+        "SoTienDaTra": 18901057.5,
+        "TongNo": 18901057.5,
+        "SoDuCN": 0,
+        "TrangThaiCN": "Hoàn tất",
+        "MaHD": "HD024"
+      }
+    ],
+    "PHIEU_THU": [
+      {
+        "MaPT": "PT001",
+        "NgayThu": "2026-04-01T09:00:00.000Z",
+        "SoTienThucThu": 450000,
+        "HinhThucThanhToan": "Tiền mặt",
+        "GhiChu": "Thu hồi công nợ trực tiếp khi giao đơn HD001",
+        "MaCN": "CN004",
+        "MaNV": "NV003"
+      },
+      {
+        "MaPT": "PT002",
+        "NgayThu": "2026-04-05T10:30:00.000Z",
+        "SoTienThucThu": 20000000,
+        "HinhThucThanhToan": "Chuyển khoản",
+        "GhiChu": "Thu tiền nợ đợt 1 hợp đồng đơn máy pha HD002",
+        "MaCN": "CN001",
+        "MaNV": "NV003"
+      },
+      {
+        "MaPT": "PT003",
+        "NgayThu": "2026-04-07T14:15:00.000Z",
+        "SoTienThucThu": 1000000,
+        "HinhThucThanhToan": "Tiền mặt",
+        "GhiChu": "Thu nợ dứt điểm đơn hàng hạt sỉ HD003",
+        "MaCN": "CN006",
+        "MaNV": "NV008"
+      },
+      {
+        "MaPT": "PT004",
+        "NgayThu": "2026-04-10T11:00:00.000Z",
+        "SoTienThucThu": 1140000,
+        "HinhThucThanhToan": "Chuyển khoản",
+        "GhiChu": "Thu hồi công nợ hóa đơn hạt xay HD010",
+        "MaCN": "CN010",
+        "MaNV": "NV020"
+      },
+      {
+        "MaPT": "PT005",
+        "NgayThu": "2026-04-12T15:30:00.000Z",
+        "SoTienThucThu": 650000,
+        "HinhThucThanhToan": "Chuyển khoản",
+        "GhiChu": "Thu hồi nợ thanh toán vật tư tiêu hao HD012",
+        "MaCN": "CN007",
+        "MaNV": "NV003"
+      },
+      {
+        "MaPT": "PT006",
+        "NgayThu": "2026-04-15T09:45:00.000Z",
+        "SoTienThucThu": 10000000,
+        "HinhThucThanhToan": "Chuyển khoản",
+        "GhiChu": "Thu nợ đợt 1 đơn hàng lớn đại lý HD015",
+        "MaCN": "CN002",
+        "MaNV": "NV013"
+      },
+      {
+        "MaPT": "PT007",
+        "NgayThu": "2026-04-17T16:20:00.000Z",
+        "SoTienThucThu": 2375000,
+        "HinhThucThanhToan": "Tiền mặt",
+        "GhiChu": "Tất toán nợ đơn hàng hạt xay đặc sản HD017",
+        "MaCN": "CN008",
+        "MaNV": "NV020"
+      },
+      {
+        "MaPT": "PT008",
+        "NgayThu": "2026-04-19T13:00:00.000Z",
+        "SoTienThucThu": 450000,
+        "HinhThucThanhToan": "Tiền mặt",
+        "GhiChu": "Thu tiền thanh toán trực tiếp đơn lẻ HD019",
+        "MaCN": "CN009",
+        "MaNV": "NV003"
+      },
+      {
+        "MaPT": "PT009",
+        "NgayThu": "2026-04-22T10:10:00.000Z",
+        "SoTienThucThu": 500000,
+        "HinhThucThanhToan": "Tiền mặt",
+        "GhiChu": "Thu bồi thêm tiền nợ đơn hàng máy pha HD002",
+        "MaCN": "CN001",
+        "MaNV": "NV008"
+      },
+      {
+        "MaPT": "PT010",
+        "NgayThu": "2026-04-25T15:00:00.000Z",
+        "SoTienThucThu": 274000000,
+        "HinhThucThanhToan": "Chuyển khoản",
+        "GhiChu": "Tất toán hóa đơn máy pha JAVI M30 đơn HD007",
+        "MaCN": "CN012",
+        "MaNV": "NV013"
+      },
+      {
+        "MaPT": "PT011",
+        "NgayThu": "2026-04-26T11:30:00.000Z",
+        "SoTienThucThu": 200000,
+        "HinhThucThanhToan": "Tiền mặt",
+        "GhiChu": "Thu dứt điểm nợ hóa đơn bán lẻ HD006",
+        "MaCN": "CN011",
+        "MaNV": "NV003"
+      },
+      {
+        "MaPT": "PT012",
+        "NgayThu": "2026-04-27T14:00:00.000Z",
+        "SoTienThucThu": 400000,
+        "HinhThucThanhToan": "Chuyển khoản",
+        "GhiChu": "Thu hồi nợ tiền bao bì đóng gói HD011",
+        "MaCN": "CN015",
+        "MaNV": "NV008"
+      },
+      {
+        "MaPT": "PT013",
+        "NgayThu": "2026-04-28T10:15:00.000Z",
+        "SoTienThucThu": 900000,
+        "HinhThucThanhToan": "Tiền mặt",
+        "GhiChu": "Khách sỉ thanh toán dứt điểm đơn HD014",
+        "MaCN": "CN017",
+        "MaNV": "NV020"
+      },
+      {
+        "MaPT": "PT014",
+        "NgayThu": "2026-04-29T16:00:00.000Z",
+        "SoTienThucThu": 300000,
+        "HinhThucThanhToan": "Tiền mặt",
+        "GhiChu": "Tất toán hóa đơn mua hạt thô đơn HD009",
+        "MaCN": "CN014",
+        "MaNV": "NV003"
+      },
+      {
+        "MaPT": "PT015",
+        "NgayThu": "2026-04-30T09:30:00.000Z",
+        "SoTienThucThu": 100000,
+        "HinhThucThanhToan": "Tiền mặt",
+        "GhiChu": "Thu hồi nợ tiền vật tư cốc ly đơn HD018",
+        "MaCN": "CN019",
+        "MaNV": "NV008"
+      },
+      {
+        "MaPT": "PT016",
+        "NgayThu": "2026-05-01T11:00:00.000Z",
+        "SoTienThucThu": 760000,
+        "HinhThucThanhToan": "Chuyển khoản",
+        "GhiChu": "Tất toán tiền đơn hàng muộn đơn HD005",
+        "MaCN": "CN005",
+        "MaNV": "NV013"
+      },
+      {
+        "MaPT": "PT017",
+        "NgayThu": "2026-05-02T14:45:00.000Z",
+        "SoTienThucThu": 1000000,
+        "HinhThucThanhToan": "Tiền mặt",
+        "GhiChu": "Thu tiền nợ gối đầu đơn HD003",
+        "MaCN": "CN006",
+        "MaNV": "NV020"
+      },
+      {
+        "MaPT": "PT018",
+        "NgayThu": "2026-05-03T10:00:00.000Z",
+        "SoTienThucThu": 300000,
+        "HinhThucThanhToan": "Chuyển khoản",
+        "GhiChu": "Thu hồi nợ hóa đơn lẻ bổ sung đơn HD009",
+        "MaCN": "CN014",
+        "MaNV": "NV003"
+      },
+      {
+        "MaPT": "PT019",
+        "NgayThu": "2026-05-04T15:20:00.000Z",
+        "SoTienThucThu": 1400000,
+        "HinhThucThanhToan": "Tiền mặt",
+        "GhiChu": "Đại lý dứt điểm tiền nợ đơn tháng HD013",
+        "MaCN": "CN016",
+        "MaNV": "NV008"
+      },
+      {
+        "MaPT": "PT020",
+        "NgayThu": "2026-05-05T16:10:00.000Z",
+        "SoTienThucThu": 500000,
+        "HinhThucThanhToan": "Chuyển khoản",
+        "GhiChu": "Khách hàng tất toán nợ bồi đợt cuối đơn HD002",
+        "MaCN": "CN001",
+        "MaNV": "NV020"
+      },
+      {
+        "MaPT": "PT021",
+        "NgayThu": "2026-06-20T19:21:43.307Z",
+        "SoTienThucThu": 5000000,
+        "HinhThucThanhToan": "Tiền mặt",
+        "GhiChu": "Khách trả trước một phần khi lập hóa đơn",
+        "MaCN": "CN021",
+        "MaNV": "NV001"
+      },
+      {
+        "MaPT": "PT022",
+        "NgayThu": "2026-06-21T21:49:04.343Z",
+        "SoTienThucThu": 1140000,
+        "HinhThucThanhToan": "Tiền mặt",
+        "GhiChu": "",
+        "MaCN": "CN020",
+        "MaNV": "NV001"
+      },
+      {
+        "MaPT": "PT023",
+        "NgayThu": "2026-06-21T22:09:00.233Z",
+        "SoTienThucThu": 13901057.5,
+        "HinhThucThanhToan": "Tiền mặt",
+        "GhiChu": "",
+        "MaCN": "CN021",
+        "MaNV": "NV001"
+      }
+    ],
+    "PHIEU_CHI": [
+      {
+        "MaPC": "PC001",
+        "NgayChi": "2026-03-01T10:00:00.000Z",
+        "SoTienThucChi": 65000000,
+        "HinhThucThanhToan": "Chuyển khoản",
+        "GhiChu": "Thanh toán dứt điểm lô hàng Robusta thô",
+        "MaPN": "PN001",
+        "MaNV": "NV003"
+      },
+      {
+        "MaPC": "PC002",
+        "NgayChi": "2026-03-02T11:30:00.000Z",
+        "SoTienThucChi": 39500000,
+        "HinhThucThanhToan": "Chuyển khoản",
+        "GhiChu": "Tất toán toàn bộ tiền Arabica Đà Lạt",
+        "MaPN": "PN002",
+        "MaNV": "NV003"
+      },
+      {
+        "MaPC": "PC003",
+        "NgayChi": "2026-03-05T15:00:00.000Z",
+        "SoTienThucChi": 7500000,
+        "HinhThucThanhToan": "Tiền mặt",
+        "GhiChu": "Thanh toán tiền ly nhựa PP",
+        "MaPN": "PN003",
+        "MaNV": "NV008"
+      },
+      {
+        "MaPC": "PC004",
+        "NgayChi": "2026-03-07T16:30:00.000Z",
+        "SoTienThucChi": 15000000,
+        "HinhThucThanhToan": "Tiền mặt",
+        "GhiChu": "Thanh toán tiền mật ong rừng thô",
+        "MaPN": "PN004",
+        "MaNV": "NV020"
+      },
+      {
+        "MaPC": "PC005",
+        "NgayChi": "2026-03-10T13:00:00.000Z",
+        "SoTienThucChi": 248000000,
+        "HinhThucThanhToan": "Chuyển khoản",
+        "GhiChu": "Thanh toán lô máy pha Javi chính hãng",
+        "MaPN": "PN005",
+        "MaNV": "NV013"
+      },
+      {
+        "MaPC": "PC006",
+        "NgayChi": "2026-03-12T16:00:00.000Z",
+        "SoTienThucChi": 8000000,
+        "HinhThucThanhToan": "Tiền mặt",
+        "GhiChu": "Chi tiền nhập túi tote quà tặng",
+        "MaPN": "PN006",
+        "MaNV": "NV013"
+      },
+      {
+        "MaPC": "PC007",
+        "NgayChi": "2026-03-15T10:15:00.000Z",
+        "SoTienThucChi": 3000000,
+        "HinhThucThanhToan": "Tiền mặt",
+        "GhiChu": "Thanh toán tem nhãn bao bì",
+        "MaPN": "PN007",
+        "MaNV": "NV020"
+      },
+      {
+        "MaPC": "PC008",
+        "NgayChi": "2026-03-18T17:00:00.000Z",
+        "SoTienThucChi": 45000000,
+        "HinhThucThanhToan": "Chuyển khoản",
+        "GhiChu": "Thanh toán tiền Robusta BMT",
+        "MaPN": "PN008",
+        "MaNV": "NV020"
+      },
+      {
+        "MaPC": "PC009",
+        "NgayChi": "2026-03-22T11:00:00.000Z",
+        "SoTienThucChi": 12000000,
+        "HinhThucThanhToan": "Chuyển khoản",
+        "GhiChu": "Thanh toán tiền mật ong Gia Lai",
+        "MaPN": "PN010",
+        "MaNV": "NV003"
+      },
+      {
+        "MaPC": "PC010",
+        "NgayChi": "2026-03-25T15:30:00.000Z",
+        "SoTienThucChi": 19750000,
+        "HinhThucThanhToan": "Chuyển khoản",
+        "GhiChu": "Thanh toán tiền Arabica Sơn La thô",
+        "MaPN": "PN011",
+        "MaNV": "NV008"
+      },
+      {
+        "MaPC": "PC011",
+        "NgayChi": "2026-03-28T13:00:00.000Z",
+        "SoTienThucChi": 4000000,
+        "HinhThucThanhToan": "Tiền mặt",
+        "GhiChu": "Thanh toán tiền hộp quà tặng cứng",
+        "MaPN": "PN012",
+        "MaNV": "NV013"
+      },
+      {
+        "MaPC": "PC012",
+        "NgayChi": "2026-04-01T10:30:00.000Z",
+        "SoTienThucChi": 32500000,
+        "HinhThucThanhToan": "Chuyển khoản",
+        "GhiChu": "Thanh toán tiền Robusta thô đợt 2",
+        "MaPN": "PN013",
+        "MaNV": "NV003"
+      },
+      {
+        "MaPC": "PC013",
+        "NgayChi": "2026-04-03T14:00:00.000Z",
+        "SoTienThucChi": 15000000,
+        "HinhThucThanhToan": "Tiền mặt",
+        "GhiChu": "Thanh toán tiền vật tư túi giấy",
+        "MaPN": "PN014",
+        "MaNV": "NV008"
+      },
+      {
+        "MaPC": "PC014",
+        "NgayChi": "2026-04-05T15:00:00.000Z",
+        "SoTienThucChi": 59800000,
+        "HinhThucThanhToan": "Chuyển khoản",
+        "GhiChu": "Thanh toán máy pha I4.9 dự án",
+        "MaPN": "PN015",
+        "MaNV": "NV013"
+      },
+      {
+        "MaPC": "PC015",
+        "NgayChi": "2026-04-10T16:30:00.000Z",
+        "SoTienThucChi": 22500000,
+        "HinhThucThanhToan": "Chuyển khoản",
+        "GhiChu": "Thanh toán hạt cà phê Đắk Mil hữu cơ",
+        "MaPN": "PN017",
+        "MaNV": "NV020"
+      },
+      {
+        "MaPC": "PC016",
+        "NgayChi": "2026-04-12T10:00:00.000Z",
+        "SoTienThucChi": 4500000,
+        "HinhThucThanhToan": "Tiền mặt",
+        "GhiChu": "Thanh toán tiền mua bao tải đay",
+        "MaPN": "PN018",
+        "MaNV": "NV003"
+      },
+      {
+        "MaPC": "PC017",
+        "NgayChi": "2026-04-15T13:30:00.000Z",
+        "SoTienThucChi": 19750000,
+        "HinhThucThanhToan": "Chuyển khoản",
+        "GhiChu": "Thanh toán dứt điểm lô Arabica Cầu Đất thô",
+        "MaPN": "PN019",
+        "MaNV": "NV008"
+      },
+      {
+        "MaPC": "PC018",
+        "NgayChi": "2026-04-18T16:00:00.000Z",
+        "SoTienThucChi": 3000000,
+        "HinhThucThanhToan": "Tiền mặt",
+        "GhiChu": "Thanh toán tiền khay nhựa phụ trợ kho",
+        "MaPN": "PN020",
+        "MaNV": "NV013"
+      },
+      {
+        "MaPC": "PC019",
+        "NgayChi": "2026-04-22T09:30:00.000Z",
+        "SoTienThucChi": 3000000,
+        "HinhThucThanhToan": "Tiền mặt",
+        "GhiChu": "Chi tiền sửa chữa máy móc kho bảo trì",
+        "MaPN": "PN002",
+        "MaNV": "NV003"
+      },
+      {
+        "MaPC": "PC020",
+        "NgayChi": "2026-04-25T11:15:00.000Z",
+        "SoTienThucChi": 6000000,
+        "HinhThucThanhToan": "Chuyển khoản",
+        "GhiChu": "Tất toán lô tiền nợ ly giấy ECO",
+        "MaPN": "PN009",
+        "MaNV": "NV008"
+      }
+    ]
+  }
+}

@@ -1,0 +1,673 @@
+﻿<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nhân Viên - JAVI COFFEE</title>
+    <link rel="stylesheet" href="/css/global.css?v=20261021-form-unified" />
+    <link rel="stylesheet" href="/admin/css/sidebar.css?v=20261021-action-fit-2" />
+    <link rel="stylesheet" href="/admin/css/san-pham.css" />
+    <link
+      rel="stylesheet"
+      href="/vendor/fontawesome/css/all.min.css"
+    />
+    <script src="/admin/js/auth.js?v=20261021-form-unified"></script>
+    <script src="/admin/js/report-filters.js?v=20261021-action-fit-2"></script>
+      <!-- Google Fonts: 2 font chuẩn xuyên suốt hệ thống (Hỗ trợ 100% tiếng Việt) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+<script src="/admin/js/grid-files.js" defer></script><script src="/admin/js/ui-consistency.js?v=20261021-form-unified" defer></script><link rel="stylesheet" href="/admin/css/admin-design.css">
+<script defer src="/admin/js/admin-design.js"></script>
+</head>
+  <body>
+    <div class="sidebar"></div>
+
+    <div class="main-content">
+      <div class="page-header">
+        <h2><i class="fas fa-user-tie"></i> QUẢN LÝ NHÂN SỰ</h2>
+        <div>
+          <button
+            class="btn"
+            style="background-color: #17a2b8; color: white; margin-right: 10px"
+            onclick="openPermissionModal()"
+          >
+            <i class="fas fa-user-shield"></i> Phân Quyền
+          </button>
+          <button class="btn" onclick="openModal()">
+            <i class="fas fa-plus"></i> Thêm Nhân Viên
+          </button>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Tìm kiếm theo Mã NV, Tên NV, Chức vụ..."
+            onkeyup="filterNV()"
+          />
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table id="dataTable">
+          <thead>
+            <tr>
+<th>Mã NV</th>
+              <th>Họ Tên</th>
+              <th>CCCD</th>
+              <th>Chức Vụ</th>
+              <th>SĐT</th>
+              <th>Trạng Thái</th>
+              <th style="text-align: right;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              
+<td>NV001</td>
+              <td>Lê Văn Phát</td>
+              <td>123456789001</td>
+              <td style="color: var(--color-primary); font-weight: bold">
+                Quản lý
+              </td>
+              <td>0901234567</td>
+              <td style="color: #28a745">Đang làm việc</td>
+              <td>
+                <button class="action-btn btn-delete">
+                  <i class="fas fa-lock"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    
+      
+    </div>
+
+    <!-- KHUNG MODAL -->
+    <div class="modal-overlay" id="addModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-user-plus"></i> Thêm Hồ Sơ Nhân Viên</h3>
+          <button class="close-btn" onclick="closeModal()">&times;</button>
+        </div>
+        <form id="addForm">
+          <div class="section-title">Hồ sơ nhân viên</div>
+          <div class="form-row">
+            <div class="form-group" style="flex: 2">
+              <label>Họ Tên Nhân Viên <span style="color: red">*</span></label>
+              <input type="text" id="hoTen" required />
+            </div>
+            <div class="form-group">
+              <label>CCCD <span style="color: red">*</span></label>
+              <input type="text" id="cccd" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Giới Tính</label>
+              <select id="gioiTinh">
+                <option value="Nam">Nam</option>
+                <option value="Nữ">Nữ</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Số Điện Thoại</label>
+              <input type="text" id="soDT" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Chức Vụ <span style="color: red">*</span></label>
+              <div style="display: flex; gap: 5px">
+                <select id="chucVu" required style="flex: 1">
+                  <option value="Bán hàng">Bán hàng</option>
+                  <option value="Kho">Nhân viên Kho</option>
+                  <option value="Kế toán">Kế toán</option>
+                  <option value="Quản lý">Quản lý</option>
+                </select>
+                <button
+                  type="button"
+                  class="btn"
+                  style="
+                    padding: 0 12px;
+                    background-color: #17a2b8;
+                    color: white;
+                  "
+                  onclick="promptNewRole()"
+                  title="Thêm Chức Vụ Mới"
+                >
+                  <i class="fas fa-plus"></i>
+                </button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" id="emailNV" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Địa Chỉ</label>
+            <input type="text" id="diaChiNV" />
+          </div>
+
+          <div
+            class="section-title"
+            id="pwdSectionHeader"
+            style="
+              margin-top: 20px;
+              margin-bottom: 10px;
+              font-size: 16px;
+              border-bottom: 1px dashed #333;
+              padding-bottom: 5px;
+              color: var(--color-primary);
+            "
+          >
+            <i class="fas fa-key"></i> Tài khoản đăng nhập (Tùy chọn)
+          </div>
+          <div class="form-row" id="pwdSectionRow">
+            <div class="form-group">
+              <label>Tên Đăng Nhập</label>
+              <input
+                type="text"
+                id="tenDangNhap"
+                placeholder="Ví dụ: admin_phat"
+              />
+            </div>
+            <div class="form-group">
+              <label>Mật Khẩu</label>
+              <input
+                type="password"
+                id="matKhau"
+                placeholder="Nhập mật khẩu..."
+              />
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn"
+              style="background-color: #333; color: #fff"
+              onclick="closeModal()"
+            >
+              Hủy
+            </button>
+            <button type="submit" class="btn">Lưu Nhân Viên</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- KHUNG MODAL PHÂN QUYỀN -->
+    <div class="modal-overlay" id="permissionModal" style="display: none">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-user-shield"></i> Cài Đặt Phân Quyền Chức Vụ</h3>
+          <button class="close-btn" onclick="closePermissionModal()">
+            &times;
+          </button>
+        </div>
+        <div
+          style="
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+          "
+        >
+          <label style="font-weight: bold">Chọn chức vụ:</label>
+          <select
+            id="roleSelect"
+            onchange="loadRolePermissions()"
+            style="
+              padding: 8px 15px;
+              border-radius: 4px;
+              background: #222;
+              color: var(--color-primary);
+              border: 1px solid #555;
+              font-weight: bold;
+              flex: 1;
+              max-width: 300px;
+            "
+          >
+            <option value="Quản lý">Quản lý (Full Quyền)</option>
+            <option value="Bán hàng">Nhân viên Bán hàng</option>
+            <option value="Kho">Nhân viên Kho</option>
+            <option value="Kế toán">Kế toán</option>
+          </select>
+        </div>
+        <div
+          class="table-responsive"
+          style="max-height: 450px; overflow-y: auto"
+        >
+          <table style="width: 100%; text-align: center">
+            <thead>
+              <tr>
+                <th style="text-align: left">Phân Hệ (Module)</th>
+                <th><i class="fas fa-eye"></i> Xem (Truy cập)</th>
+                <th><i class="fas fa-plus"></i> Thêm mới</th>
+                <th>Chỉnh sửa</th>
+                <th><i class="fas fa-trash"></i> Xóa / Khóa</th>
+              </tr>
+            </thead>
+            <tbody id="permissionBody">
+              <!-- Dữ liệu render bằng JS -->
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer" style="margin-top: 20px">
+          <button
+            type="button"
+            class="btn"
+            style="background-color: #333; color: #fff"
+            onclick="closePermissionModal()"
+          >
+            Đóng
+          </button>
+          <button type="button" class="btn" onclick="savePermissions()">
+            Lưu Thiết Lập
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- KHUNG MODAL THÊM CHỨC VỤ MỚI -->
+    <div
+      class="modal-overlay"
+      id="newRoleModal"
+      style="display: none; z-index: 2001"
+    >
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-briefcase"></i> Thêm Chức Vụ Mới</h3>
+          <button class="close-btn" onclick="closeNewRoleModal()">
+            &times;
+          </button>
+        </div>
+        <div class="form-group" style="margin-top: 15px">
+          <label>Tên Chức Vụ Mới <span style="color: red">*</span></label>
+          <input
+            type="text"
+            id="newRoleInput"
+            placeholder="Ví dụ: Bảo vệ, Marketing..."
+          />
+        </div>
+        <div class="modal-footer" style="margin-top: 20px">
+          <button
+            type="button"
+            class="btn"
+            style="background-color: #333; color: #fff"
+            onclick="closeNewRoleModal()"
+          >
+            Hủy Bỏ
+          </button>
+          <button type="button" class="btn" onclick="confirmNewRole()">
+            Xác Nhận
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let listData = [];
+      let editId = null;
+
+      const modal = document.getElementById("addModal");
+      function openModal() {
+        document.getElementById("addForm").reset();
+        editId = null;
+        document.querySelector(".modal-header h3").innerHTML =
+          '<i class="fas fa-user-plus"></i> Thêm Hồ Sơ Nhân Viên';
+        document.getElementById("pwdSectionHeader").style.display = "block";
+        document.getElementById("pwdSectionRow").style.display = "flex";
+        modal.style.display = "flex";
+      }
+      function closeModal() {
+        modal.style.display = "none";
+      }
+
+      function editNV(id) {
+        const item = listData.find((x) => x.MaNV === id);
+        if (!item) return;
+        editId = id;
+        document.getElementById("hoTen").value = item.HoTenNV;
+        document.getElementById("cccd").value = item.CCCD;
+        document.getElementById("gioiTinh").value = item.GioiTinh || "Nam";
+        document.getElementById("soDT").value = item.SoDTNV;
+        document.getElementById("emailNV").value = item.EmailNV;
+        document.getElementById("diaChiNV").value = item.DiaChiNV;
+        document.getElementById("chucVu").value = item.ChucVu;
+        document.getElementById("tenDangNhap").value = item.TenDangNhap || "";
+        document.getElementById("matKhau").value = "";
+        document.getElementById("pwdSectionHeader").style.display = "block";
+        document.getElementById("pwdSectionRow").style.display = "flex";
+        document.querySelector(".modal-header h3").innerHTML =
+          '<i class="fas fa-edit"></i> Cập Nhật Nhân Viên';
+        modal.style.display = "flex";
+      }
+
+      function promptNewRole() {
+        document.getElementById("newRoleInput").value = "";
+        document.getElementById("newRoleModal").style.display = "flex";
+      }
+
+      function closeNewRoleModal() {
+        document.getElementById("newRoleModal").style.display = "none";
+      }
+
+      function confirmNewRole() {
+        const newRole = document.getElementById("newRoleInput").value;
+        if (newRole && newRole.trim() !== "") {
+          const roleName = newRole.trim();
+
+          const chucVuSelect = document.getElementById("chucVu");
+          if (
+            !Array.from(chucVuSelect.options).some(
+              (opt) => opt.value === roleName,
+            )
+          ) {
+            const opt = document.createElement("option");
+            opt.value = roleName;
+            opt.text = roleName;
+            chucVuSelect.add(opt);
+          }
+          chucVuSelect.value = roleName;
+
+          const roleSelect = document.getElementById("roleSelect");
+          if (
+            !Array.from(roleSelect.options).some(
+              (opt) => opt.value === roleName,
+            )
+          ) {
+            const opt = document.createElement("option");
+            opt.value = roleName;
+            opt.text = roleName;
+            roleSelect.add(opt);
+          }
+          closeNewRoleModal();
+        } else {
+          alert("Vui lòng nhập tên chức vụ!");
+          document.getElementById("newRoleInput").focus();
+        }
+      }
+
+      function updateRoleLists(employees) {
+        const roles = new Set();
+        employees.forEach((emp) => {
+          if (emp.ChucVu) roles.add(emp.ChucVu);
+        });
+
+        const chucVuSelect = document.getElementById("chucVu");
+        const roleSelect = document.getElementById("roleSelect");
+
+        roles.forEach((role) => {
+          if (
+            !Array.from(chucVuSelect.options).some((opt) => opt.value === role)
+          ) {
+            chucVuSelect.add(new Option(role, role));
+          }
+          if (
+            !Array.from(roleSelect.options).some((opt) => opt.value === role)
+          ) {
+            roleSelect.add(new Option(role, role));
+          }
+        });
+      }
+
+      // ==================================================
+      // TÍNH NĂNG PHÂN QUYỀN
+      // ==================================================
+      const modules = [
+        "Tổng Quan (Dashboard)",
+        "Sản Phẩm",
+        "Nhập Kho",
+        "Xuất Kho",
+        "Bán Hàng",
+        "Hóa Đơn",
+        "Công Nợ",
+        "Phiếu Thu",
+        "Phiếu Chi",
+        "Nhà Cung Cấp",
+        "Khách Hàng",
+        "Nhân Viên",
+        "Quản Trị Hệ Thống",
+      ];
+
+      const permissionModal = document.getElementById("permissionModal");
+
+      function openPermissionModal() {
+        document.getElementById("roleSelect").value = "Quản lý";
+        loadRolePermissions();
+        permissionModal.style.display = "flex";
+      }
+
+      function closePermissionModal() {
+        permissionModal.style.display = "none";
+      }
+
+      function loadRolePermissions() {
+        const role = document.getElementById("roleSelect").value;
+        const tbody = document.getElementById("permissionBody");
+        let html = "";
+
+        modules.forEach((mod) => {
+          // Giả lập logic lấy quyền mặc định (Mô phỏng theo code auth.js?v=20261021-form-unified hiện tại)
+          let canView = false,
+            canAdd = false,
+            canEdit = false,
+            canDelete = false;
+
+          if (role === "Quản lý") {
+            canView = canAdd = canEdit = canDelete = true;
+          } else if (role === "Bán hàng") {
+            if (
+              ["Tổng Quan (Dashboard)", "Bán Hàng", "Khách Hàng"].includes(mod)
+            ) {
+              canView = canAdd = canEdit = true;
+            } else if (["Sản Phẩm"].includes(mod)) {
+              canView = true; // Chỉ xem
+            }
+          } else if (role === "Kho") {
+            if (
+              [
+                "Tổng Quan (Dashboard)",
+                "Nhập Kho",
+                "Xuất Kho",
+                "Nhà Cung Cấp",
+              ].includes(mod)
+            ) {
+              canView = canAdd = canEdit = true;
+            } else if (["Sản Phẩm"].includes(mod)) {
+              canView = true; // Kho xem sản phẩm nhưng ko thêm sửa giá được
+            }
+          } else if (role === "Kế toán") {
+            if (
+              [
+                "Tổng Quan (Dashboard)",
+                "Hóa Đơn",
+                "Công Nợ",
+                "Phiếu Thu",
+                "Phiếu Chi",
+                "Khách Hàng",
+                "Nhà Cung Cấp",
+              ].includes(mod)
+            ) {
+              canView = canAdd = canEdit = true;
+            } else if (["Nhân Viên"].includes(mod)) {
+              canView = true; // Xem ds nhân sự
+            }
+          }
+
+          // Render dòng (Màu chữ nhạt đi nếu không được Check)
+          html += `
+            <tr>
+              <td style="text-align: left; font-weight: bold; color: ${canView ? "var(--color-text-main)" : "#666"}">${mod}</td>
+              <td>
+                <input type="checkbox" class="chk-view" onchange="toggleRow(this)" style="transform: scale(1.3); cursor: pointer;" ${canView ? "checked" : ""} ${role === "Quản lý" ? "disabled" : ""}>
+              </td>
+              <td>
+                <input type="checkbox" class="chk-action" style="transform: scale(1.3); cursor: pointer;" ${canAdd ? "checked" : ""} ${!canView || role === "Quản lý" ? "disabled" : ""}>
+              </td>
+              <td>
+                <input type="checkbox" class="chk-action" style="transform: scale(1.3); cursor: pointer;" ${canEdit ? "checked" : ""} ${!canView || role === "Quản lý" ? "disabled" : ""}>
+              </td>
+              <td>
+                <input type="checkbox" class="chk-action" style="transform: scale(1.3); cursor: pointer;" ${canDelete ? "checked" : ""} ${!canView || role === "Quản lý" ? "disabled" : ""}>
+              </td>
+            </tr>
+          `;
+        });
+
+        tbody.innerHTML = html;
+      }
+
+      // Nếu bỏ chọn "Xem", sẽ tự động bỏ chọn và khóa các quyền Thêm/Sửa/Xóa
+      function toggleRow(viewCheckbox) {
+        const tr = viewCheckbox.closest("tr");
+        const tdLabel = tr.querySelector("td:first-child");
+        const actionCheckboxes = tr.querySelectorAll(".chk-action");
+
+        if (viewCheckbox.checked) {
+          tdLabel.style.color = "var(--color-text-main)";
+          actionCheckboxes.forEach((chk) => (chk.disabled = false));
+        } else {
+          tdLabel.style.color = "#666";
+          actionCheckboxes.forEach((chk) => {
+            chk.checked = false;
+            chk.disabled = true;
+          });
+        }
+      }
+
+      function savePermissions() {
+        const role = document.getElementById("roleSelect").value;
+        if (role === "Quản lý") {
+          alert(
+            "Chức vụ Quản lý mặc định có toàn quyền hệ thống, không thể thay đổi!",
+          );
+          return;
+        }
+
+        // Ở đây lấy ra trạng thái của các Checkbox để chuẩn bị lưu xuống DB
+        // (Hiện tại hiển thị giả lập UI thành công)
+        alert(
+          `Đã lưu thiết lập phân quyền mới cho chức vụ: ${role}!\n(Ghi chú: Cần tạo bảng PHAN_QUYEN trong Database để áp dụng thực tế)`,
+        );
+        closePermissionModal();
+      }
+      // ==================================================
+
+      async function lockNV(id) {
+        if (
+          !(await javiConfirm(
+            "Bạn có chắc muốn Khóa/Mở nhân viên " + id + " ?",
+          ))
+        )
+          return;
+        try {
+          const res = await fetch("/api/nhan-vien/lock/" + id, {
+            method: "PUT",
+          });
+          const data = await res.json();
+          if (data.success) {
+            alert(data.message);
+            loadData();
+          } else alert("Lỗi: " + data.message);
+        } catch (e) {
+          alert("Lỗi kết nối server");
+        }
+      }
+
+      document
+        .getElementById("addForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          // Gom dữ liệu từ Form
+          const payload = {
+            hoTen: document.getElementById("hoTen").value,
+            cccd: document.getElementById("cccd").value,
+            gioiTinh: document.getElementById("gioiTinh").value,
+            soDT: document.getElementById("soDT").value,
+            chucVu: document.getElementById("chucVu").value,
+            emailNV: document.getElementById("emailNV").value,
+            diaChiNV: document.getElementById("diaChiNV").value,
+            tenDangNhap: document.getElementById("tenDangNhap").value,
+            matKhau: document.getElementById("matKhau").value,
+          };
+
+          try {
+            const url = editId ? "/api/nhan-vien/" + editId : "/api/nhan-vien";
+            const method = editId ? "PUT" : "POST";
+            const response = await fetch(url, {
+              method: method,
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+            const data = await response.json();
+            if (data.success) {
+              alert(data.message);
+              closeModal();
+              loadData();
+            } else alert("Lỗi: " + data.message);
+          } catch (err) {
+            alert("Lỗi kết nối tới Server!");
+          }
+        });
+
+      function filterNV() {
+        const val = document.getElementById("searchInput").value.toLowerCase();
+        const rows = document.querySelectorAll("#dataTable tbody tr");
+        rows.forEach((row) => {
+          if (row.cells.length < 5) return;
+          if (row.textContent.toLowerCase().includes(val)) { row.classList.remove('filter-hidden'); } else { row.classList.add('filter-hidden'); } updatePagination(row.closest('table'));
+        });
+      }
+
+      async function loadData() {
+        try {
+          const res = await fetch("/api/nhan-vien");
+          const data = await res.json();
+          if (data.success) {
+            listData = data.data;
+            const tbody = document.querySelector("#dataTable tbody");
+            updateRoleLists(listData);
+            let html = "";
+            data.data.forEach((item) => {
+              html += `
+                <tr data-row-edit="editNV" data-edit-id="${encodeURIComponent(item.MaNV)}">
+                  
+<td>${item.MaNV}</td>
+                  <td>${item.HoTenNV}</td>
+                  <td>${item.CCCD || ""}</td>
+                  <td style="color: var(--color-primary); font-weight: bold">${item.ChucVu}</td>
+                  <td>${item.SoDTNV || ""}</td>
+                  <td style="color: ${item.TrangThai === "Đang làm việc" ? "#28a745" : "#dc3545"}">${item.TrangThai}</td>
+                  <td>
+                    <button class="action-btn btn-delete" onclick="lockNV('${item.MaNV}')"><i class="${item.TrangThai === "Đang làm việc" ? "fas fa-lock" : "fas fa-unlock"}"></i></button>
+                  </td>
+                </tr>
+              `;
+            });
+            tbody.innerHTML =
+              html ||
+              '<tr><td colspan="7" style="text-align:center;">Chưa có dữ liệu</td></tr>';
+          }
+        } catch (err) {
+          console.error("Lỗi:", err);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", loadData);
+    </script>
+  </body>
+</html>

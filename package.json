@@ -2,19 +2,31 @@
   "name": "duan_html",
   "version": "1.0.0",
   "description": "Dự án phần mềm bán hàng Javi Coffee.",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "test": "node tests/check-structure.cjs && node tests/check-login-scope.cjs && node tests/check-detail-loading.cjs && node tests/check-cart-focus.cjs && node tests/check-pos-customer.cjs && node tests/check-pos-options.cjs && node tests/check-checkout-pricing.cjs && node tests/check-account-api.cjs && node tests/check-coupon-display.cjs && node tests/check-import-cell-errors.cjs && node tests/check-order-import.cjs && node tests/check-xlsx-compatibility.cjs && node tests/check-register-otp-flow.cjs",
+    "test:permissions": "node tests/check-customer-permissions.cjs",
+    "templates": "node Admin/Backend/scripts/generate-import-templates.js",
+    "start:user": "node User/server.js",
+    "start:admin": "node Admin/server.js",
+    "test:coffee:db": "node tests/check-coffee-integration.cjs",
+    "test:q10:db": "node tests/check-q10-integration.cjs"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
+    "exceljs": "^4.4.0",
     "express": "^5.2.1",
+    "jszip": "^3.10.2",
     "msnodesqlv8": "^5.2.0",
-    "mssql": "^12.5.4"
+    "mssql": "^12.5.4",
+    "nodemailer": "^10.1.2",
+    "saxes": "^5.0.1"
   }
 }

@@ -1,0 +1,326 @@
+﻿<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tồn Kho - JAVI COFFEE</title>
+
+    <link rel="stylesheet" href="/css/global.css?v=20261021-form-unified" />
+    <link rel="stylesheet" href="/admin/css/sidebar.css?v=20261021-action-fit-2" />
+    <link rel="stylesheet" href="/admin/css/ton-kho.css?v=20261021-action-fit-2" />
+    <link
+      rel="stylesheet"
+      href="/vendor/fontawesome/css/all.min.css"
+    />
+    <script src="/admin/js/auth.js?v=20261021-form-unified"></script>
+    <script src="/admin/js/report-filters.js?v=20261021-action-fit-2"></script>
+      <!-- Google Fonts: 2 font chuẩn xuyên suốt hệ thống (Hỗ trợ 100% tiếng Việt) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+<script src="/admin/js/grid-files.js" defer></script><script src="/admin/js/ui-consistency.js?v=20261021-form-unified" defer></script><link rel="stylesheet" href="/admin/css/admin-design.css">
+<script defer src="/admin/js/admin-design.js"></script>
+</head>
+  <body>
+    <!-- SIDEBAR sẽ được auto-render bởi auth.js?v=20261021-form-unified -->
+    <div class="sidebar"></div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+      <div class="page-header">
+        <h2><i class="fas fa-cubes"></i> QUẢN LÝ TỒN KHO</h2>
+        <button
+          class="btn"
+          onclick="printInventoryReport()"
+          style="background-color: #17a2b8"
+        >
+          <i class="fas fa-print"></i> Xuất Báo Cáo Tồn Kho
+        </button>
+      </div>
+
+      <div class="stat-cards">
+        <div class="card">
+          <div class="card-title">
+            Tổng Số Lượng Tồn Kho <i class="fas fa-boxes"></i>
+          </div>
+          <div class="card-value" id="stat-total-stock">0</div>
+        </div>
+        <div class="card">
+          <div class="card-title">
+            Giá Trị Tồn Kho Ước Tính <i class="fas fa-money-bill"></i>
+          </div>
+          <div class="card-value" id="stat-total-value">0 đ</div>
+        </div>
+        <div class="card">
+          <div class="card-title">
+            Sắp Hết Hàng
+            <i class="fas fa-exclamation-triangle" style="color: #ff4d4d"></i>
+          </div>
+          <div class="card-value alert" id="stat-low-stock">0 SP</div>
+        </div>
+      </div>
+
+      <div
+        class="filter-bar"
+
+      >
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Tìm kiếm theo Mã SP, Tên SP, Phân Loại..."
+          onkeyup="filterInventory()"
+          style="
+            flex: 2;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #333;
+            background: #222;
+            color: #fff;
+          "
+        />
+        <select
+          id="statusFilter"
+          onchange="filterInventory()"
+          style="
+            flex: 1;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #333;
+            background: #222;
+            color: #fff;
+          "
+        >
+          <option value="all">Tất cả trạng thái</option>
+          <option value="low">Sắp hết hàng</option>
+          <option value="in_stock">Trên tồn tối thiểu</option>
+        </select>
+      </div>
+
+      <div class="table-responsive">
+        <table id="inventoryTable">
+          <thead>
+            <tr>
+<th>Mã SP</th>
+              <th>Tên Sản Phẩm</th>
+              <th>Phân Loại</th>
+              <th>ĐVT</th>
+              <th>Tồn Thực Tế</th>
+              <th>Có Thể Bán</th>
+              <th>Tồn tối thiểu</th>
+              <th>Trạng Thái</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="8" style="text-align: center">
+                Đang tải dữ liệu...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <script>
+      let inventoryList = [];
+
+      async function loadInventoryData() {
+        try {
+          const response = await fetch("/api/san-pham");
+          const data = await response.json();
+          if (data.success) {
+            inventoryList = data.data;
+            renderInventoryTable(inventoryList);
+            updateStats(inventoryList);
+          }
+        } catch (error) {
+          console.error("Lỗi tải dữ liệu tồn kho:", error);
+        }
+      }
+
+      function renderInventoryTable(data) {
+        const tbody = document.querySelector("#inventoryTable tbody");
+        let html = "";
+        data.forEach((item) => {
+          let statusHtml = item.SoLuongTon <= 0 ? '<span class="badge debt">Hết hàng</span>' :
+            item.SoLuongTon <= Number(item.TonToiThieu ?? 5)
+              ? '<span class="badge debt">Sắp hết hàng</span>'
+              : '<span class="badge completed">Còn hàng</span>';
+
+          html += `
+            <tr>
+              
+<td>${item.MaSP}</td>
+              <td style="font-weight: bold;">${item.TenSP}</td>
+              <td>${item.MaLoaiSP || "Khác"}</td>
+              <td>${item.DonViTinh}</td>
+              <td style="font-weight: bold;">${item.SoLuongTon}</td>
+              <td style="color: var(--color-primary); font-weight: bold;">${item.SoLuongKD}</td>
+              <td>${Number(item.TonToiThieu ?? 5)}</td>
+              <td>${statusHtml}</td>
+            </tr>
+          `;
+        });
+        tbody.innerHTML =
+          html ||
+          '<tr><td colspan="8" style="text-align:center;">Không có dữ liệu</td></tr>';
+      }
+
+      function updateStats(data) {
+        let totalStock = 0,
+          totalValue = 0,
+          lowStockCount = 0;
+        data.forEach((item) => {
+          totalStock += item.SoLuongTon;
+          totalValue += item.SoLuongTon * (item.GiaBan || 0);
+          if (item.SoLuongTon <= Number(item.TonToiThieu ?? 5)) lowStockCount++;
+        });
+        document.getElementById("stat-total-stock").textContent =
+          new Intl.NumberFormat("vi-VN").format(totalStock);
+        document.getElementById("stat-total-value").textContent =
+          new Intl.NumberFormat("vi-VN").format(totalValue) + " đ";
+        document.getElementById("stat-low-stock").textContent =
+          lowStockCount + " SP";
+      }
+
+      function filterInventory() {
+        const searchVal = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+        const statusVal = document.getElementById("statusFilter").value;
+
+        const filtered = inventoryList.filter((item) => {
+          const matchSearch =
+            item.MaSP.toLowerCase().includes(searchVal) ||
+            item.TenSP.toLowerCase().includes(searchVal) ||
+            (item.MaLoaiSP && item.MaLoaiSP.toLowerCase().includes(searchVal));
+          let matchStatus = true;
+          if (statusVal === "low") matchStatus = item.SoLuongTon <= Number(item.TonToiThieu ?? 5);
+          else if (statusVal === "in_stock") matchStatus = item.SoLuongTon > Number(item.TonToiThieu ?? 5);
+          return matchSearch && matchStatus;
+        });
+        renderInventoryTable(filtered);
+      }
+
+      function printInventoryReport() {
+        const printWindow = window.open("", "_blank");
+        if (!printWindow) return;
+        const printTime = new Date().toLocaleString("vi-VN");
+        const currentUserData = localStorage.getItem("currentUser");
+        const user = currentUserData
+          ? JSON.parse(currentUserData)
+          : { HoTenNV: "...................." };
+
+        let html = `
+          <html><head><title>BÁO CÁO TỒN KHO - JAVI COFFEE</title>
+          <link rel="stylesheet" href="${window.location.origin}/admin/css/print-document.css">
+          <style>
+            body { font-family: 'Times New Roman', serif; padding: 30px; color: #000; }
+            .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 20px; }
+            .logo { flex: 0 0 120px; text-align: left; }
+            .logo img { width: 100%; height: auto; }
+            .company-info { flex: 1; padding-left: 20px; line-height: 1.5; font-size: 13px; }
+            .company-info h2 { margin: 0 0 5px 0; font-size: 16px; text-transform: uppercase; font-weight: bold; color: #000; }
+            h1 { text-align: center; text-transform: uppercase; font-size: 20px; margin-top: 10px; margin-bottom: 5px; }
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 13px; }
+            th, td { border: 1px solid #000; padding: 8px; text-align: left; }
+            th { background-color: #f2f2f2 !important; print-color-adjust: exact; text-align: center; font-weight: bold; }
+            .text-center { text-align: center; }
+            .text-right { text-align: right; }
+          </style>
+          </head><body>
+          <div class="header">
+            <div class="logo">
+              <img src="${window.location.origin}/images/logo-javi-scan.png" alt="JAVI COFFEE" />
+            </div>
+            <div class="company-info">
+              <h2>CÔNG TY TNHH JAVI COFFEE</h2>
+              <div><strong>Mã số thuế:</strong> 0314857973</div>
+              <div><strong>Địa chỉ:</strong> 13 Đường số 7, Khu Phố 5, Phường Linh Chiểu, Thành phố Hồ Chí Minh</div>
+              <div><strong>Điện thoại:</strong> 0909979012</div>
+            </div>
+          </div>
+          <h1>BÁO CÁO TỒN KHO CHI TIẾT</h1>
+          <p style="text-align:center; font-style: italic;">Ngày in: ${printTime}</p>
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 5%">STT</th>
+                <th style="width: 10%">Mã SP</th>
+                <th style="width: 35%">Tên Sản Phẩm</th>
+                <th style="width: 10%">Phân Loại</th>
+                <th style="width: 10%">ĐVT</th>
+                <th style="width: 15%">Tồn Thực Tế</th>
+                <th style="width: 15%">Tồn Khả Dụng</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+
+        let totalStock = 0;
+        let totalAvail = 0;
+
+        const searchVal = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+        const statusVal = document.getElementById("statusFilter").value;
+
+        const filtered = inventoryList.filter((item) => {
+          const matchSearch =
+            item.MaSP.toLowerCase().includes(searchVal) ||
+            item.TenSP.toLowerCase().includes(searchVal) ||
+            (item.MaLoaiSP && item.MaLoaiSP.toLowerCase().includes(searchVal));
+          let matchStatus = true;
+          if (statusVal === "low") matchStatus = item.SoLuongTon <= Number(item.TonToiThieu ?? 5);
+          else if (statusVal === "in_stock") matchStatus = item.SoLuongTon > Number(item.TonToiThieu ?? 5);
+          return matchSearch && matchStatus;
+        });
+
+        filtered.forEach((item, index) => {
+          totalStock += item.SoLuongTon;
+          totalAvail += item.SoLuongKD;
+          html += `
+            <tr>
+              <td class="text-center">${index + 1}</td>
+              <td class="text-center">${item.MaSP}</td>
+              <td>${item.TenSP}</td>
+              <td class="text-center">${item.MaLoaiSP || "Khác"}</td>
+              <td class="text-center">${item.DonViTinh}</td>
+              <td class="text-right" style="font-weight: bold;">${item.SoLuongTon}</td>
+              <td class="text-right" style="font-weight: bold;">${item.SoLuongKD}</td>
+            </tr>
+          `;
+        });
+
+        html += `
+              <tr>
+                <td colspan="5" class="text-right" style="font-weight: bold;">TỔNG CỘNG:</td>
+                <td class="text-right" style="font-weight: bold; color: red;">${new Intl.NumberFormat("vi-VN").format(totalStock)}</td>
+                <td class="text-right" style="font-weight: bold; color: red;">${new Intl.NumberFormat("vi-VN").format(totalAvail)}</td>
+              </tr>
+            </tbody>
+          </table>
+          <br>
+          <div class="report-signatures" style="display:flex; justify-content:space-around; margin-top:40px; text-align:center;">
+            <div><strong>Thủ Kho</strong><br><i>(Ký, ghi rõ họ tên)</i><br><br><br><br>${user.HoTenNV}</div>
+            <div><strong>Giám Đốc</strong><br><i>(Ký, đóng dấu)</i></div>
+          
+      
+    
+    </div>
+  </body></html>
+        `;
+
+        printWindow.document.open();
+        printWindow.document.write(html);
+        printWindow.document.close();
+        printWhenReady(printWindow);
+      }
+
+      document.addEventListener("DOMContentLoaded", () => loadInventoryData());
+    </script>
+  </body>
+</html>

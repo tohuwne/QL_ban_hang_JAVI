@@ -1,0 +1,20 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
+const source=fs.readFileSync('Admin/Frontend/js/pos-options.js','utf8');
+const alerts=[];let choice={trongLuongGram:500,loaiXay:'Nguyên hạt',qty:3},stock=50,renders=0;
+const context={window:{},cart:[],productsList:[{MaSP:'CFH31',TenSP:'Cà phê',GiaBan:39500,ApDungTuyChon:true},{MaSP:'MPF05',TenSP:'Máy pha',GiaBan:19900000,ApDungTuyChon:false}],crypto:{randomUUID:require('crypto').randomUUID},alert:async m=>alerts.push(m),getMaxAllowedQty:()=>stock,renderCart:()=>renders++};
+vm.createContext(context);vm.runInContext(source,context);context.choosePOSOptions=async()=>choice;
+(async()=>{
+ await context.window.addToCart('CFH31');assert.equal(context.cart.length,1);assert.equal(context.cart[0].qty,3);assert.equal(context.cart[0].price,197500);
+ choice={...choice,qty:2};await context.window.addToCart('CFH31');assert.equal(context.cart.length,1);assert.equal(context.cart[0].qty,5);
+ choice={...choice,loaiXay:'Xay sẵn pha phin'};await context.window.addToCart('CFH31');assert.equal(context.cart.length,2);assert.equal(context.cart[1].qty,2);
+ assert.equal(context.posAvailableToAdd(context.productsList[0],200,'Nguyên hạt'),7);
+ choice={trongLuongGram:200,loaiXay:'Nguyên hạt',qty:8};await context.window.addToCart('CFH31');assert.equal(context.cart.length,2);assert.equal(alerts.length,1);
+ choice={...choice,qty:1.5};await context.window.addToCart('CFH31');assert.equal(context.cart.length,2);
+ choice=null;await context.window.addToCart('CFH31');assert.equal(context.cart.length,2);
+ await context.window.addToCart('MPF05');assert.equal(context.cart[2].qty,1);assert.equal(context.cart[2].trongLuongGram,null);
+ stock=100000;context.cart[0].qty=998;assert.equal(context.posAvailableToAdd(context.productsList[0],500,'Nguyên hạt'),1);
+ let resolveChoice,opened=0;context.choosePOSOptions=()=>{opened++;return new Promise(resolve=>resolveChoice=resolve);};
+ const pending=context.window.addToCart('CFH31');await context.window.addToCart('CFH31');assert.equal(opened,1);resolveChoice(null);await pending;
+ assert.equal(renders,4);
+ console.log('PASS: POS selected quantity/price, merge and split by options, stock across variants, 999 quantity cap, cancel, normal product and repeated-click guard.');
+})().catch(e=>{console.error(e);process.exitCode=1;});

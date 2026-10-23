@@ -1,0 +1,24 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
+const nodes=new Map(),pending=[];
+const element=id=>{if(!nodes.has(id))nodes.set(id,{style:{},textContent:'',innerHTML:'',hidden:false});return nodes.get(id);};
+const context={document:{getElementById:element},Intl,fetch:()=>new Promise(resolve=>pending.push(resolve))};
+vm.createContext(context);
+const source=fs.readFileSync('Admin/Frontend/don-hang.html','utf8');
+vm.runInContext(source.slice(source.indexOf('      const orderDetailEscape='),source.indexOf('      async function deleteOrder(')),context);
+const respond=(index,data,ok=true)=>pending[index]({ok,json:async()=>data});
+(async()=>{
+ const first=context.viewOrder('OLD','KH',100,0,100,'');
+ const second=context.viewOrder('NEW','KH',100,0,100,'');
+ respond(1,{success:true,data:{items:[{TenSP:'<b>safe</b>',GiaBan:0,price:123,SoLuong:0,GiamGiaSP:.0112,ThanhTien:0}]}});await second;
+ const body=element('orderDetailItems');
+ assert(body.innerHTML.includes('&lt;b&gt;safe&lt;/b&gt;'));
+ assert(body.innerHTML.includes('-1,12%'));
+ assert(!body.innerHTML.includes('123 đ'));
+ const rendered=body.innerHTML;
+ respond(0,{success:true,data:{items:[{TenSP:'stale'}]}});await first;
+ assert.equal(body.innerHTML,rendered);
+ const failure=context.viewOrder('BAD','KH',0,0,0,'');
+ respond(2,{success:false,message:'Không tải được <đơn>'},false);await failure;
+ assert(body.innerHTML.includes('Không tải được &lt;đơn&gt;'));
+ console.log('PASS: detail loading ignores stale responses, escapes data, preserves zero values and formats discounts.');
+})().catch(err=>{console.error(err);process.exitCode=1;});

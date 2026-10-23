@@ -1,0 +1,16 @@
+const fs=require('fs'),path=require('path');require('dotenv').config({quiet:true});
+const {sql,poolPromise}=require('../Shared/Backend/config/database');
+const {defaults}=require('../Shared/Backend/services/website-content');
+(async()=>{const pool=await poolPromise;
+ const counts=async()=> (await pool.request().query('SELECT DB_NAME() db,(SELECT COUNT(*) FROM KHACH_HANG) customers,(SELECT COUNT(*) FROM TAI_KHOAN) accounts,(SELECT COUNT(*) FROM DON_HANG) orders,(SELECT COUNT(*) FROM HOA_DON) invoices')).recordset[0];
+ const before=await counts();
+ const location=(await pool.request().query("SELECT CONVERT(nvarchar(4000),SERVERPROPERTY('InstanceDefaultBackupPath')) path")).recordset[0].path;
+ if(!location)throw Error('Không xác định được vị trí sao lưu.');
+ const backup=path.win32.join(location,before.db+'_before_website_'+Date.now()+'.bak');
+ await pool.request().query("BACKUP DATABASE ["+before.db.replace(/]/g,']]')+"] TO DISK=N'"+backup.replace(/'/g,"''")+"' WITH COPY_ONLY, INIT, CHECKSUM");
+ await pool.request().query(fs.readFileSync('docs/sql/WEBSITE_NOI_DUNG.sql','utf8'));
+ await pool.request().input('Content',sql.NVarChar(sql.MAX),JSON.stringify(defaults.partners)).query("IF NOT EXISTS(SELECT 1 FROM WEB_NOI_DUNG WHERE Ma='partners') INSERT INTO WEB_NOI_DUNG(Ma,NoiDung) VALUES('partners',@Content)");
+ await pool.request().query(fs.readFileSync('docs/sql/WEBSITE_BAI_MAU.sql','utf8'));
+ const after=await counts();if(JSON.stringify(before)!==JSON.stringify(after))throw Error('Số lượng hồ sơ/chứng từ thay đổi.');
+ fs.mkdirSync('outputs/website-content',{recursive:true});fs.writeFileSync('outputs/website-content/deployment.json',JSON.stringify({before,after,backup,at:new Date().toISOString()},null,2));console.log({before,after,backup});
+})().catch(e=>{console.error(e.message);process.exitCode=1;}).finally(async()=>{(await poolPromise).close();});

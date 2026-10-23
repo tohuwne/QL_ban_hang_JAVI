@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Lý Đơn Hàng - JAVI COFFEE</title>
+
+    <!-- Nhúng CSS -->
+    <link rel="stylesheet" href="/css/global.css?v=20261021-form-unified" />
+    <link rel="stylesheet" href="/admin/css/sidebar.css?v=20261021-action-fit-2" />
+    <link rel="stylesheet" href="/admin/css/don-hang.css" />
+    <link
+      rel="stylesheet"
+      href="/vendor/fontawesome/css/all.min.css"
+    />
+    <script src="/admin/js/auth.js?v=20261021-form-unified"></script>
+    <script src="/admin/js/report-filters.js?v=20261021-order-source"></script>
+      <!-- Google Fonts: 2 font chuẩn xuyên suốt hệ thống (Hỗ trợ 100% tiếng Việt) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+<script src="/admin/js/grid-files.js" defer></script><script src="/admin/js/ui-consistency.js?v=20261021-form-unified" defer></script><link rel="stylesheet" href="/admin/css/admin-design.css">
+<script defer src="/admin/js/admin-design.js"></script>
+</head>
+  <body>
+    <!-- 1. SIDEBAR: auth.js?v=20261021-form-unified tự động render -->
+    <div class="sidebar"></div>
+
+    <!-- 2. MAIN CONTENT -->
+    <div class="main-content">
+      <div class="page-header">
+        <h2><i class="fas fa-shopping-basket"></i> QUẢN LÝ BÁN HÀNG</h2>
+        <button class="btn" onclick="window.location.href = 'ban-hang.html'">
+          <i class="fas fa-plus"></i> Lên Đơn Hàng Mới
+        </button>
+      </div>
+
+      <!-- THANH TÌM KIẾM -->
+      <div class="stat-cards" id="orderStats" aria-live="polite"></div>
+      <form class="report-filters" onsubmit="event.preventDefault(); filterTable()">
+        <label>Từ ngày<input type="date" id="orderFrom" aria-describedby="orderFromError" /><small id="orderFromError" class="date-range-error" aria-live="polite" hidden></small></label>
+        <label>Đến ngày<input type="date" id="orderTo" /></label>
+        <div class="filter-field"><span>Trạng thái đơn hàng</span><details class="multi-filter" id="orderStatuses"><summary>Tất cả</summary><div class="multi-options"></div></details></div>
+        <div class="filter-field"><span>Trạng thái thanh toán</span><details class="multi-filter" id="paymentStatuses"><summary>Tất cả</summary><div class="multi-options"></div></details></div>
+        <button class="btn" type="submit"><i class="fas fa-filter"></i> Xem</button>
+      </form>
+
+      <!-- KHU VỰC 2: Bảng Dữ Liệu -->
+
+        <div class="table-responsive">
+          <table id="orderTable">
+          <thead>
+            <tr>
+
+<th>Mã ĐH</th>
+              <th>Ngày Đặt</th>
+              <th>Khách hàng</th>
+              <th>Tổng Tiền</th>
+              <th>Trạng Thái</th>
+              <th>Thanh toán</th>
+              <th>Nguồn đơn</th>
+              <th style="display:none;">Mã NV</th>
+              <th style="text-align: right;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="9" style="text-align: center">
+                Đang tải dữ liệu...
+              </td>
+            </tr>
+          </tbody>
+          </table>
+        </div>
+
+    
+      
+    </div>
+
+    <!-- MODAL CHI TIẾT ĐƠN HÀNG & XUẤT PDF -->
+    <div class="modal-overlay" id="orderDetailModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-shopping-bag"></i> CHI TIẾT ĐƠN HÀNG</h3>
+          <button class="close-btn" onclick="document.getElementById('orderDetailModal').style.display = 'none'">&times;</button>
+        </div>
+        <div class="detail-body">
+          <div class="voucher-info-grid">
+            <div class="voucher-info-item">
+              <span class="voucher-label">Mã Đơn Hàng</span>
+              <span class="voucher-value" id="v-maDH"></span>
+            </div>
+            <div class="voucher-info-item">
+              <span class="voucher-label">Khách hàng</span>
+              <span class="voucher-value" id="v-maKH"></span>
+            </div>
+            <div class="voucher-info-item">
+              <span class="voucher-label">Tổng Tiền Gốc</span>
+              <span class="voucher-value" id="v-tongTien"></span>
+            </div>
+            <div class="voucher-info-item">
+              <span class="voucher-label">Giảm Giá</span>
+              <span class="voucher-value" id="v-giamGia"></span>
+            </div>
+          </div>
+
+          <div class="voucher-info-item" style="margin-bottom:12px"><span class="voucher-label">Trạng thái thanh toán</span><span class="voucher-value" id="v-paymentStatus"></span></div>
+          <div class="voucher-info-grid" id="webOrderDelivery" hidden><div class="voucher-info-item"><span class="voucher-label">Người nhận & liên hệ</span><span class="voucher-value" id="v-webRecipient"></span></div><div class="voucher-info-item"><span class="voucher-label">Địa chỉ giao hàng</span><span class="voucher-value" id="v-webAddress"></span></div><div class="voucher-info-item"><span class="voucher-label">Phương thức thanh toán</span><span class="voucher-value" id="v-webMethod"></span></div><div class="voucher-info-item"><span class="voucher-label">Ghi chú giao hàng</span><span class="voucher-value" id="v-webNote"></span></div></div>
+          <div class="voucher-highlight-banner">
+            <span class="voucher-highlight-label">Tổng Thanh Toán</span>
+            <span class="voucher-highlight-amount" id="v-thanhToan"></span>
+          </div>
+
+          <div class="card-panel-header" style="font-size: 14px; margin-top: 10px; margin-bottom: 8px;">
+            Sản Phẩm Trong Đơn
+          </div>
+          <div class="table-responsive" style="max-height: 250px; overflow-y: auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Sản Phẩm</th>
+                  <th style="text-align: center;">SL</th>
+                  <th style="text-align: right;">Đơn Giá</th>
+                  <th style="text-align: right;">Giảm Giá</th>
+                  <th style="text-align: right;">Thành Tiền</th>
+                </tr>
+              </thead>
+              <tbody id="orderDetailItems">
+                <tr><td colspan="5" style="text-align: center">Đang tải...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="document.getElementById('orderDetailModal').style.display = 'none'">Đóng</button>
+          <button type="button" class="btn btn-primary" onclick="printPDFCurrentOrder()">
+            <i class="fas fa-print"></i> In Hóa Đơn (PDF)
+          </button>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <!-- 4. LOGIC JAVASCRIPT -->
+    <script>
+      function filterTable() { applyOrderFilters(); }
+
+      // XEM CHI TIẾT
+      const orderDetailEscape=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      let orderDetailVersion=0;
+      async function viewOrder(maDH,maKH,tongTien,giamGia,tongSauGiam,trangThaiTT){
+        const version=++orderDetailVersion,modal=document.getElementById('orderDetailModal'),tbody=document.getElementById('orderDetailItems'),money=value=>new Intl.NumberFormat('vi-VN').format(Number(value)||0)+' đ';
+        document.getElementById('v-maDH').textContent=maDH;document.getElementById('v-maKH').textContent=maKH;document.getElementById('v-tongTien').textContent=money(tongTien);document.getElementById('v-giamGia').textContent=money(giamGia);document.getElementById('v-thanhToan').textContent=money(tongSauGiam);document.getElementById('v-paymentStatus').textContent=trangThaiTT||'Chưa cập nhật';document.getElementById('webOrderDelivery').hidden=true;
+        tbody.innerHTML='<tr><td colspan="5">Đang tải chi tiết...</td></tr>';modal.style.display='flex';
+        try{
+          const res=await fetch('/api/don-hang/'+encodeURIComponent(String(maDH).trim())+'/chi-tiet'),data=await res.json();if(version!==orderDetailVersion)return;if(!res.ok||!data.success)throw Error(data.message||'Không tải được chi tiết đơn hàng.');
+          const detail=data.data||{},items=Array.isArray(detail.items)?detail.items:Array.isArray(detail)?detail:[];
+          document.getElementById('webOrderDelivery').hidden=!detail.DiaChiGiaoHang;document.getElementById('v-webRecipient').textContent=[detail.NguoiNhan,detail.SoDTNhan,detail.EmailNhan].filter(Boolean).join(' / ');document.getElementById('v-webAddress').textContent=detail.DiaChiGiaoHang||'';document.getElementById('v-webMethod').textContent=detail.HinhThucTTWebsite||'';document.getElementById('v-webNote').textContent=detail.GhiChuGiaoHang||'Không có';if(detail.TenKH)document.getElementById('v-maKH').textContent='('+String(maKH).trim()+') '+detail.TenKH;
+          tbody.innerHTML=items.map(item=>{const discount=Number(item.GiamGiaSP||0)*100;return '<tr><td>'+orderDetailEscape(item.name??item.TenSP??'')+'</td><td>'+orderDetailEscape(item.SoLuong??item.quantity??0)+'</td><td>'+money(item.GiaBan??item.price??0)+'</td><td class="detail-discount">'+(discount?'-'+new Intl.NumberFormat('vi-VN',{maximumFractionDigits:2}).format(discount)+'%':'—')+'</td><td>'+money(item.ThanhTien)+'</td></tr>';}).join('')||'<tr><td colspan="5">Không có sản phẩm trong đơn.</td></tr>';
+        }catch(error){if(version===orderDetailVersion)tbody.innerHTML='<tr><td colspan="5">'+orderDetailEscape(error.message||'Không tải được dữ liệu. Vui lòng thử lại.')+'</td></tr>';}
+      }
+
+      async function deleteOrder(maDH) {
+        const confirmDelete = await javiConfirm(`Bạn có chắc chắn muốn xóa đơn hàng ${maDH} này không?`);
+        if (!confirmDelete) return;
+
+        try {
+          const res = await fetch(`/api/don-hang/${maDH}`, {
+            method: "DELETE",
+          });
+          const data = await res.json();
+          if (data.success) {
+            alert("Xóa đơn hàng thành công!");
+            loadDonHangData();
+          } else {
+            alert("Lỗi: " + data.message);
+          }
+        } catch (err) {
+          alert("Lỗi Server khi thực hiện xóa đơn hàng!");
+        }
+      }
+ 
+      function redirectLapHD(maDH) {
+        window.location.href = `hoa-don.html?lapMaDH=${encodeURIComponent(maDH)}`;
+      }
+
+      // Cài đặt Fetch API (Chuẩn bị kết nối Node.js)
+      async function loadDonHangData() {
+        try {
+          const response = await fetch("/api/don-hang");
+          const data = await response.json();
+          if (data.success) {
+            const tbody = document.querySelector("#orderTable tbody");
+            let html = "";
+ 
+            // Sắp xếp theo Mã ĐH giảm dần (mới nhất lên đầu)
+            data.data.sort((a, b) => b.MaDH.localeCompare(a.MaDH));
+ 
+            data.data.forEach((item) => {
+              const date = new Date(item.NgayDat).toLocaleDateString("vi-VN");
+              
+              // Trạng thái đơn hàng
+              let statusClass = "";
+              if (item.TrangThaiDonHang === "Hoàn thành")
+                statusClass = "status-success";
+              else if (item.TrangThaiDonHang === "Chờ giao")
+                statusClass = "status-warning";
+              else if (
+                item.TrangThaiDonHang === "Không hoàn thành" ||
+                item.TrangThaiDonHang === "Không thành công"
+              )
+                statusClass = "status-orange";
+              else statusClass = "status-info";
+ 
+              // Trạng thái thanh toán
+              let pStatus = item.TrangThaiThanhToan;
+              let pStatusText = pStatus ? pStatus : "Chưa lập HĐ";
+              let pStatusHtml = "";
+              if (pStatus === "Đã thanh toán") {
+                pStatusHtml = `<span class="status-success">${pStatusText}</span>`;
+              } else if (pStatus === "Chưa thanh toán") {
+                pStatusHtml = `<span class="status-orange">${pStatusText}</span>`;
+              } else {
+                pStatusHtml = `
+                  <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 4px 0;">
+                    <span class="status-info">${pStatusText}</span>
+                    <button class="action-btn" style="background-color: var(--color-primary); color: #000; font-size: 11px; padding: 2px 6px; font-weight: bold; border-radius: 4px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; line-height: 1.2;" onclick="redirectLapHD('${item.MaDH.trim()}')">
+                      <i class="fas fa-file-invoice" style="font-size: 10px;"></i></button>
+                  </div>
+                `;
+              }
+ 
+              let btnHtml = `<div style="display: flex; gap: 5px; align-items: center; white-space: nowrap;">`;
+              
+              // Chỉ hiển thị nút Sửa, Xóa nếu chưa lập hóa đơn và chưa lập phiếu xuất
+              if (!pStatus && !item.MaPX) {
+                btnHtml += `
+                  ${!['Website','Online'].includes(item.NguonDon) ? `<button class="action-btn" style="background-color: #dc3545; color: white;" onclick="event.stopPropagation(); deleteOrder('${item.MaDH.trim()}')"><i class="fas fa-trash-alt"></i></button>` : ''}
+                `;
+              }
+ 
+              if (item.TrangThaiDonHang === "Chờ giao" && !item.MaPX) {
+                btnHtml += `<button class="action-btn" style="background-color: #ffc107; color: #000;" onclick="event.stopPropagation(); window.location.href='xuat-kho.html?maDH=${item.MaDH.trim()}'"><i class="fas fa-truck-loading"></i></button>`;
+              }
+              btnHtml += `</div>`;
+ 
+              html += `
+                <tr
+                  style="cursor: pointer;"
+                  title="Double-click để xem chi tiết"
+                  ondblclick="${!pStatus && !item.MaPX && !['Website','Online'].includes(item.NguonDon) ? `window.location.href='ban-hang.html?editMaDH=${item.MaDH.trim()}'` : `viewOrder('${item.MaDH}', '${item.MaKH}', '${item.TongTienDonHang}', '${item.TongGiamGiaSP}', '${item.TongTienSauGiam}', '${pStatusText}')`}"
+                >
+
+<td>${item.MaDH}</td>
+                  <td>${date}</td>
+                  <td>${formatCustomer(item.MaKH, item.TenKH)}</td>
+                  <td style="color: var(--color-primary); font-weight: bold;">${new Intl.NumberFormat("vi-VN").format(item.TongTienSauGiam)} đ</td>
+                  <td class="${statusClass}">${item.TrangThaiDonHang}</td>
+                  <td>${pStatusHtml}</td>
+                  <td>${["Online", "Website"].includes(item.NguonDon) ? "Khách đặt web" : "Nhân viên lập"}</td>
+                  <td style="display:none;">${item.MaNV}</td>
+                  <td>${btnHtml}</td>
+                </tr>
+              `;
+            });
+            tbody.innerHTML =
+              html ||
+              '<tr><td colspan="9" style="text-align:center;">Chưa có đơn hàng nào</td></tr>';
+            setupOrderFilters(data.data);
+          }
+        } catch (error) {
+          console.error("Lỗi:", error);
+        }
+      }
+      document.addEventListener("DOMContentLoaded", loadDonHangData);
+    </script>
+  </body>
+</html>

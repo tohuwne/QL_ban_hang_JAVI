@@ -1,0 +1,532 @@
+﻿<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Lý Xuất Kho - JAVI COFFEE</title>
+
+    <!-- Nhúng CSS -->
+    <link rel="stylesheet" href="/css/global.css?v=20261021-form-unified" />
+    <link rel="stylesheet" href="/admin/css/sidebar.css?v=20261021-action-fit-2" />
+    <link rel="stylesheet" href="/admin/css/xuat-kho.css" />
+    <link
+      rel="stylesheet"
+      href="/vendor/fontawesome/css/all.min.css"
+    />
+    <script src="/admin/js/auth.js?v=20261021-form-unified"></script>
+    <script src="/admin/js/report-filters.js?v=20261021-action-fit-2"></script>
+      <!-- Google Fonts: 2 font chuẩn xuyên suốt hệ thống (Hỗ trợ 100% tiếng Việt) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+<script src="/admin/js/grid-files.js" defer></script><script src="/admin/js/ui-consistency.js?v=20261021-form-unified" defer></script><link rel="stylesheet" href="/admin/css/admin-design.css">
+<script defer src="/admin/js/admin-design.js"></script>
+</head>
+  <body>
+    <!-- 1. SIDEBAR: auth.js?v=20261021-form-unified tự động render -->
+    <div class="sidebar"></div>
+
+    <!-- 2. MAIN CONTENT -->
+    <div class="main-content">
+      <div class="page-header">
+        <h2><i class="fas fa-truck-loading"></i> HỆ THỐNG QUẢN LÝ XUẤT KHO</h2>
+        <button class="btn" onclick="openCreateModal()">
+          <i class="fas fa-plus"></i> Tạo Phiếu Xuất Kho
+        </button>
+      </div>
+
+      <form class="report-filters" data-status-tabs="exportStatusTabs" data-report-table="exportTable" data-date-column="1" data-value-column="4" onsubmit="event.preventDefault(); applyRowReportFilters(this, true)">
+        <label>Từ ngày<input type="date" id="exportFrom" aria-describedby="exportFromError" /><small id="exportFromError" class="date-range-error" aria-live="polite" hidden></small></label>
+        <label>Đến ngày<input type="date" id="exportTo" /></label>
+        <button class="btn" type="submit"><i class="fas fa-filter"></i> Xem</button>
+      </form>
+
+      <div class="status-filter-tabs" id="exportStatusTabs" role="group" aria-label="Lọc trạng thái xuất kho"></div>
+      <button class="btn" id="btnChangeAll" style="display:none" onclick="changeAllStatus()"></button>
+
+      <!-- KHU VỰC 2: Bảng Dữ Liệu Lịch Sử Xuất -->
+      <div class="table-responsive">
+        <table id="exportTable">
+          <thead>
+            <tr>
+<th>Mã PX</th>
+              <th>Ngày Xuất Kho</th>
+              <th>Mã Đơn Liên Kết</th>
+              <th style="display:none;">Mã NV Thực Hiện</th>
+              <th>Trạng Thái Giao Hàng</th>
+              <th style="text-align: right;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="6" style="text-align: center">
+                Đang tải dữ liệu...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    
+      
+    </div>
+
+    <!-- 3. KHUNG MODAL CHI TIẾT PHIẾU XUẤT -->
+    <div class="modal-overlay" id="detailModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-clipboard-list"></i> Chi Tiết Phiếu Xuất Kho</h3>
+          <button class="close-btn" onclick="closeDetailModal()">
+            &times;
+          </button>
+        </div>
+        <div class="detail-body">
+          <div class="section-title">Thông tin tổng quan</div>
+          <div class="detail-grid">
+            <div>
+              <strong>Mã Phiếu Xuất:</strong> <span id="dt-maPX"></span>
+            </div>
+            <div>
+              <strong>Ngày Xuất Kho:</strong> <span id="dt-ngayXuat"></span>
+            </div>
+            <div>
+              <strong>Mã Đơn Hàng:</strong>
+              <span id="dt-maDH" style="color: var(--color-primary)"></span>
+            </div>
+            <div>
+              <strong>Nhân Viên Kho:</strong> <span id="dt-maNV"></span>
+            </div>
+            <div>
+              <strong>Trạng Thái:</strong> <span id="dt-trangThai"></span>
+            </div>
+          </div>
+
+          <div class="section-title">Chi tiết sản phẩm bốc dỡ</div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Mã SP</th>
+                  <th>Tên Sản Phẩm (Gói cà phê)</th>
+                  <th>Đơn Vị Tính</th>
+                  <th>SL Xuất Thực Tế</th>
+                </tr>
+              </thead>
+              <tbody id="dt-chiTietBody">
+                <!-- Dữ liệu chi tiết sẽ được JS đổ vào đây -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; margin-top: 20px">
+          <button
+            type="button"
+            class="btn"
+            onclick="printExport()"
+            style="background-color: #17a2b8; color: white; margin-right: 10px"
+          >
+            <i class="fas fa-print"></i> In Phiếu Xuất
+          </button>
+          <button type="button" class="btn" onclick="closeDetailModal()">
+            Đóng Cửa Sổ
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3.5 KHUNG MODAL TẠO PHIẾU XUẤT MỚI -->
+    <div class="modal-overlay" id="createModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-plus-circle"></i> Tạo Phiếu Xuất Kho Mới</h3>
+          <button class="close-btn" onclick="closeCreateModal()">
+            &times;
+          </button>
+        </div>
+        <form id="createExportForm">
+          <div class="section-title">Đơn hàng cần xuất</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Đơn Hàng Cần Xuất <span style="color: red">*</span></label>
+              <input
+                type="text"
+                id="dhInput"
+                placeholder="Tìm hoặc chọn Đơn hàng..."
+                required
+                onchange="validateDH()"
+              />
+            </div>
+            <div class="form-group">
+              <label>Ngày Xuất</label>
+              <input type="date" id="newNgayXuat" required />
+            </div>
+          </div>
+          <div class="section-title">Phân công xuất kho</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label
+                >Trạng Thái Mặc Định <span style="color: red">*</span></label
+              >
+              <select id="newTrangThai" required disabled>
+                <option value="Chờ lấy hàng" selected>Chờ lấy hàng</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label
+                >Nhân Viên Xuất Kho <span style="color: red">*</span></label
+              >
+              <input
+                type="text"
+                id="nvInput"
+                placeholder="Tìm nhân viên..."
+                required
+                onchange="validateNV()"
+              />
+            </div>
+          </div>
+
+          <div
+            style="
+              display: flex;
+              justify-content: flex-end;
+              gap: 10px;
+              margin-top: 20px;
+            "
+          >
+            <button
+              type="button"
+              class="btn"
+              style="background-color: #333; color: #fff"
+              onclick="closeCreateModal()"
+            >
+              Hủy
+            </button>
+            <button type="submit" class="btn">Lưu Phiếu Xuất</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- 4. LOGIC JAVASCRIPT -->
+    <script>
+      let xuatKhoList = [];
+      let dhListArray = [];
+      let nvListArray = [];
+
+      async function loadDataForForm() {
+        try {
+          const resDH = await fetch("/api/don-hang");
+          const dataDH = await resDH.json();
+          if (dataDH.success) {
+            // Chỉ hiển thị các đơn hàng có trạng thái là "Chờ giao"
+            dhListArray = dataDH.data.filter(
+              (dh) => dh.TrangThaiDonHang === "Chờ giao" && !dh.MaPX,
+            );
+            const listDH = dhListArray.map(
+              (dh) => `${dh.MaDH} - KH: ${dh.MaKH}`,
+            );
+            setupAutocomplete("dhInput", listDH);
+          }
+
+          const resNV = await fetch("/api/nhan-vien");
+          const dataNV = await resNV.json();
+          if (dataNV.success) {
+            nvListArray = dataNV.data;
+            const listNV = nvListArray.map(
+              (nv) => `${nv.MaNV} - ${nv.HoTenNV}`,
+            );
+            setupAutocomplete("nvInput", listNV);
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      function validateDH() {
+        const inputEl = document.getElementById("dhInput");
+        const val = inputEl.value.trim();
+        if (!val) return;
+
+        const exactMatch = dhListArray.find(
+          (d) => `${d.MaDH} - KH: ${d.MaKH}` === val,
+        );
+        if (exactMatch) return;
+
+        const matches = dhListArray.filter(
+          (d) =>
+            d.MaDH.toLowerCase().includes(val.toLowerCase()) ||
+            d.MaKH.toLowerCase().includes(val.toLowerCase()),
+        );
+
+        if (matches.length > 0) {
+          inputEl.value = `${matches[0].MaDH} - KH: ${matches[0].MaKH}`;
+        } else {
+          alert("Không tìm thấy Đơn hàng hợp lệ! Vui lòng chọn từ danh sách.");
+          inputEl.value = "";
+        }
+      }
+
+      function validateNV() {
+        const inputEl = document.getElementById("nvInput");
+        const val = inputEl.value.trim();
+        if (!val) return;
+
+        const exactMatch = nvListArray.find(
+          (n) => `${n.MaNV} - ${n.HoTenNV}` === val,
+        );
+        if (exactMatch) return;
+
+        const matches = nvListArray.filter(
+          (n) =>
+            n.HoTenNV.toLowerCase().includes(val.toLowerCase()) ||
+            n.MaNV.toLowerCase().includes(val.toLowerCase()),
+        );
+
+        if (matches.length > 0) {
+          inputEl.value = `${matches[0].MaNV} - ${matches[0].HoTenNV}`;
+        } else {
+          alert("Không tìm thấy Nhân viên hợp lệ! Vui lòng chọn từ danh sách.");
+          inputEl.value = "";
+        }
+      }
+
+      // Lọc bảng lịch sử theo trạng thái
+      function filterTable() {
+        applyRowReportFilters(document.querySelector('[data-report-table="exportTable"]'), true);
+      }
+
+      // Đóng mở Modal Chi Tiết
+      const detailModal = document.getElementById("detailModal");
+
+      async function viewDetail(maPX) {
+        const item = xuatKhoList.find((i) => i.MaPX.trim() === maPX);
+        if (!item) return;
+
+        document.getElementById("dt-maPX").textContent = item.MaPX;
+        document.getElementById("dt-ngayXuat").textContent = new Date(
+          item.NgayXuat,
+        ).toLocaleDateString("vi-VN");
+        document.getElementById("dt-maDH").textContent = item.MaDH;
+        document.getElementById("dt-maNV").textContent = item.MaNV;
+
+        const ttSpan = document.getElementById("dt-trangThai");
+        ttSpan.textContent = item.TrangThaiGiaoHang;
+        ttSpan.className = "";
+        if (
+          item.TrangThaiGiaoHang === "Đã giao hàng" ||
+          item.TrangThaiGiaoHang === "Giao thành công"
+        )
+          ttSpan.classList.add("status-success");
+        else if (item.TrangThaiGiaoHang === "Đang giao hàng")
+          ttSpan.classList.add("status-warning");
+        else if (item.TrangThaiGiaoHang === "Hủy xuất kho")
+          ttSpan.classList.add("status-danger");
+        else if (item.TrangThaiGiaoHang === "Giao hàng không thành công")
+          ttSpan.classList.add("status-failed");
+        else ttSpan.classList.add("status-info");
+
+        try {
+          const res = await fetch(`/api/xuat-kho/${maPX}/chi-tiet`);
+          const data = await res.json();
+          const tbody = document.getElementById("dt-chiTietBody");
+          let html = "";
+          if (data.success && data.data.items) {
+            data.data.items.forEach((d) => {
+              html += `<tr>
+<td>${d.MaSP}</td><td>${d.TenSP}</td><td>${d.DonViTinh}</td><td style="font-weight: bold; color: var(--color-primary);">${d.SoLuong}</td></tr>`;
+            });
+          }
+          tbody.innerHTML =
+            html ||
+            '<tr><td colspan="4" style="text-align:center;">Không có dữ liệu</td></tr>';
+          detailModal.style.display = "flex";
+        } catch (err) {
+          alert("Lỗi tải chi tiết phiếu xuất!");
+        }
+      }
+
+      function closeDetailModal() {
+        detailModal.style.display = "none";
+      }
+
+      function printExport() {
+        const maPX = document.getElementById("dt-maPX").textContent;
+        window.open(
+          `in-chung-tu.html?type=PX&id=${encodeURIComponent(maPX.trim())}`,
+          "_blank",
+        );
+      }
+
+      // Đóng mở Modal Tạo Phiếu Xuất
+      const createModal = document.getElementById("createModal");
+
+      function openCreateModal() {
+        document.getElementById("createExportForm").reset();
+        document.getElementById("newNgayXuat").valueAsDate = new Date(); // Mặc định là ngày hôm nay
+
+        // Auto-fill NV
+        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        if (currentUser) {
+          document.getElementById("nvInput").value =
+            `${currentUser.MaNV} - ${currentUser.HoTenNV}`;
+        }
+
+        createModal.style.display = "flex";
+      }
+
+      function closeCreateModal() {
+        createModal.style.display = "none";
+      }
+
+      document
+        .getElementById("createExportForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const dhVal = document
+            .getElementById("dhInput")
+            .value.split(" - ")[0];
+          const nvVal = document
+            .getElementById("nvInput")
+            .value.split(" - ")[0];
+          if (!dhVal || !nvVal)
+            return alert("Vui lòng chọn hợp lệ Đơn hàng và Nhân viên!");
+
+          const payload = {
+            ngayXuat: document.getElementById("newNgayXuat").value,
+            trangThai: document.getElementById("newTrangThai").value,
+            maNV: nvVal,
+            maDH: dhVal,
+          };
+          try {
+            const res = await fetch("/api/xuat-kho", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+            const data = await res.json();
+            if (data.success) {
+              alert(data.message);
+              closeCreateModal();
+              loadDanhSachXuatKho();
+            } else alert("Lỗi: " + data.message);
+          } catch (err) {
+            alert("Lỗi Server!");
+          }
+        });
+
+      async function updateStatus(maPX, nextStatus) {
+        try {
+          const res = await fetch(`/api/xuat-kho/${maPX.trim()}/status`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nextStatus }),
+          });
+          const data = await res.json();
+          if (data.success) loadDanhSachXuatKho();
+          else alert("Lỗi: " + data.message);
+        } catch (err) {
+          alert("Lỗi Server!");
+        }
+      }
+
+      async function changeAllStatus(fromStatus, toStatus) {
+        if (
+          !(await javiConfirm(
+            `Xác nhận chuyển tất cả phiếu '${fromStatus}' sang '${toStatus}'?`,
+          ))
+        )
+          return;
+        try {
+          const res = await fetch(`/api/xuat-kho/status/all`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ fromStatus, toStatus }),
+          });
+          const data = await res.json();
+          if (data.success) {
+            alert(data.message);
+            loadDanhSachXuatKho();
+          } else alert("Lỗi: " + data.message);
+        } catch (err) {
+          alert("Lỗi Server!");
+        }
+      }
+
+      // Fetch API (Chuẩn bị kết nối Node.js Backend)
+      async function loadDanhSachXuatKho() {
+        try {
+          const response = await fetch("/api/xuat-kho");
+          const data = await response.json();
+          if (data.success) {
+            xuatKhoList = data.data;
+            const tbody = document.querySelector("#exportTable tbody");
+            let html = "";
+            data.data.forEach((item) => {
+              const date = new Date(item.NgayXuat).toLocaleDateString("vi-VN");
+              let statusClass = "";
+              if (
+                item.TrangThaiGiaoHang === "Đã giao hàng" ||
+                item.TrangThaiGiaoHang === "Giao thành công"
+              )
+                statusClass = "status-success";
+              else if (item.TrangThaiGiaoHang === "Đang giao hàng")
+                statusClass = "status-warning";
+              else if (item.TrangThaiGiaoHang === "Hủy xuất kho")
+                statusClass = "status-danger";
+              else if (item.TrangThaiGiaoHang === "Giao hàng không thành công")
+                statusClass = "status-failed";
+              else statusClass = "status-info";
+
+              let actionBtn = `<button class="action-btn" onclick="viewDetail('${item.MaPX.trim()}')"><i class="fas fa-eye"></i></button>`;
+              if (item.TrangThaiGiaoHang === "Chờ lấy hàng") {
+                actionBtn += ` <button class="action-btn" style="background-color: #ffc107; color: #000;" onclick="updateStatus('${item.MaPX.trim()}', 'Đang giao hàng')">Giao Hàng <i class="fas fa-truck"></i></button>`;
+                actionBtn += ` <button class="action-btn" style="background-color: #dc3545;" onclick="updateStatus('${item.MaPX.trim()}', 'Hủy xuất kho')">Hủy Xuất <i class="fas fa-ban"></i></button>`;
+              } else if (item.TrangThaiGiaoHang === "Đang giao hàng") {
+                actionBtn += ` <button class="action-btn" style="background-color: #28a745;" onclick="updateStatus('${item.MaPX.trim()}', 'Đã giao hàng')">Thành Công <i class="fas fa-check"></i></button>`;
+                actionBtn += ` <button class="action-btn" style="background-color: #fd7e14;" onclick="updateStatus('${item.MaPX.trim()}', 'Giao hàng không thành công')">Thất Bại <i class="fas fa-times"></i></button>`;
+              } else if (
+                item.TrangThaiGiaoHang === "Giao hàng không thành công"
+              ) {
+                actionBtn += ` <button class="action-btn" style="background-color: #17a2b8;" onclick="updateStatus('${item.MaPX.trim()}', 'Chờ lấy hàng')">Giao Lại <i class="fas fa-redo"></i></button>`;
+                actionBtn += ` <button class="action-btn" style="background-color: #dc3545;" onclick="updateStatus('${item.MaPX.trim()}', 'Hủy xuất kho')">Hủy Phiếu <i class="fas fa-trash"></i></button>`;
+              }
+
+              html += `<tr>
+                
+<td>${item.MaPX}</td><td>${date}</td><td>${item.MaDH}</td><td style="display:none;">${item.MaNV}</td>
+                <td class="${statusClass}">${item.TrangThaiGiaoHang}</td>
+                <td>${actionBtn}</td>
+              </tr>`;
+            });
+            tbody.innerHTML =
+              html ||
+              '<tr><td colspan="6" style="text-align:center;">Chưa có phiếu xuất nào</td></tr>';
+          }
+        } catch (error) {
+          console.error("API chưa thiết lập trên server:", error);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        loadDanhSachXuatKho();
+        await loadDataForForm();
+        const urlParams = new URLSearchParams(window.location.search);
+        const maDH = urlParams.get("maDH");
+        if (maDH) {
+          openCreateModal();
+          const match = dhListArray.find((d) => d.MaDH.trim() === maDH.trim());
+          if (match) {
+            document.getElementById("dhInput").value =
+              `${match.MaDH} - KH: ${match.MaKH}`;
+            validateDH();
+          } else {
+            document.getElementById("dhInput").value = maDH;
+            validateDH();
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

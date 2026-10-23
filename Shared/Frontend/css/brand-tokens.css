@@ -1,0 +1,7 @@
+/* Shared visual tokens for login, back office and the customer website. */
+:root {
+ --brand-canvas:#080a0d; --brand-surface:#111419; --brand-raised:#171b21; --brand-border:#2b313a;
+ --brand-text:#edf0f4; --brand-muted:#99a3b1; --brand-gold:#eac957;
+ --brand-body-font:'SF Pro Text','SF Pro Display','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
+ --brand-heading-font:'SF Pro Display','SF Pro Text','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
+}

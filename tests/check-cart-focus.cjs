@@ -1,0 +1,16 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
+const source=fs.readFileSync('User/Frontend/js/storefront.js','utf8');
+const start=source.indexOf('function initialCartSelection('),end=source.indexOf('async function initCart(',start);
+const context={Set,lineId:item=>String(item.MaGH),maxPackages:item=>Math.floor(Number(item.SoLuongKD)/(item.TrongLuongGram?item.TrongLuongGram/100:1))};
+vm.createContext(context);vm.runInContext(source.slice(start,end),context);
+const rows=[{MaGH:'10',MaSP:'CFH31',TrongLuongGram:200,SoLuong:1,SoLuongKD:50,HienThi:1},{MaGH:'11',MaSP:'CFH31',TrongLuongGram:500,SoLuong:3,SoLuongKD:50,HienThi:1},{MaGH:'12',MaSP:'MPF05',SoLuong:1,SoLuongKD:5,HienThi:1}];
+const choose=focus=>[...context.initialCartSelection(rows,focus)];
+assert.deepEqual(choose({maGH:11}),['11']);
+assert.deepEqual(choose({maGH:'10'}),['10']);
+assert.deepEqual(choose({maGH:999}),[]);
+assert.deepEqual(choose(null),['10','11','12']);
+rows[1].SoLuongKD=2;assert.deepEqual(choose({maGH:11}),[]);
+rows[1].SoLuongKD=50;rows[1].HienThi=false;assert.deepEqual(choose({maGH:11}),[]);
+assert(!source.includes('/website/buy-now'));
+assert(!source.includes('buyNowSelection'));
+console.log('PASS: select only the exact added cart row, never another variant; stale/unavailable row selects none, ordinary cart behavior preserved, no direct-purchase API.');

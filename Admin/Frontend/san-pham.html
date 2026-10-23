@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Lý Sản Phẩm - JAVI COFFEE</title>
+
+    <!-- Nhúng CSS đồng bộ -->
+    <link rel="stylesheet" href="/css/global.css?v=20261021-form-unified" />
+    <link rel="stylesheet" href="/admin/css/sidebar.css?v=20261021-action-fit-2" />
+    <link rel="stylesheet" href="/admin/css/san-pham.css" />
+
+    <!-- Nhúng FontAwesome -->
+    <link
+      rel="stylesheet"
+      href="/vendor/fontawesome/css/all.min.css"
+    />
+    <script src="/admin/js/auth.js?v=20261021-form-unified"></script>
+    <script src="/admin/js/report-filters.js?v=20261021-action-fit-2"></script>
+      <!-- Google Fonts: 2 font chuẩn xuyên suốt hệ thống (Hỗ trợ 100% tiếng Việt) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+<script src="/admin/js/grid-files.js" defer></script><script src="/admin/js/ui-consistency.js?v=20261021-form-unified" defer></script><link rel="stylesheet" href="/admin/css/admin-design.css">
+<script defer src="/admin/js/admin-design.js"></script>
+</head>
+  <body>
+    <!-- 1. SIDEBAR: auth.js?v=20261021-form-unified tự động render -->
+    <div class="sidebar"></div>
+
+    <!-- 2. MAIN CONTENT -->
+    <div class="main-content">
+      <div class="page-header">
+        <h2><i class="fas fa-coffee"></i> QUẢN LÝ DANH MỤC SẢN PHẨM</h2>
+        <button class="btn" onclick="openModal()">
+          <i class="fas fa-plus"></i> Thêm Sản Phẩm Mới
+        </button>
+      </div>
+
+      <!-- Thanh Bộ Lọc -->
+      <div class="filter-section category-badges" id="categoryBadges" aria-label="Lọc theo loại sản phẩm">
+        <button type="button" class="filter-btn active" data-category="">Tất cả</button>
+      </div>
+
+      <!-- Bảng Dữ Liệu -->
+      <div class="table-responsive">
+        <table id="productTable">
+          <thead>
+            <tr>
+
+              <th style="width: 95px;">Mã SP</th>
+              <th>Tên Sản Phẩm</th>
+              <th style="width: 120px;">Loại</th>
+              <th>ĐVT</th>
+              <th>Trọng Lượng</th>
+              <th>Công Suất</th>
+              <th>Giá Bán</th>
+              <th>Tồn Kho</th>
+              <th>Tồn tối thiểu</th>
+              <th>Số Lượng KD</th>
+              <th style="text-align: right;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="11" class="text-center">Đang tải dữ liệu...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    
+      
+    </div>
+
+    <!-- 3. KHUNG MODAL ẨN ĐỂ THÊM/SỬA SẢN PHẨM -->
+    <div class="modal-overlay" id="productModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-plus-circle"></i> Thêm Sản Phẩm Mới</h3>
+          <button class="close-btn" onclick="closeModal()">&times;</button>
+        </div>
+        <form id="productForm">
+          <div class="section-title">Thông tin sản phẩm</div>
+          <div class="form-row">
+            <div class="form-group" style="flex: 0.4">
+              <label>Mã SP <span style="color: red">*</span></label>
+              <input type="text" id="maSP" placeholder="VD: CFH99" required />
+            </div>
+            <div class="form-group" style="flex: 1">
+              <label>Tên Sản Phẩm <span style="color: red">*</span></label>
+              <input
+                type="text"
+                id="tenSP"
+                placeholder="Nhập tên sản phẩm..."
+                required
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Loại Sản Phẩm <span style="color: red">*</span></label>
+              <select id="loaiSP" required>
+                <!-- Sẽ được load tự động từ Database -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Đơn Vị Tính <span style="color: red">*</span></label>
+              <input
+                type="text"
+                id="dvt"
+                placeholder="Ví dụ: Kg, Máy, Lít..."
+                required
+              />
+            </div>
+          </div>
+          <div class="section-title">Giá bán và thông số</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Trọng Lượng (Kg)</label>
+              <input
+                type="number"
+                step="0.01"
+                id="trongLuong"
+                placeholder="0.00"
+              />
+            </div>
+            <div class="form-group">
+              <label id="productPriceLabel">Giá Bán (VNĐ) <span style="color: red">*</span></label>
+              <input type="number" id="giaBan" placeholder="0" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Công Suất Phục Vụ (dành cho máy pha)</label>
+            <input type="text" id="congSuat" maxlength="100" placeholder="Ví dụ: 80 ly/giờ" />
+          </div>
+          <div class="form-group">
+            <label>Tồn tối thiểu</label>
+            <input type="number" id="tonToiThieu" min="0" step="0.01" value="5" required />
+            <small>Cảnh báo sắp hết hàng khi tồn thực tế nhỏ hơn hoặc bằng mức này.</small>
+          </div>
+          <div class="form-group">
+            <label>Ghi Chú</label>
+            <textarea
+              id="ghiChu"
+              rows="3"
+              placeholder="Nhập ghi chú thêm nếu có..."
+            ></textarea>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn"
+              style="background-color: #333; color: #fff"
+              onclick="closeModal()"
+            >
+              Hủy Bỏ
+            </button>
+            <button type="submit" class="btn">Lưu Sản Phẩm</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- 4. LOGIC JAVASCRIPT -->
+    <script>
+      // =========================================================================
+      // API requests use the current admin server origin.
+      let listData = [];
+      let editId = null;
+      let activeProductCategory = "";
+
+      // Đóng mở modal
+      const modal = document.getElementById("productModal");
+      function openModal() {
+        document.getElementById("productForm").reset();syncCoffeeBase();
+        document.getElementById("maSP").readOnly = false;
+        editId = null;
+        document.querySelector(".modal-header h3").innerHTML =
+          '<i class="fas fa-plus-circle"></i> Thêm Sản Phẩm Mới';
+        modal.style.display = "flex";
+      }
+      function closeModal() {
+        modal.style.display = "none";
+      }
+
+      // Gọi Dữ liệu đổ lên Form Sửa
+      function editProduct(id) {
+        const item = listData.find(
+          (x) => x.MaSP && x.MaSP.trim() === id.trim(),
+        );
+        if (!item) return;
+        editId = id.trim();
+
+        document.getElementById("maSP").value = item.MaSP
+          ? item.MaSP.trim()
+          : "";
+        document.getElementById("maSP").readOnly = true;
+        document.getElementById("tenSP").value = item.TenSP || "";
+        document.getElementById("loaiSP").value = item.MaLoaiSP
+          ? item.MaLoaiSP.trim()
+          : "";
+        document.getElementById("dvt").value = item.DonViTinh || "";
+        document.getElementById("trongLuong").value =
+          item.TrongLuong != null ? item.TrongLuong : "";
+        document.getElementById("congSuat").value = item.CongSuat || "";
+        document.getElementById("giaBan").value = item.GiaBan || 0;syncCoffeeBase();
+        document.getElementById("tonToiThieu").value = item.TonToiThieu ?? 5;
+        document.getElementById("ghiChu").value = item.GhiChu || "";
+
+        document.querySelector(".modal-header h3").innerHTML =
+          '<i class="fas fa-edit"></i> Cập Nhật Sản Phẩm';
+        modal.style.display = "flex";
+      }
+
+      // Chức năng Bấm nút Xóa
+      async function deleteProduct(id) {
+        const confirmed = await javiConfirm(`Hành động nguy hiểm: Bạn có chắc chắn muốn xóa sản phẩm ${id} không?`);
+        if (!confirmed)
+          return;
+
+        // Tự động kiểm tra API bản cũ hay mới
+        let baseUrl = "/api/san-pham";
+        try {
+          const checkRes = await fetch("/api/san-pham");
+          if (checkRes.status === 404) baseUrl = "/api/products";
+        } catch (e) {}
+
+        try {
+          const res = await fetch(baseUrl + "/" + id.trim(), {
+            method: "DELETE",
+          });
+          const data = await res.json();
+          if (data.success) {
+            alert(data.message);
+            loadProducts();
+          } else alert("Lỗi: " + data.message);
+        } catch (e) {
+          alert("Lỗi kết nối server");
+        }
+      }
+
+      // Bộ lọc dữ liệu bảng
+      function filterProducts() {
+        const rows = document.querySelectorAll("#productTable tbody tr");
+        rows.forEach((row) => {
+          if (row.cells.length < 8) return;
+          const category = row.cells[2].textContent;
+          const matchCategory = !activeProductCategory || category.includes(activeProductCategory);
+          row.classList.toggle("filter-hidden", !matchCategory);
+        });
+        updatePagination(document.getElementById("productTable"));
+      }
+
+      function setProductCategoryFilter(category, button) {
+        activeProductCategory = category;
+        document.querySelectorAll("#categoryBadges .filter-btn").forEach((item) =>
+          item.classList.toggle("active", item === button),
+        );
+        filterProducts();
+      }
+
+      // Gọi API lấy danh sách Loại SP để đổ vào các ô Select
+      function syncCoffeeBase(){const active=document.getElementById('loaiSP').selectedOptions[0]?.dataset.options==='1';const weight=document.getElementById('trongLuong');weight.readOnly=active;if(active)weight.value='0.10';document.getElementById('productPriceLabel').innerHTML=active?'Giá bán mỗi 100g (VNĐ) <span style="color:red">*</span>':'Giá bán (VNĐ) <span style="color:red">*</span>';}
+      document.getElementById('loaiSP').addEventListener('change',syncCoffeeBase);
+      async function loadCategories() {
+        try {
+          const response = await fetch("/api/loai-sp", { cache: "no-store" });
+          const data = await response.json();
+          if (data.success) {
+            const badgeGroup = document.getElementById("categoryBadges");
+            const formSelect = document.getElementById("loaiSP");
+            badgeGroup.innerHTML = "";
+            const addBadge = (label, value) => {
+              const button = document.createElement("button");
+              button.type = "button";
+              button.className = "filter-btn";
+              button.textContent = label;
+              button.classList.toggle("active", value === activeProductCategory);
+              button.addEventListener("click", () => setProductCategoryFilter(value, button));
+              badgeGroup.appendChild(button);
+            };
+            addBadge("Tất cả", "");
+            formSelect.innerHTML = "";
+
+            data.data.forEach((item) => {
+              if (item.MaLoaiSP && item.TenLoaiSP) {
+                addBadge(item.TenLoaiSP, item.TenLoaiSP);
+                formSelect.innerHTML += `<option data-options="${item.ApDungTuyChon?1:0}" value="${item.MaLoaiSP.trim()}">${item.TenLoaiSP}</option>`;
+              }
+            });
+          }
+        } catch (error) {
+          console.error("Lỗi load danh mục:", error);
+        }
+      }
+
+      // Gọi API lấy danh sách khi trang tải xong (Chuẩn bị kết nối Node.js)
+      async function loadProducts() {
+        const tbody = document.querySelector("#productTable tbody");
+        tbody.innerHTML =
+          '<tr><td colspan="11" class="text-center">Đang tải dữ liệu...</td></tr>';
+
+        try {
+          let response = await fetch("/api/san-pham", { cache: "no-store" });
+
+          // NẾU BỊ 404 DO QUÊN RESET SERVER, TỰ ĐỘNG GỌI ĐƯỜNG DẪN CŨ
+          if (response.status === 404) {
+            console.warn(
+              "Tự động fallback về /api/products do Server chưa cập nhật.",
+            );
+            response = await fetch("/api/products", { cache: "no-store" });
+          }
+
+          if (!response.ok) {
+            throw new Error(
+              "Lỗi HTTP: " +
+                response.status +
+                " - Vui lòng tắt bật lại Server (Ctrl+C)!",
+            );
+          }
+
+          const data = await response.json();
+          if (!data.success) {
+            throw new Error(data.message || "Lỗi từ server");
+          }
+
+          listData = data.data || [];
+
+          if (listData.length === 0) {
+            tbody.innerHTML =
+              '<tr><td colspan="11" class="text-center">Chưa có dữ liệu sản phẩm</td></tr>';
+            return;
+          }
+
+          let html = "";
+          listData.forEach((item) => {
+            const maSP = item.MaSP ? String(item.MaSP).trim() : "";
+            const tenSP = item.TenSP || "";
+            const tenLoai = item.TenLoaiSP || "";
+            const dvt = item.DonViTinh || "";
+            const trongLuong = item.TrongLuong != null ? item.TrongLuong : "-";
+            const congSuat = item.CongSuat || "-";
+            const giaBan = item.GiaBan || 0;
+            const slTon = Number(item.SoLuongTon) || 0;
+            const slKD = Number(item.SoLuongKD) || 0;
+
+            const slTonUI =
+              slTon <= Number(item.TonToiThieu ?? 5)
+                ? `<span class="text-danger"><i class="fas fa-exclamation-triangle"></i> ${slTon}</span>`
+                : slTon;
+            const slKDUI =
+              slKD <= Number(item.TonToiThieu ?? 5) ? `<span class="text-danger">${slKD}</span>` : slKD;
+
+            html += `<tr data-row-edit="editProduct" data-edit-id="${encodeURIComponent(maSP)}">
+
+<td><strong>${maSP}</strong></td>
+              <td>${tenSP}</td>
+              <td>${tenLoai}</td>
+              <td>${dvt}</td>
+              <td>${trongLuong}</td>
+              <td>${congSuat}</td>
+              <td style="color: var(--color-primary); font-weight: bold;">${new Intl.NumberFormat("vi-VN").format(giaBan)} đ</td>
+              <td>${slTonUI}</td>
+              <td>${Number(item.TonToiThieu ?? 5)}</td>
+              <td>${slKDUI}</td>
+              <td>
+                <button class="action-btn btn-delete" style="background-color: #dc3545;" onclick="deleteProduct('${maSP}')" title="Xóa"><i class="fas fa-trash"></i> Xóa</button>
+              </td>
+            </tr>`;
+          });
+          tbody.innerHTML = html;
+        } catch (error) {
+          console.error("Lỗi lấy dữ liệu:", error);
+          tbody.innerHTML = `<tr><td colspan="11" class="text-center text-danger"><strong>Có lỗi xảy ra:</strong> ${error.message}</td></tr>`;
+        }
+      }
+
+      // Lắng nghe sự kiện
+      document.addEventListener("DOMContentLoaded", () => {
+        loadCategories();
+        loadProducts();
+      });
+
+      // Bắt sự kiện submit form Thêm sản phẩm
+      document
+        .getElementById("productForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          // Tự động kiểm tra API bản cũ hay mới
+          let baseUrl = "/api/san-pham";
+          try {
+            const checkRes = await fetch("/api/san-pham");
+            if (checkRes.status === 404) baseUrl = "/api/products";
+          } catch (e) {}
+
+          const payload = {
+            maSP: document.getElementById("maSP").value.trim(),
+            tenSP: document.getElementById("tenSP").value.trim(),
+            loaiSP: document.getElementById("loaiSP").value.trim(),
+            dvt: document.getElementById("dvt").value.trim(),
+            trongLuong: document.getElementById("trongLuong").value
+              ? Number(document.getElementById("trongLuong").value)
+              : null,
+            congSuat: document.getElementById("congSuat").value.trim() || null,
+            giaBan: Number(document.getElementById("giaBan").value),
+            tonToiThieu: Number(document.getElementById("tonToiThieu").value),
+            ghiChu: document.getElementById("ghiChu").value.trim(),
+          };
+          try {
+            const url = editId ? baseUrl + "/" + editId : baseUrl;
+            const method = editId ? "PUT" : "POST";
+            const res = await fetch(url, {
+              method: method,
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+            const data = await res.json();
+            if (data.success) {
+              alert(data.message);
+              closeModal();
+              loadProducts();
+            } else alert("Lỗi: " + data.message);
+          } catch (err) {
+            alert("Lỗi Server!");
+          }
+        });
+    </script>
+  </body>
+</html>
