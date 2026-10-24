@@ -6,8 +6,12 @@ const database = process.env.DB_NAME || "BH_WEB2";
 // Sử dụng Connection String với driver {SQL Server} mặc định của Windows
 // Không dùng port TCP vì SQL Server Express mặc định không bật TCP/IP trên port 1433
 // Kết nối qua Shared Memory (lpc:) cho kết nối local ổn định hơn
+// LocalDB ((localdb)\TenInstance) cần ODBC Driver 17 vì driver {SQL Server} cũ không hiểu cú pháp này
+const localdb = /^\(localdb\)\\/i.test(server);
 const config = {
-  connectionString: `Driver={SQL Server};Server=lpc:${server};Database=${database};Trusted_Connection=yes;`,
+  connectionString: localdb
+    ? `Driver={ODBC Driver 17 for SQL Server};Server=${server};Database=${database};Trusted_Connection=yes;`
+    : `Driver={SQL Server};Server=lpc:${server};Database=${database};Trusted_Connection=yes;`,
 };
 
 const poolPromise = new sql.ConnectionPool(config)

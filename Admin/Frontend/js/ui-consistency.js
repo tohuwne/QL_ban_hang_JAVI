@@ -2,7 +2,7 @@
 (function(){
  const excluded=new Set(['javiAlertModal','javiConfirmModal','profileModal']);
  let sourceRow=null;
- const rowActions=row=>row?[...row.querySelectorAll('td button,td a')].filter(el=>!el.disabled&&!el.hidden&&el.getClientRects().length&&!el.closest('[hidden],[inert]')&&getComputedStyle(el).display!=='none'&&getComputedStyle(el).visibility!=='hidden'&&!el.matches('.btn-view')&&!el.querySelector('.fa-eye')&&!/view(?:Detail|Invoice|CustomerInvoices|Order)\s*\(/i.test(el.getAttribute('onclick')||'')):[];
+ const rowActions=row=>row?[...row.querySelectorAll('td button,td a')].filter(el=>!el.disabled&&!el.hidden&&el.getClientRects().length&&!el.closest('[hidden],[inert]')&&getComputedStyle(el).display!=='none'&&getComputedStyle(el).visibility!=='hidden'&&!el.matches('.btn-view')&&!el.querySelector('.bi-eye')&&!/view(?:Detail|Invoice|CustomerInvoices|Order)\s*\(/i.test(el.getAttribute('onclick')||'')):[];
  function syncDetailActions(content){
   if(content.querySelector('form')||getComputedStyle(content.parentElement).display==='none')return;
   const footer=content.querySelector('.javi-modal-footer');if(!footer)return;

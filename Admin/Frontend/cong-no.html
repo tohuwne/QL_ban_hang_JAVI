@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="/admin/css/sidebar.css?v=20261021-action-fit-2" />
     <link
       rel="stylesheet"
-      href="/vendor/fontawesome/css/all.min.css"
+      href="/vendor/bootstrap-icons/bootstrap-icons.min.css"
     />
     <script src="/admin/js/auth.js?v=20261021-form-unified"></script>
     <script src="/admin/js/report-filters.js?v=20261021-action-fit-2"></script>
@@ -86,9 +86,9 @@
 
     <div class="main-content">
       <div class="page-header">
-        <h2><i class="fas fa-book"></i> TỔNG HỢP CÔNG NỢ KHÁCH HÀNG</h2>
+        <h2><i class="bi bi-journal-bookmark"></i> TỔNG HỢP CÔNG NỢ KHÁCH HÀNG</h2>
         <button class="btn" onclick="window.location.href = 'phieu-thu.html'">
-          <i class="fas fa-hand-holding-usd"></i> Tới Phiếu Thu Thu Tiền
+          <i class="bi bi-cash-coin"></i> Tới Phiếu Thu Thu Tiền
         </button>
       </div>
 
@@ -96,7 +96,7 @@
         <label>Trạng thái công nợ<select id="debtStatus"><option value="">Tất cả</option><option value="outstanding">Còn nợ</option><option value="paid">Đã hết nợ</option></select></label>
         <label>Dư nợ từ (VNĐ)<input type="number" id="debtMin" min="0" placeholder="Không giới hạn" /></label>
         <label>Dư nợ đến (VNĐ)<input type="number" id="debtMax" min="0" placeholder="Không giới hạn" /></label>
-        <button class="btn" type="submit"><i class="fas fa-filter"></i> Xem</button>
+        <button class="btn" type="submit"><i class="bi bi-funnel"></i> Xem</button>
       </form>
 
       <!-- Bảng Dữ Liệu -->
@@ -130,7 +130,7 @@
     <div class="modal-overlay" id="customerInvoicesModal">
       <div class="modal-content">
         <div class="modal-header">
-          <h3><i class="fas fa-file-invoice"></i> Danh Sách Hóa Đơn Nợ</h3>
+          <h3><i class="bi bi-file-earmark-text"></i> Danh Sách Hóa Đơn Nợ</h3>
           <button class="close-btn" onclick="closeInvoicesModal()">
             &times;
           </button>
@@ -176,7 +176,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h3>
-            <i class="fas fa-hand-holding-usd"></i> Lập Phiếu Thu Nợ
+            <i class="bi bi-cash-coin"></i> Lập Phiếu Thu Nợ
           </h3>
           <button class="close-btn" onclick="closeReceiptModal()">
             &times;
@@ -478,7 +478,7 @@
                 <td style="${noClass}">${new Intl.NumberFormat("vi-VN").format(item.TongConNo || 0)} đ</td>
                 <td style="text-align: right;">
                   <button class="action-btn" onclick="viewCustomerInvoices('${item.MaKH}', '${item.TenKH}')">
-                      <i class="fas fa-eye"></i></button>
+                      <i class="bi bi-eye"></i></button>
                 </td>
               </tr>`;
             });
@@ -573,7 +573,7 @@
                         <td>${new Intl.NumberFormat("vi-VN").format(cn.SoTienDaTra)} đ</td>
                         <td style="font-weight: bold; color: #dc3545;">${new Intl.NumberFormat("vi-VN").format(cn.SoDuCN)} đ</td>
                         <td>
-                          ${cn.SoDuCN > 0 ? `<button class="action-btn btn-pay debt-collect" title="Thu nợ" aria-label="Thu nợ" data-order="${debtEscape(maDH_str.trim())}" data-invoice="${debtEscape(maHD_str.trim())}" data-balance="${Number(cn.SoDuCN)||0}" data-debt="${debtEscape(String(Array.isArray(cn.MaCN)?cn.MaCN[0]:cn.MaCN||'').trim())}" onclick="openReceiptModal(this.dataset.order,this.dataset.invoice,Number(this.dataset.balance),this.dataset.debt)"><i class="fas fa-hand-holding-dollar" aria-hidden="true"></i></button>` : ""}
+                          ${cn.SoDuCN > 0 ? `<button class="action-btn btn-pay debt-collect" title="Thu nợ" aria-label="Thu nợ" data-order="${debtEscape(maDH_str.trim())}" data-invoice="${debtEscape(maHD_str.trim())}" data-balance="${Number(cn.SoDuCN)||0}" data-debt="${debtEscape(String(Array.isArray(cn.MaCN)?cn.MaCN[0]:cn.MaCN||'').trim())}" onclick="openReceiptModal(this.dataset.order,this.dataset.invoice,Number(this.dataset.balance),this.dataset.debt)"><i class="bi bi-cash-coin" aria-hidden="true"></i></button>` : ""}
                         </td>
                     </tr>
                 `;

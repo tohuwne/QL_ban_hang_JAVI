@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="/admin/css/xuat-kho.css" />
     <link
       rel="stylesheet"
-      href="/vendor/fontawesome/css/all.min.css"
+      href="/vendor/bootstrap-icons/bootstrap-icons.min.css"
     />
     <script src="/admin/js/auth.js?v=20261021-form-unified"></script>
     <script src="/admin/js/report-filters.js?v=20261021-action-fit-2"></script>
@@ -32,16 +32,16 @@
     <!-- 2. MAIN CONTENT -->
     <div class="main-content">
       <div class="page-header">
-        <h2><i class="fas fa-truck-loading"></i> HỆ THỐNG QUẢN LÝ XUẤT KHO</h2>
+        <h2><i class="bi bi-truck"></i> HỆ THỐNG QUẢN LÝ XUẤT KHO</h2>
         <button class="btn" onclick="openCreateModal()">
-          <i class="fas fa-plus"></i> Tạo Phiếu Xuất Kho
+          <i class="bi bi-plus-lg"></i> Tạo Phiếu Xuất Kho
         </button>
       </div>
 
       <form class="report-filters" data-status-tabs="exportStatusTabs" data-report-table="exportTable" data-date-column="1" data-value-column="4" onsubmit="event.preventDefault(); applyRowReportFilters(this, true)">
         <label>Từ ngày<input type="date" id="exportFrom" aria-describedby="exportFromError" /><small id="exportFromError" class="date-range-error" aria-live="polite" hidden></small></label>
         <label>Đến ngày<input type="date" id="exportTo" /></label>
-        <button class="btn" type="submit"><i class="fas fa-filter"></i> Xem</button>
+        <button class="btn" type="submit"><i class="bi bi-funnel"></i> Xem</button>
       </form>
 
       <div class="status-filter-tabs" id="exportStatusTabs" role="group" aria-label="Lọc trạng thái xuất kho"></div>
@@ -77,7 +77,7 @@
     <div class="modal-overlay" id="detailModal">
       <div class="modal-content">
         <div class="modal-header">
-          <h3><i class="fas fa-clipboard-list"></i> Chi Tiết Phiếu Xuất Kho</h3>
+          <h3><i class="bi bi-card-checklist"></i> Chi Tiết Phiếu Xuất Kho</h3>
           <button class="close-btn" onclick="closeDetailModal()">
             &times;
           </button>
@@ -127,7 +127,7 @@
             onclick="printExport()"
             style="background-color: #17a2b8; color: white; margin-right: 10px"
           >
-            <i class="fas fa-print"></i> In Phiếu Xuất
+            <i class="bi bi-printer"></i> In Phiếu Xuất
           </button>
           <button type="button" class="btn" onclick="closeDetailModal()">
             Đóng Cửa Sổ
@@ -140,7 +140,7 @@
     <div class="modal-overlay" id="createModal">
       <div class="modal-content">
         <div class="modal-header">
-          <h3><i class="fas fa-plus-circle"></i> Tạo Phiếu Xuất Kho Mới</h3>
+          <h3><i class="bi bi-plus-circle"></i> Tạo Phiếu Xuất Kho Mới</h3>
           <button class="close-btn" onclick="closeCreateModal()">
             &times;
           </button>
@@ -479,18 +479,18 @@
                 statusClass = "status-failed";
               else statusClass = "status-info";
 
-              let actionBtn = `<button class="action-btn" onclick="viewDetail('${item.MaPX.trim()}')"><i class="fas fa-eye"></i></button>`;
+              let actionBtn = `<button class="action-btn" onclick="viewDetail('${item.MaPX.trim()}')"><i class="bi bi-eye"></i></button>`;
               if (item.TrangThaiGiaoHang === "Chờ lấy hàng") {
-                actionBtn += ` <button class="action-btn" style="background-color: #ffc107; color: #000;" onclick="updateStatus('${item.MaPX.trim()}', 'Đang giao hàng')">Giao Hàng <i class="fas fa-truck"></i></button>`;
-                actionBtn += ` <button class="action-btn" style="background-color: #dc3545;" onclick="updateStatus('${item.MaPX.trim()}', 'Hủy xuất kho')">Hủy Xuất <i class="fas fa-ban"></i></button>`;
+                actionBtn += ` <button class="action-btn" style="background-color: #ffc107; color: #000;" onclick="updateStatus('${item.MaPX.trim()}', 'Đang giao hàng')">Giao Hàng <i class="bi bi-truck"></i></button>`;
+                actionBtn += ` <button class="action-btn" style="background-color: #dc3545;" onclick="updateStatus('${item.MaPX.trim()}', 'Hủy xuất kho')">Hủy Xuất <i class="bi bi-slash-circle"></i></button>`;
               } else if (item.TrangThaiGiaoHang === "Đang giao hàng") {
-                actionBtn += ` <button class="action-btn" style="background-color: #28a745;" onclick="updateStatus('${item.MaPX.trim()}', 'Đã giao hàng')">Thành Công <i class="fas fa-check"></i></button>`;
-                actionBtn += ` <button class="action-btn" style="background-color: #fd7e14;" onclick="updateStatus('${item.MaPX.trim()}', 'Giao hàng không thành công')">Thất Bại <i class="fas fa-times"></i></button>`;
+                actionBtn += ` <button class="action-btn" style="background-color: #28a745;" onclick="updateStatus('${item.MaPX.trim()}', 'Đã giao hàng')">Thành Công <i class="bi bi-check-lg"></i></button>`;
+                actionBtn += ` <button class="action-btn" style="background-color: #fd7e14;" onclick="updateStatus('${item.MaPX.trim()}', 'Giao hàng không thành công')">Thất Bại <i class="bi bi-x-lg"></i></button>`;
               } else if (
                 item.TrangThaiGiaoHang === "Giao hàng không thành công"
               ) {
-                actionBtn += ` <button class="action-btn" style="background-color: #17a2b8;" onclick="updateStatus('${item.MaPX.trim()}', 'Chờ lấy hàng')">Giao Lại <i class="fas fa-redo"></i></button>`;
-                actionBtn += ` <button class="action-btn" style="background-color: #dc3545;" onclick="updateStatus('${item.MaPX.trim()}', 'Hủy xuất kho')">Hủy Phiếu <i class="fas fa-trash"></i></button>`;
+                actionBtn += ` <button class="action-btn" style="background-color: #17a2b8;" onclick="updateStatus('${item.MaPX.trim()}', 'Chờ lấy hàng')">Giao Lại <i class="bi bi-arrow-clockwise"></i></button>`;
+                actionBtn += ` <button class="action-btn" style="background-color: #dc3545;" onclick="updateStatus('${item.MaPX.trim()}', 'Hủy xuất kho')">Hủy Phiếu <i class="bi bi-trash"></i></button>`;
               }
 
               html += `<tr>

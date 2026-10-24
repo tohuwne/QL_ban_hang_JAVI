@@ -36,16 +36,12 @@ const product={MaSP:'SP001',TenSP:'Cà phê kiểm thử',DonViTinh:'Gói',SoLuo
    assert.equal(await page.locator('#invoiceMethods .selection-value').innerText(),'Tất cả');
    await page.locator('#invoiceMethods summary').click();await page.locator('#invoiceMethods [role=option][data-value="Tiền mặt"]').click();await page.locator('.report-filters > button').click();
    assert.equal(await page.locator('#invoiceTable tbody tr:not(.filter-hidden)').count(),1);
-   const dateInput=page.locator('#invoiceTable thead input[type=date]');assert.equal(await dateInput.count(),1);
-   const status=page.locator('#invoiceTable th').nth(6).locator('summary');await status.click();const first=page.locator('#invoiceTable th').nth(6).locator('[role=option][data-value="Đã thanh toán"]');await first.click();assert.equal(await first.getAttribute('aria-selected'),'true');await first.click();assert.equal(await first.getAttribute('aria-selected'),'false');
-   await page.locator('#invoiceTable th').nth(6).locator('summary').click();
-   await dateInput.fill('2026-10-15');assert.equal(await page.locator('#invoiceTable tbody tr:not(.filter-hidden):not(.col-filter-hidden)').count(),0);
-   const gridDateClear=dateInput.locator('..').locator('.filter-clear');await gridDateClear.hover();await gridDateClear.click();assert.equal(await dateInput.inputValue(),'');assert.equal(await page.locator('#invoiceTable tbody tr:not(.filter-hidden):not(.col-filter-hidden)').count(),1);
-   await page.locator('#invoiceTable th').nth(6).locator('summary').click();
+   assert.equal(await page.locator('#invoiceTable thead input, #invoiceTable thead details').count(),0);
+   await page.locator('.list-toolbar .grid-search input').fill('khong-co-hoa-don');assert.equal(await page.locator('#invoiceTable tbody tr:not(.filter-hidden):not(.grid-search-hidden)').count(),0);
+   await page.locator('.list-toolbar .grid-search input').fill('');assert.equal(await page.locator('#invoiceTable tbody tr:not(.filter-hidden):not(.grid-search-hidden)').count(),1);
 
    await page.screenshot({path:'tests/.artifacts/invoice-filters.png',fullPage:true});
-   await page.locator('#invoiceTable th').nth(6).locator('summary').click();
-   await page.locator('#invoiceTable tbody tr:not(.filter-hidden):not(.col-filter-hidden)').first().dblclick();await page.waitForTimeout(100);assert(await page.locator('.document-detail').count());await page.screenshot({path:'tests/.artifacts/invoice-detail.png',fullPage:true});
+   await page.locator('#invoiceTable tbody tr:not(.filter-hidden):not(.grid-search-hidden)').first().dblclick();await page.waitForTimeout(100);assert(await page.locator('.document-detail').count());await page.screenshot({path:'tests/.artifacts/invoice-detail.png',fullPage:true});
   }
   if(['nhap-kho','xuat-kho','phieu-thu','phieu-chi'].includes(name)){
    assert.equal(await page.locator('#searchInput').count(),0);

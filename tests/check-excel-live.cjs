@@ -29,12 +29,12 @@ const {chromium}=require('C:/Users/admin/.cache/codex-runtimes/codex-primary-run
   await page.locator('.import-row-error').waitFor();assert(await page.locator('#importPreview th:visible').filter({hasText:'KH mới'}).count()>0);assert(await page.locator('#commitImport').isDisabled());
   await page.goto('http://localhost:3000/admin/dia-diem-van-chuyen.html');
   for(const tab of ['tabProvince','tabWard','tabShipping']){
-   await page.locator('#'+tab).click();const toolbar=page.locator('.web-tab-panel:not([hidden]) .directory-toolbar');
+   await page.locator('#'+tab).click();const toolbar=page.locator('.web-tab-panel:not([hidden]) .page-actions');
    try{await toolbar.locator('.grid-file-menu').waitFor({timeout:5000});}catch(e){await page.screenshot({path:'tests/.artifacts/location-file-menu-error.png',fullPage:true});console.log('Tab:',tab,await page.locator('.grid-file-menu').evaluateAll(nodes=>nodes.map(n=>({parent:n.parentElement.outerHTML.slice(0,180),display:getComputedStyle(n).display}))));throw e;}
    const addRect=await toolbar.locator('button.btn').first().boundingBox(),fileRect=await toolbar.locator('.grid-file-menu').boundingBox();assert(fileRect.x-addRect.x-addRect.width<=14);
   }
   await page.goto('http://localhost:3000/admin/loai-sp.html');
-  await page.getByRole('button',{name:/Nhập \/ Xuất file/}).click();await page.locator('[data-file-import]').click();
+  await page.locator('[data-file-import]').click();
   await page.waitForURL('**/admin/import-loai-sp.html');await page.locator('#importPreview th').first().waitFor();assert.equal(page.frames().length,1);
   assert(await page.locator('#downloadTemplate').isEnabled());assert.equal(await page.locator('.import-help').count(),0);
   const pending=page.waitForEvent('download');await page.locator('#downloadTemplate').click();const download=await pending;

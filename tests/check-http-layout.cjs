@@ -19,7 +19,7 @@ const {createToken} = require('../Shared/Backend/middleware/auth');
   });
   const base = 'http://127.0.0.1:' + server.address().port;
   try {
-    for (const url of ['/', '/admin/dashboard.html', '/landing_page/mua-hang.html', '/landing_page/login.html', '/user/mua-hang.html', '/admin/js/auth.js', '/user/js/storefront.js', '/js/auth.js', '/js/storefront.js', '/admin/css/dashboard.css', '/user/css/storefront.css', '/css/global.css', '/css/brand-tokens.css', '/images/logo-javi-auth.png', '/vendor/remixicon/remixicon.css']) {
+    for (const url of ['/', '/admin/dashboard.html', '/landing_page/mua-hang.html', '/landing_page/login.html', '/user/mua-hang.html', '/admin/js/auth.js', '/user/js/storefront.js', '/js/auth.js', '/js/storefront.js', '/admin/css/dashboard.css', '/user/css/storefront.css', '/css/global.css', '/css/brand-tokens.css', '/images/logo-javi-auth.png', '/vendor/bootstrap-icons/bootstrap-icons.min.css', '/vendor/bootstrap-icons/fonts/bootstrap-icons.woff2']) {
       const response = await fetch(base + url);
       assert.equal(response.status, 200, url);
       assert((await response.arrayBuffer()).byteLength > 0, url);

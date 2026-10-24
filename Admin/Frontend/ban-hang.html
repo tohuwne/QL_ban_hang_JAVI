@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="/admin/css/ban-hang.css?v=20261021-form-unified" />
     <link
       rel="stylesheet"
-      href="/vendor/fontawesome/css/all.min.css"
+      href="/vendor/bootstrap-icons/bootstrap-icons.min.css"
     />
     <script src="/admin/js/auth.js?v=20261021-form-unified"></script>
     <script src="/admin/js/report-filters.js?v=20261021-action-fit-2"></script>
@@ -29,12 +29,12 @@
     <div class="sidebar"></div>
     <main class="main-content pos-main">
       <div class="page-header">
-        <h2 id="posPageTitle"><i class="fas fa-shopping-cart" aria-hidden="true"></i> BÁN HÀNG POS</h2>
-        <a href="don-hang.html" class="btn pos-back"><i class="fas fa-arrow-left" aria-hidden="true"></i> Quay lại đơn hàng</a>
+        <h2 id="posPageTitle"><i class="bi bi-cart3" aria-hidden="true"></i> BÁN HÀNG POS</h2>
+        <a href="don-hang.html" class="btn pos-back"><i class="bi bi-arrow-left" aria-hidden="true"></i> Quay lại đơn hàng</a>
       </div>
       <div class="pos-workspace">
         <section class="pos-customer-bar" aria-label="Khách hàng của đơn">
-          <div class="pos-customer-picker"><label for="khInput">Thông tin đơn hàng</label><div class="pos-customer-search"><i class="fas fa-search" aria-hidden="true"></i><input type="search" id="khInput" placeholder="Nhập mã khách hàng hoặc số điện thoại" autocomplete="off" aria-describedby="customer-search-message"><kbd>Enter</kbd><small id="customer-search-message" role="status" aria-live="polite" hidden></small></div><button type="button" id="btnOpenAddCustomer" class="btn" onclick="openCustomerModal()" title="Thêm khách hàng mới" aria-label="Thêm khách hàng mới"><i class="fas fa-user-plus" aria-hidden="true"></i></button></div>
+          <div class="pos-customer-picker"><label for="khInput">Thông tin đơn hàng</label><div class="pos-customer-search"><i class="bi bi-search" aria-hidden="true"></i><input type="search" id="khInput" placeholder="Nhập mã khách hàng hoặc số điện thoại" autocomplete="off" aria-describedby="customer-search-message"><kbd>Enter</kbd><small id="customer-search-message" role="status" aria-live="polite" hidden></small></div><button type="button" id="btnOpenAddCustomer" class="btn" onclick="openCustomerModal()" title="Thêm khách hàng mới" aria-label="Thêm khách hàng mới"><i class="bi bi-person-plus" aria-hidden="true"></i></button></div>
           <div id="customer-details" hidden><div><span>Khách hàng</span><strong id="kh-ten"></strong></div><div><span>Loại khách</span><strong id="kh-loai"></strong></div><div><span>Số điện thoại</span><strong id="kh-sdt"></strong></div><div class="pos-customer-address"><span>Địa chỉ</span><strong id="kh-diachi"></strong></div></div>
         </section>
         <div class="pos-layout">
@@ -46,7 +46,7 @@
           <section class="cart-panel" aria-labelledby="posCartTitle">
             <div class="cart-header pos-panel-heading"><div><h3 id="posCartTitle">Sản phẩm đã chọn <span id="posOrderCount" class="pos-count">0</span></h3></div><button class="btn btn-danger pos-clear" onclick="clearCart()">Xóa tất cả</button></div>
             <div class="pos-cart-columns" aria-hidden="true"><span>Sản phẩm / Đơn giá</span><span>Số lượng / Thành tiền</span></div>
-            <div class="cart-items" id="cartItems"><div class="pos-cart-empty"><i class="fas fa-shopping-basket" aria-hidden="true"></i><strong>Đơn hàng đang trống</strong></div></div>
+            <div class="cart-items" id="cartItems"><div class="pos-cart-empty"><i class="bi bi-basket" aria-hidden="true"></i><strong>Đơn hàng đang trống</strong></div></div>
                     <aside class="payment-panel" aria-labelledby="posPaymentTitle">
             <h3 id="posPaymentTitle" class="pos-sr-only">Thanh toán</h3>
             <div class="cart-summary">
@@ -54,13 +54,13 @@
               <div class="summary-row"><span>Chiết khấu KH (<span id="cusDiscountPercent">0</span>%)</span><span id="sumCusDiscount" class="pos-discount-value">0 đ</span></div>
               <div class="pos-discount-field"><label for="extraDiscountInput">Giảm giá thêm</label><div class="pos-discount-inputs"><input type="number" id="extraDiscountInput" value="0" min="0" oninput="renderCart()"><select id="extraDiscountType" aria-label="Đơn vị giảm giá" onchange="renderCart()"><option value="VNĐ">đ</option><option value="%">%</option></select></div></div>
               <div class="summary-row"><span>Tiền giảm thêm</span><span id="sumExtraDiscount" class="pos-discount-value">0 đ</span></div>
-              <div class="pos-coupon-field"><label for="posCouponPicker">Mã giảm giá</label><input type="hidden" id="posCoupon"><button type="button" id="posCouponPicker" onclick="openPOSCouponPicker()" class="btn"><i class="fas fa-ticket" aria-hidden="true"></i><span id="posCouponSummary">Chọn mã giảm giá</span><i class="fas fa-angle-right" aria-hidden="true"></i></button><small id="posCouponMessage" role="status"></small></div>
+              <div class="pos-coupon-field"><label for="posCouponPicker">Mã giảm giá</label><input type="hidden" id="posCoupon"><button type="button" id="posCouponPicker" onclick="openPOSCouponPicker()" class="btn"><i class="bi bi-ticket-perforated" aria-hidden="true"></i><span id="posCouponSummary">Chọn mã giảm giá</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button><small id="posCouponMessage" role="status"></small></div>
               <div class="summary-row pos-discount-total"><span>Tổng giảm giá</span><strong id="sumTotalDiscount" class="pos-discount-value">0 đ</strong></div>
             </div>
             <div class="cart-actions">
               <div class="pos-payable"><span>Khách cần trả</span><strong id="sumTotal">0 đ</strong></div>
               <label class="pos-status-label" for="orderStatus">Trạng thái đơn</label><select id="orderStatus"><option value="Hoàn thành" selected>Hoàn thành tại quầy</option><option value="Chờ giao">Giao sau</option></select>
-              <div class="pos-action-buttons"><button class="btn pos-cancel" id="btnCancelOrder" onclick="cancelOrder()">Hủy</button><button class="btn" id="btnSaveOrder" onclick="checkout(false)"><i class="fas fa-save" aria-hidden="true"></i> Lưu đơn</button></div>
+              <div class="pos-action-buttons"><button class="btn pos-cancel" id="btnCancelOrder" onclick="cancelOrder()">Hủy</button><button class="btn" id="btnSaveOrder" onclick="checkout(false)"><i class="bi bi-floppy" aria-hidden="true"></i> Lưu đơn</button></div>
             </div>
           </aside>
           </section>
@@ -73,7 +73,7 @@
     <div class="modal-overlay" id="addCustomerModal">
       <div class="modal-content">
         <div class="modal-header">
-          <h3><i class="fas fa-user-plus"></i> Thêm Khách Hàng Mới</h3>
+          <h3><i class="bi bi-person-plus"></i> Thêm Khách Hàng Mới</h3>
           <button class="close-btn" onclick="closeCustomerModal()">
             &times;
           </button>
@@ -181,7 +181,7 @@
       async function loadProductsForPOS() {
         const grid = document.getElementById("productGrid");
         grid.innerHTML =
-          '<p style="text-align: center; color: #888; grid-column: 1 / -1"><i class="fas fa-spinner fa-spin"></i> Đang tải danh sách sản phẩm...</p>';
+          '<p style="text-align: center; color: #888; grid-column: 1 / -1"><i class="bi bi-arrow-repeat bi-spin"></i> Đang tải danh sách sản phẩm...</p>';
 
         try {
           // 1. Tải danh mục SP
@@ -356,7 +356,7 @@
         if (cart.length === 0) {
           posCouponCode="";posCouponDiscount=0;posCouponBasis="";document.getElementById("posCoupon").value="";document.getElementById("posCouponMessage").textContent="";window.refreshPOSCouponSummary?.();
           cartContainer.innerHTML =
-            '<div class="pos-cart-empty"><i class="fas fa-shopping-basket" aria-hidden="true"></i><strong>Đơn hàng đang trống</strong></div>';
+            '<div class="pos-cart-empty"><i class="bi bi-basket" aria-hidden="true"></i><strong>Đơn hàng đang trống</strong></div>';
           document.getElementById("sumSubtotal").innerText = "0 đ";
           document.getElementById("sumCusDiscount").innerText = "0 đ";
           document.getElementById("sumExtraDiscount").innerText = "0 đ";
@@ -384,7 +384,7 @@
           itemDiscountTotal += itemDiscAmt;
 
           const rowKey=posEscape(item.rowId||item.maSP);
-          html += `<article class="cart-item" data-pos-row="${posEscape(item.rowId||item.maSP)}"><div class="cart-item-info"><span class="product-code">${posEscape(item.maSP)}</span><div class="cart-item-name">${posEscape(item.tenSP)}</div>${item.trongLuongGram?'<span class="pos-item-options">'+(item.trongLuongGram>=1000?item.trongLuongGram/1000+'kg':item.trongLuongGram+'g')+' / '+posEscape(item.loaiXay)+'</span>':''}<div class="cart-item-price">${formatCurrency(item.price)} <span>/ ${item.trongLuongGram?'lựa chọn':posEscape(productsList.find(p=>p.MaSP.trim()===item.maSP)?.DonViTinh||'sản phẩm')}</span></div><label class="pos-item-discount">Giảm/SP <input aria-label="Giảm giá cho ${posEscape(item.tenSP)}" type="number" value="${item.itemDiscountPercent||0}" min="0" max="100" onchange="setItemDiscount('${rowKey}', this.value)"> %</label></div><div class="pos-item-actions"><button class="pos-remove" type="button" aria-label="Xóa ${posEscape(item.tenSP)}" onclick="removeItem('${rowKey}')"><i class="fas fa-trash-alt" aria-hidden="true"></i></button><div class="qty-controls"><button class="qty-btn" aria-label="Giảm số lượng" onclick="updateQty('${rowKey}',-1)">−</button><input aria-label="Số lượng ${posEscape(item.tenSP)}" type="number" value="${item.qty}" min="0" max="${maxRowQty(item)}" step="1" onchange="setQty('${rowKey}',this.value)"><button class="qty-btn" aria-label="Tăng số lượng" onclick="updateQty('${rowKey}',1)">+</button></div><strong class="pos-line-total">${formatCurrency(lineTotalRaw-itemDiscAmt)}</strong></div></article>`;
+          html += `<article class="cart-item" data-pos-row="${posEscape(item.rowId||item.maSP)}"><div class="cart-item-info"><span class="product-code">${posEscape(item.maSP)}</span><div class="cart-item-name">${posEscape(item.tenSP)}</div>${item.trongLuongGram?'<span class="pos-item-options">'+(item.trongLuongGram>=1000?item.trongLuongGram/1000+'kg':item.trongLuongGram+'g')+' / '+posEscape(item.loaiXay)+'</span>':''}<div class="cart-item-price">${formatCurrency(item.price)} <span>/ ${item.trongLuongGram?'lựa chọn':posEscape(productsList.find(p=>p.MaSP.trim()===item.maSP)?.DonViTinh||'sản phẩm')}</span></div><label class="pos-item-discount">Giảm/SP <input aria-label="Giảm giá cho ${posEscape(item.tenSP)}" type="number" value="${item.itemDiscountPercent||0}" min="0" max="100" onchange="setItemDiscount('${rowKey}', this.value)"> %</label></div><div class="pos-item-actions"><button class="pos-remove" type="button" aria-label="Xóa ${posEscape(item.tenSP)}" onclick="removeItem('${rowKey}')"><i class="bi bi-trash3" aria-hidden="true"></i></button><div class="qty-controls"><button class="qty-btn" aria-label="Giảm số lượng" onclick="updateQty('${rowKey}',-1)">−</button><input aria-label="Số lượng ${posEscape(item.tenSP)}" type="number" value="${item.qty}" min="0" max="${maxRowQty(item)}" step="1" onchange="setQty('${rowKey}',this.value)"><button class="qty-btn" aria-label="Tăng số lượng" onclick="updateQty('${rowKey}',1)">+</button></div><strong class="pos-line-total">${formatCurrency(lineTotalRaw-itemDiscAmt)}</strong></div></article>`;
 
         });
         cartContainer.innerHTML = html;
@@ -628,7 +628,7 @@
           document.getElementById("newCusAddress").value = existingCus.DiaChiKH || "";
           
           alertEl.style.color = "#28a745";
-          alertEl.innerHTML = `<i class="fas fa-check-circle"></i> SĐT đã thuộc về KH: <strong>${existingCus.TenKH}</strong> (${existingCus.MaKH.trim()})`;
+          alertEl.innerHTML = `<i class="bi bi-check-circle"></i> SĐT đã thuộc về KH: <strong>${existingCus.TenKH}</strong> (${existingCus.MaKH.trim()})`;
           alertEl.style.display = "block";
           isAutoFilled = true;
         } else {
@@ -730,7 +730,7 @@
         // Cập nhật giao diện
         const headerTitle = document.querySelector(".page-header h2");
         if (headerTitle) {
-          headerTitle.innerHTML = `<i class="fas fa-edit"></i> CẬP NHẬT ĐƠN HÀNG ${editModeMaDH}`;
+          headerTitle.innerHTML = `<i class="bi bi-pencil-square"></i> CẬP NHẬT ĐƠN HÀNG ${editModeMaDH}`;
         }
         document.title = `Cập Nhật Đơn Hàng ${editModeMaDH} - JAVI COFFEE`;
 

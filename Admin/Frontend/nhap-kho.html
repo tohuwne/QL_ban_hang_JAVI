@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="/admin/css/nhap-kho.css" />
     <link
       rel="stylesheet"
-      href="/vendor/fontawesome/css/all.min.css"
+      href="/vendor/bootstrap-icons/bootstrap-icons.min.css"
     />
     <script src="/admin/js/auth.js?v=20261021-form-unified"></script>
     <script src="/admin/js/report-filters.js?v=20261021-action-fit-2"></script>
@@ -32,9 +32,9 @@
     <!-- 2. MAIN CONTENT -->
     <div class="main-content">
       <div class="page-header">
-        <h2><i class="fas fa-boxes"></i> QUẢN LÝ NHẬP KHO CÀ PHÊ</h2>
+        <h2><i class="bi bi-boxes"></i> QUẢN LÝ NHẬP KHO CÀ PHÊ</h2>
         <button class="btn" onclick="openModal()">
-          <i class="fas fa-plus"></i> Tạo Phiếu Nhập Mới
+          <i class="bi bi-plus-lg"></i> Tạo Phiếu Nhập Mới
         </button>
       </div>
 
@@ -42,19 +42,19 @@
       <div class="stat-cards">
         <div class="card">
           <div class="card-title">
-            Tổng chi phí nhập hàng <i class="fas fa-file-invoice-dollar"></i>
+            Tổng chi phí nhập hàng <i class="bi bi-receipt-cutoff"></i>
           </div>
           <div class="card-value">180,200,000 đ</div>
         </div>
         <div class="card">
           <div class="card-title">
-            Tổng phiếu nhập <i class="fas fa-receipt"></i>
+            Tổng phiếu nhập <i class="bi bi-receipt"></i>
           </div>
           <div class="card-value">20</div>
         </div>
         <div class="card">
           <div class="card-title">
-            Còn nợ nhà cung cấp <i class="fas fa-hand-holding-usd"></i>
+            Còn nợ nhà cung cấp <i class="bi bi-cash-coin"></i>
           </div>
           <div class="card-value danger">44,500,000 đ</div>
         </div>
@@ -64,7 +64,7 @@
         <label>Từ ngày<input type="date" id="importFrom" aria-describedby="importFromError" /><small id="importFromError" class="date-range-error" aria-live="polite" hidden></small></label>
         <label>Đến ngày<input type="date" id="importTo" /></label>
         <div class="filter-field"><span>Trạng thái</span><details class="multi-filter" id="importValues" data-default-values="Đã thanh toán|Thanh toán một phần|Chưa thanh toán"><summary>Tất cả</summary><div class="multi-options"></div></details></div>
-        <button class="btn" type="submit"><i class="fas fa-filter"></i> Xem</button>
+        <button class="btn" type="submit"><i class="bi bi-funnel"></i> Xem</button>
       </form>
 
       <!-- KHU VỰC 2: Bảng Dữ Liệu -->
@@ -101,7 +101,7 @@
     <div class="modal-overlay" id="receiptModal">
       <div class="modal-content">
         <div class="modal-header">
-          <h3><i class="fas fa-plus-circle"></i> Tạo Phiếu Nhập Kho</h3>
+          <h3><i class="bi bi-plus-circle"></i> Tạo Phiếu Nhập Kho</h3>
           <button class="close-btn" onclick="closeModal()">&times;</button>
         </div>
         <form id="receiptForm">
@@ -124,7 +124,7 @@
                   onclick="window.location.href = 'nha-cung-cap.html'"
                   title="Thêm/Quản lý NCC"
                 >
-                  <i class="fas fa-building"></i>
+                  <i class="bi bi-building"></i>
                 </button>
               </div>
             </div>
@@ -191,7 +191,7 @@
               font-size: 14px;
             "
           >
-            <i class="fas fa-arrow-down"></i> Thêm vào danh sách nhập
+            <i class="bi bi-arrow-down"></i> Thêm vào danh sách nhập
           </button>
 
           <!-- Tính toán thanh toán -->
@@ -249,7 +249,7 @@
     <div class="modal-overlay" id="detailModal">
       <div class="modal-content">
         <div class="modal-header">
-          <h3><i class="fas fa-info-circle"></i> Chi Tiết Phiếu Nhập Kho</h3>
+          <h3><i class="bi bi-info-circle"></i> Chi Tiết Phiếu Nhập Kho</h3>
           <button class="close-btn" onclick="closeDetailModal()">
             &times;
           </button>
@@ -318,7 +318,7 @@
             onclick="printImport()"
             style="background-color: #17a2b8; color: white; margin-right: 10px"
           >
-            <i class="fas fa-print"></i> In Phiếu Nhập
+            <i class="bi bi-printer"></i> In Phiếu Nhập
           </button>
           <button type="button" class="btn" onclick="closeDetailModal()">
             Đóng
@@ -575,8 +575,8 @@
                   <td class="${statusClass}">${item.TrangThaiThanhToan}</td>
                   <td style="display:none;">${item.MaNV}</td>
                   <td style="text-align: right;">
-                    <button class="action-btn" onclick="viewDetail('${item.MaPN.trim()}')"><i class="fas fa-eye"></i></button>
-                    ${item.TrangThaiThanhToan !== "Đã thanh toán" ? `<button class="action-btn debt-collect debt-pay" title="Trả nợ" aria-label="Trả nợ" onclick="window.location.href='phieu-chi.html?mapn=${item.MaPN.trim()}'"><i class="fas fa-money-bill-transfer" aria-hidden="true"></i></button>` : ""}
+                    <button class="action-btn" onclick="viewDetail('${item.MaPN.trim()}')"><i class="bi bi-eye"></i></button>
+                    ${item.TrangThaiThanhToan !== "Đã thanh toán" ? `<button class="action-btn debt-collect debt-pay" title="Trả nợ" aria-label="Trả nợ" onclick="window.location.href='phieu-chi.html?mapn=${item.MaPN.trim()}'"><i class="bi bi-send-arrow-up" aria-hidden="true"></i></button>` : ""}
                   </td>
                 </tr>
               `;

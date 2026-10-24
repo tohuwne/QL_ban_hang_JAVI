@@ -18,7 +18,7 @@
 
   <main class="main-content" style="display:flex;flex-direction:column;min-height:0">
     <div class="page-header">
-      <h2><i class="ri-map-pin-line"></i> DANH MỤC ĐỊA ĐIỂM</h2>
+      <h2><i class="bi bi-geo-alt"></i> DANH MỤC ĐỊA ĐIỂM</h2>
     </div>
 
     <!-- ===== 3 TABS ===== -->
@@ -30,9 +30,11 @@
 
     <!-- ===== TAB 1: TỈNH THÀNH ===== -->
     <div class="web-tab-panel commerce-settings" role="tabpanel" id="panelProvince" aria-labelledby="tabProvince">
+      <div class="page-actions">
+        <button class="btn" id="addProvince"><i class="bi bi-plus-lg"></i> Thêm tỉnh thành</button>
+      </div>
       <div class="directory-toolbar">
         <input type="text" id="searchProvince" placeholder="Tìm tỉnh / thành phố…" aria-label="Tìm kiếm">
-        <button class="btn" id="addProvince"><i class="fas fa-plus"></i> Thêm tỉnh thành</button>
       </div>
       <div id="msgProvince" role="status"></div>
       <div class="table-responsive">
@@ -53,12 +55,14 @@
 
     <!-- ===== TAB 2: PHƯỜNG / XÃ ===== -->
     <div class="web-tab-panel commerce-settings" role="tabpanel" id="panelWard" aria-labelledby="tabWard" hidden>
+      <div class="page-actions">
+        <button class="btn" id="addWard"><i class="bi bi-plus-lg"></i> Thêm phường / xã</button>
+      </div>
       <div class="directory-toolbar">
         <select id="filterWardProvince" aria-label="Lọc theo tỉnh">
           <option value="">Tất cả tỉnh / thành</option>
         </select>
         <input type="text" id="searchWard" placeholder="Tìm phường / xã…" aria-label="Tìm kiếm">
-        <button class="btn" id="addWard"><i class="fas fa-plus"></i> Thêm phường / xã</button>
       </div>
       <div id="msgWard" role="status"></div>
       <div class="table-responsive">
@@ -80,9 +84,11 @@
 
     <!-- ===== TAB 3: PHÍ GIAO HÀNG ===== -->
     <div class="web-tab-panel commerce-settings" role="tabpanel" id="panelShipping" aria-labelledby="tabShipping" hidden>
+      <div class="page-actions">
+        <button class="btn" id="addShipping"><i class="bi bi-plus-lg"></i> Thêm phí giao hàng</button>
+      </div>
       <div class="directory-toolbar">
         <input type="text" id="searchShipping" placeholder="Tìm khu vực…" aria-label="Tìm kiếm">
-        <button class="btn" id="addShipping"><i class="fas fa-plus"></i> Thêm phí giao hàng</button>
       </div>
       <div id="msgShipping" role="status"></div>
       <div class="table-responsive">
@@ -114,7 +120,7 @@
           <div class="form-group"><label for="delivery-code-1">Mã tỉnh thành <span class="required-mark">*</span></label><input id="delivery-code-1" name="code" type="number" min="1" max="2147483647" step="1" required></div>
           <div class="form-group"><label for="delivery-name-2">Tên tỉnh / thành phố <span class="required-mark">*</span></label><input type="text" id="delivery-name-2" name="name" maxlength="100" required></div>
           <p id="errProvince" role="status"></p>
-          <div class="modal-footer"><button class="btn directory-cancel" type="button" data-close-directory>Hủy</button><button class="btn" type="submit"><i class="fas fa-save" aria-hidden="true"></i> Lưu</button></div>
+          <div class="modal-footer"><button class="btn directory-cancel" type="button" data-close-directory>Hủy</button><button class="btn" type="submit"><i class="bi bi-floppy" aria-hidden="true"></i> Lưu</button></div>
         </form>
 
         <!-- Form phường / xã -->
@@ -123,7 +129,7 @@
           <div class="form-group"><label for="delivery-name-4">Tên phường / xã <span class="required-mark">*</span></label><input type="text" id="delivery-name-4" name="name" maxlength="100" required></div>
           <div class="form-group"><label for="delivery-parent-5">Thuộc tỉnh / thành phố <span class="required-mark">*</span></label><select id="delivery-parent-5" name="parent" required></select></div>
           <p id="errWard" role="status"></p>
-          <div class="modal-footer"><button class="btn directory-cancel" type="button" data-close-directory>Hủy</button><button class="btn" type="submit"><i class="fas fa-save" aria-hidden="true"></i> Lưu</button></div>
+          <div class="modal-footer"><button class="btn directory-cancel" type="button" data-close-directory>Hủy</button><button class="btn" type="submit"><i class="bi bi-floppy" aria-hidden="true"></i> Lưu</button></div>
         </form>
 
         <!-- Form phí giao hàng -->
@@ -136,7 +142,7 @@
               <option value="0">Tạm ngưng</option>
             </select></div>
           <p id="errShipping" role="status"></p>
-          <div class="modal-footer"><button class="btn directory-cancel" type="button" data-close-directory>Hủy</button><button class="btn" type="submit"><i class="fas fa-save" aria-hidden="true"></i> Lưu</button></div>
+          <div class="modal-footer"><button class="btn directory-cancel" type="button" data-close-directory>Hủy</button><button class="btn" type="submit"><i class="bi bi-floppy" aria-hidden="true"></i> Lưu</button></div>
         </form>
     </div></div>
   </main>

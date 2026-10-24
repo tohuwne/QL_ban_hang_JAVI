@@ -15,15 +15,14 @@ function selectedReportValues(control) {
 }
 function reportMulti(id, values, onChange) {
   const control = typeof id === "string" ? document.getElementById(id) : id;
-  const single = control.classList.contains('col-multi-filter');
-  const signature = JSON.stringify([single, values]);
+  const signature = JSON.stringify(values);
   if (control.dataset.optionSignature === signature) return;
   control.dataset.optionSignature = signature;
   const previous = selectedReportValues(control);
   const options = control.querySelector('.multi-options');
   options.replaceChildren();
   options.setAttribute('role', 'listbox');
-  options.setAttribute('aria-multiselectable', String(!single));
+  options.setAttribute('aria-multiselectable', 'true');
   options.setAttribute('aria-label', control.getAttribute('aria-label') || control.closest('.filter-field')?.querySelector('span')?.textContent || 'Lọc giá trị');
   const summary = control.querySelector('summary');
   const selectedLabel = document.createElement('span'); selectedLabel.className = 'selection-value';
@@ -33,7 +32,7 @@ function reportMulti(id, values, onChange) {
   summary.replaceChildren(selectedLabel, extra, clear);
   const updateSummary = () => {
     const checked = selectedReportValues(control);
-    selectedLabel.textContent = checked[0] || (control.classList.contains('col-multi-filter') ? '(Tất cả)' : 'Tất cả');
+    selectedLabel.textContent = checked[0] || 'Tất cả';
     extra.textContent = checked.length > 1 ? `+${checked.length - 1}` : '';
     extra.hidden = checked.length <= 1;
     clear.hidden = !checked.length;
@@ -55,8 +54,7 @@ function reportMulti(id, values, onChange) {
     const tick = document.createElement('span'); tick.className = 'selection-tick'; tick.textContent = '✓'; tick.setAttribute('aria-hidden', 'true');
     option.append(label, tick);
     option.onclick = () => {
-      if (single) options.querySelectorAll('[role=option]').forEach(row => row.setAttribute('aria-selected', String(row.dataset.value === value)));
-      else if (!value) options.querySelectorAll('[role=option]').forEach(row => row.setAttribute('aria-selected', String(!row.dataset.value)));
+      if (!value) options.querySelectorAll('[role=option]').forEach(row => row.setAttribute('aria-selected', String(!row.dataset.value)));
       else {
         option.setAttribute('aria-selected', String(option.getAttribute('aria-selected') !== 'true'));
         options.querySelector('[data-value=""]').setAttribute('aria-selected', String(!selectedReportValues(control).length));
@@ -353,7 +351,7 @@ function lockGridColumns(table, resize = false) {
   const widths = cells.map((th,index) => {
     if (th.style.display === 'none' || th.classList.contains('d-none')) return 0;
     if (th.classList.contains('javi-action-column')) return actions[index]||56;
-    const title = (th.querySelector('.col-header-label') || th).textContent.trim().toLowerCase();
+    const title = th.textContent.trim().toLowerCase();
     if (/khách hàng|tên khách/.test(title)) return 320;
     if (/tên sản phẩm|tên nhà cung cấp|ghi chú|địa chỉ/.test(title)) return 280;
     if (/trạng thái|tình trạng/.test(title)) return 210;

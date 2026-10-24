@@ -4,7 +4,7 @@ const {sql,poolPromise}=require('../Shared/Backend/config/database');
 const {createToken}=require('../Shared/Backend/middleware/auth');
 const {createApp}=require('../app');
 let admin,user;
-(async()=>{const pool=await poolPromise;await pool.request().query(fs.readFileSync('docs/sql/WEBSITE_NOI_DUNG.sql','utf8'));
+(async()=>{const pool=await poolPromise;
  admin=createApp('admin').listen(0);user=createApp('user').listen(0);
  const token=role=>createToken({TenDangNhap:'qa_content',VaiTro:'NHAN_VIEN',MaNV:'NV000001',ChucVu:role});
  const call=async(server,path,method='GET',data,auth)=>{const response=await fetch('http://localhost:'+server.address().port+'/api'+path,{method,headers:{'Content-Type':'application/json',...(auth?{Authorization:'Bearer '+auth}:{})},...(data?{body:JSON.stringify(data)}:{})});return {status:response.status,body:await response.json()};};

@@ -14,16 +14,6 @@
   transition: none !important;
 }
 
-body {
-  background: #050505 !important;
-}
-
-.main-content {
-  margin-left: var(--sidebar-collapsed-w) !important;
-  width: calc(100% - var(--sidebar-collapsed-w)) !important;
-  background: #050505 !important;
-}
-
 .sidebar {
   position: fixed !important;
   inset: 0 auto 0 0 !important;
@@ -45,7 +35,8 @@ body {
 }
 
 .sidebar:hover,
-.sidebar:focus-within {
+.sidebar:focus-within,
+html.sidebar-pinned .sidebar {
   width: var(--sidebar-expanded-w) !important;
   box-shadow: 18px 0 44px rgba(0, 0, 0, 0.72) !important;
 }
@@ -94,25 +85,29 @@ body {
 }
 
 .sidebar:hover .sidebar-brand,
-.sidebar:focus-within .sidebar-brand {
+.sidebar:focus-within .sidebar-brand,
+html.sidebar-pinned .sidebar .sidebar-brand {
   height: 64px !important;
   min-height: 64px !important;
   padding: 0 10px 10px !important;
 }
 
 .sidebar:hover .sidebar-brand a,
-.sidebar:focus-within .sidebar-brand a {
+.sidebar:focus-within .sidebar-brand a,
+html.sidebar-pinned .sidebar .sidebar-brand a {
   justify-content: flex-start;
   gap: 11px;
 }
 
 .sidebar:hover .javi-logo-sidebar,
-.sidebar:focus-within .javi-logo-sidebar {
+.sidebar:focus-within .javi-logo-sidebar,
+html.sidebar-pinned .sidebar .javi-logo-sidebar {
   display: none !important;
 }
 
 .sidebar:hover .sidebar-brand-symbol,
-.sidebar:focus-within .sidebar-brand-symbol {
+.sidebar:focus-within .sidebar-brand-symbol,
+html.sidebar-pinned .sidebar .sidebar-brand-symbol {
   display: block;
   flex: 0 0 54px;
   width: 54px;
@@ -122,7 +117,8 @@ body {
 }
 
 .sidebar:hover .sidebar-brand-name,
-.sidebar:focus-within .sidebar-brand-name {
+.sidebar:focus-within .sidebar-brand-name,
+html.sidebar-pinned .sidebar .sidebar-brand-name {
   display: block;
   min-width: 0;
   color: #ffff01;
@@ -190,7 +186,7 @@ body {
   margin: 0 !important;
   display: grid !important;
   place-items: center !important;
-  color: #b0b0b0 !important;
+  color: var(--lt-text-soft, #b0b0b0) !important;
   font-size: 20px !important;
   line-height: 1 !important;
   transition: color 0.18s ease, transform 0.18s ease !important;
@@ -231,19 +227,20 @@ body {
 }
 
 .sidebar:hover .menu-text,
-.sidebar:focus-within .menu-text {
+.sidebar:focus-within .menu-text,
+html.sidebar-pinned .sidebar .menu-text {
   opacity: 1 !important;
   visibility: visible !important;
   transform: translateX(0);
 }
 
-.sidebar:not(:hover):not(:focus-within) .sidebar-menu li > a {
+html:not(.sidebar-pinned) .sidebar:not(:hover):not(:focus-within) .sidebar-menu li > a {
   padding: 0 !important;
   justify-content: center !important;
   gap: 0 !important;
 }
 
-.sidebar:not(:hover):not(:focus-within) .submenu {
+html:not(.sidebar-pinned) .sidebar:not(:hover):not(:focus-within) .submenu {
   display: none !important;
 }
 
@@ -251,7 +248,7 @@ body {
   width: 18px !important;
   min-width: 18px !important;
   margin: 0 !important;
-  color: #777 !important;
+  color: var(--lt-text-muted, #777) !important;
   font-size: 18px !important;
   transition: transform 0.2s ease, color 0.2s ease !important;
 }
@@ -275,20 +272,12 @@ body {
     margin 0.25s ease, padding 0.25s ease !important;
 }
 
-.sidebar .has-submenu.open > .submenu {
-  max-height: 260px !important;
-  margin: 4px 0 7px 17px !important;
-  padding: 3px 0 3px 8px !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
 .sidebar .submenu li > a {
   height: 36px !important;
   padding: 0 10px !important;
   gap: 9px !important;
   border-radius: 8px !important;
-  color: #8c8c8c !important;
+  color: var(--lt-text-muted, #8c8c8c) !important;
   font-size: 13px !important;
 }
 
@@ -315,7 +304,8 @@ body {
   }
 
   .sidebar:hover,
-  .sidebar:focus-within {
+  .sidebar:focus-within,
+html.sidebar-pinned .sidebar {
     width: min(var(--sidebar-expanded-w), calc(100vw - 24px)) !important;
   }
 
@@ -326,5 +316,15 @@ body {
 }
 
 /* All catalog entries must remain reachable when the group expands. */
-.sidebar:is(:hover,:focus-within) .has-submenu.open > .submenu{display:block!important;max-height:none!important;overflow:visible!important}
-.sidebar:not(:hover):not(:focus-within) .has-submenu.open > .submenu{display:none!important;max-height:0!important;margin:0!important;padding:0!important;opacity:0!important;visibility:hidden!important}
+:is(.sidebar:hover,.sidebar:focus-within,html.sidebar-pinned .sidebar) .has-submenu.open > .submenu{display:block!important;max-height:none!important;overflow:visible!important}
+html:not(.sidebar-pinned) .sidebar:not(:hover):not(:focus-within) .has-submenu.open > .submenu{display:none!important;max-height:0!important;margin:0!important;padding:0!important;opacity:0!important;visibility:hidden!important}
+
+/* Ghim thanh menu: luôn mở rộng, nội dung chính chừa đúng bề rộng menu (chỉ áp dụng màn hình > 900px). */
+html.sidebar-pinned {--sidebar-width:var(--sidebar-expanded-w);--sidebar-rail-w:var(--sidebar-expanded-w)}
+html.sidebar-pinned .sidebar {transition:none!important}
+.sidebar .sidebar-brand {position:relative!important}
+.sidebar .sidebar-pin {display:none;flex:0 0 28px;width:28px;height:28px;margin-left:auto;padding:0;place-items:center;border:1px solid transparent;border-radius:8px;background:transparent;color:var(--sidebar-text);font-size:14px;cursor:pointer;transition:color .16s ease,background .16s ease,border-color .16s ease}
+:is(.sidebar:hover,.sidebar:focus-within,html.sidebar-pinned .sidebar) .sidebar-pin {display:inline-grid}
+.sidebar .sidebar-pin:hover {color:var(--sidebar-text-strong);border-color:var(--sidebar-border);background:var(--sidebar-surface)}
+.sidebar .sidebar-pin[aria-pressed=true] {color:var(--sidebar-accent);border-color:var(--sidebar-border)}
+@media (prefers-reduced-motion: reduce) {.sidebar .sidebar-pin {transition:none}}

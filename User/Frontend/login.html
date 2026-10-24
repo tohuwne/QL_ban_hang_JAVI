@@ -6,7 +6,7 @@
   <meta name="description" content="Đăng nhập hoặc đăng ký tài khoản khách hàng JAVI COFFEE qua 3 bước bảo mật xác thực OTP để mua sắm và theo dõi đơn hàng." />
   <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/vendor/fontawesome/css/all.min.css" />
+  <link rel="stylesheet" href="/vendor/bootstrap-icons/bootstrap-icons.min.css" />
   <link rel="stylesheet" href="/css/global.css?v=20261021-split" />
   <script src="/runtime-config.js"></script><script src="https://accounts.google.com/gsi/client" async defer></script><script src="/admin/js/auth.js?v=20261021-split"></script>
   <!-- Firebase App & Auth SDK (Compat) sẵn sàng cho Phone Auth -->
@@ -252,7 +252,7 @@
 <link rel="stylesheet" href="/css/auth-motif-motion.css">
 </head>
 <body class="auth-page">
-<a id="shopReturn" class="shop-return" href="/shop" aria-label="Quay lại trang mua sắm"><i class="fas fa-arrow-left" aria-hidden="true"></i> Quay lại mua sắm</a>
+<a id="shopReturn" class="shop-return" href="/shop" aria-label="Quay lại trang mua sắm"><i class="bi bi-arrow-left" aria-hidden="true"></i> Quay lại mua sắm</a>
 
 <div class="auth-backdrop" aria-hidden="true">
   <div class="auth-dongson">
@@ -327,14 +327,14 @@
     <div class="auth-brand"><img src="/images/logo-javi-auth.png" alt="JAVI COFFEE" /></div>
     <div class="auth-form-side">
       <form class="auth-form" id="loginForm">
-        <label class="auth-field"><i class="fas fa-user"></i><input type="text" id="login-username" placeholder="Tài khoản" autocomplete="username" required /></label>
-        <label class="auth-field"><i class="fas fa-lock"></i><input type="password" id="login-password" placeholder="Mật khẩu" autocomplete="current-password" required /><i class="fas fa-eye password-toggle" id="toggleLoginPassword" aria-label="Hiện mật khẩu"></i></label>
+        <label class="auth-field"><i class="bi bi-person"></i><input type="text" id="login-username" placeholder="Tài khoản" autocomplete="username" required /></label>
+        <label class="auth-field"><i class="bi bi-lock"></i><input type="password" id="login-password" placeholder="Mật khẩu" autocomplete="current-password" required /><i class="bi bi-eye password-toggle" id="toggleLoginPassword" aria-label="Hiện mật khẩu"></i></label>
         <div class="auth-links"><a class="auth-link" href="#" id="forgotPassword">Quên mật khẩu?</a></div>
         <button class="auth-submit" type="submit" id="loginSubmitBtn">Đăng nhập</button>
       </form>
       <div class="auth-divider">hoặc tiếp tục với</div>
       <div class="google-slot" id="googleLoginButton">
-        <button class="google-fallback" type="button" id="googleLoginFallback"><i class="fab fa-google"></i>Đăng nhập bằng Google</button>
+        <button class="google-fallback" type="button" id="googleLoginFallback"><i class="bi bi-google"></i>Đăng nhập bằng Google</button>
       </div>
       <p class="auth-switch">Bạn chưa có tài khoản? <button type="button" data-flip="register">Đăng ký</button></p>
     </div>
@@ -367,12 +367,12 @@
 <form class="auth-form" id="registerForm" novalidate>
         <!-- BƯỚC 1: THÔNG TIN CÁ NHÂN -->
         <div class="reg-step-container active" id="regStep1">
-          <label class="auth-field"><i class="fas fa-user"></i><input type="text" id="reg-fullname" placeholder="Họ và tên" autocomplete="name" required /></label>
-          <label class="auth-field"><i class="fas fa-phone"></i><input type="tel" id="reg-phone" placeholder="Số điện thoại" autocomplete="tel" required /></label>
-          <label class="auth-field"><i class="fas fa-envelope"></i><input type="email" id="reg-email" placeholder="Email nhận mã OTP" autocomplete="email" required /></label>
-          <label class="auth-field"><i class="fas fa-at"></i><input type="text" id="reg-username" placeholder="Tên đăng nhập" autocomplete="username" required /></label>
-          <label class="auth-field"><i class="fas fa-location-dot"></i><input type="text" id="reg-address" placeholder="Địa chỉ giao hàng (không bắt buộc)" autocomplete="street-address" /></label>
-          <button class="auth-submit" type="button" id="btnNextStep1">Tiếp tục <i class="fas fa-arrow-right" style="margin-left:6px;"></i></button>
+          <label class="auth-field"><i class="bi bi-person"></i><input type="text" id="reg-fullname" placeholder="Họ và tên" autocomplete="name" required /></label>
+          <label class="auth-field"><i class="bi bi-telephone"></i><input type="tel" id="reg-phone" placeholder="Số điện thoại" autocomplete="tel" required /></label>
+          <label class="auth-field"><i class="bi bi-envelope"></i><input type="email" id="reg-email" placeholder="Email nhận mã OTP" autocomplete="email" required /></label>
+          <label class="auth-field"><i class="bi bi-at"></i><input type="text" id="reg-username" placeholder="Tên đăng nhập" autocomplete="username" required /></label>
+          <label class="auth-field"><i class="bi bi-geo-alt"></i><input type="text" id="reg-address" placeholder="Địa chỉ giao hàng (không bắt buộc)" autocomplete="street-address" /></label>
+          <button class="auth-submit" type="button" id="btnNextStep1">Tiếp tục <i class="bi bi-arrow-right" style="margin-left:6px;"></i></button>
         </div>
 
         <!-- BƯỚC 2: THIẾT LẬP MẬT KHẨU -->
@@ -381,14 +381,14 @@
             Tài khoản: <strong id="step2SummaryUser">...</strong>
           </div>
           <label class="auth-field" id="passwordRegisterField">
-            <i class="fas fa-lock"></i>
+            <i class="bi bi-lock"></i>
             <input type="password" id="reg-password" placeholder="Mật khẩu (tối thiểu 6 ký tự)" autocomplete="new-password" required />
-            <i class="fas fa-eye password-toggle" id="toggleRegisterPassword" aria-label="Hiện mật khẩu"></i>
+            <i class="bi bi-eye password-toggle" id="toggleRegisterPassword" aria-label="Hiện mật khẩu"></i>
           </label>
           <label class="auth-field">
-            <i class="fas fa-shield-alt"></i>
+            <i class="bi bi-shield-check"></i>
             <input type="password" id="reg-confirm-password" placeholder="Nhập lại mật khẩu" autocomplete="new-password" required />
-            <i class="fas fa-eye password-toggle" id="toggleConfirmPassword" aria-label="Hiện mật khẩu"></i>
+            <i class="bi bi-eye password-toggle" id="toggleConfirmPassword" aria-label="Hiện mật khẩu"></i>
           </label>
           <div class="pw-meter">
             <div class="pw-strength-bar"><div class="pw-strength-fill" id="pwStrengthFill"></div></div>
@@ -398,22 +398,22 @@
             </div>
           </div>
           <div class="auth-btn-row">
-            <button type="button" class="auth-btn-secondary" id="btnBackStep2"><i class="fas fa-arrow-left"></i> Quay lại</button>
-            <button type="button" class="auth-btn-primary" id="btnNextStep2">Tiếp tục <i class="fas fa-arrow-right"></i></button>
+            <button type="button" class="auth-btn-secondary" id="btnBackStep2"><i class="bi bi-arrow-left"></i> Quay lại</button>
+            <button type="button" class="auth-btn-primary" id="btnNextStep2">Tiếp tục <i class="bi bi-arrow-right"></i></button>
           </div>
         </div>
 
         <!-- BƯỚC 3: XÁC THỰC OTP -->
         <div class="reg-step-container" id="regStep3">
           <div class="otp-tabs" role="tablist">
-            <button type="button" class="otp-tab active" id="tabEmailOtp"><i class="fas fa-envelope"></i> Email OTP</button>
-            <button type="button" class="otp-tab" id="tabPhoneOtp" disabled title="Xác thực số điện thoại sẽ được triển khai sau"><i class="fas fa-mobile-screen"></i> SMS (SĐT)</button>
+            <button type="button" class="otp-tab active" id="tabEmailOtp"><i class="bi bi-envelope"></i> Email OTP</button>
+            <button type="button" class="otp-tab" id="tabPhoneOtp" disabled title="Xác thực số điện thoại sẽ được triển khai sau"><i class="bi bi-phone"></i> SMS (SĐT)</button>
           </div>
           <div class="step-info-box" id="otpTargetBox">
             Mã OTP sẽ được gửi đến email:<br><strong id="otpTargetDisplay">...</strong>
           </div>
           <div class="otp-action-row">
-            <button type="button" class="btn-send-otp" id="btnSendOtp"><i class="fas fa-paper-plane"></i> Gửi mã OTP</button>
+            <button type="button" class="btn-send-otp" id="btnSendOtp"><i class="bi bi-send"></i> Gửi mã OTP</button>
             <span class="otp-countdown" id="otpCountdown" style="display:none"></span>
           </div>
           <div class="otp-inputs" id="otpInputsGroup">
@@ -427,8 +427,8 @@
           <!-- Container reCAPTCHA cho Firebase Phone Auth -->
           <div id="recaptcha-container"></div>
           <div class="auth-btn-row">
-            <button type="button" class="auth-btn-secondary" id="btnBackStep3"><i class="fas fa-arrow-left"></i> Quay lại</button>
-            <button type="submit" class="auth-btn-primary" id="registerSubmitBtn"><i class="fas fa-check-circle"></i> Hoàn tất</button>
+            <button type="button" class="auth-btn-secondary" id="btnBackStep3"><i class="bi bi-arrow-left"></i> Quay lại</button>
+            <button type="submit" class="auth-btn-primary" id="registerSubmitBtn"><i class="bi bi-check-circle"></i> Hoàn tất</button>
           </div>
         </div>
       </form>
@@ -437,7 +437,7 @@
       <div id="registerAuxSection">
         <div class="auth-divider" id="registerDivider">hoặc đăng ký với</div>
         <div class="google-slot" id="googleRegisterButton">
-          <button class="google-fallback" type="button" id="googleRegisterFallback"><i class="fab fa-google"></i>Đăng ký bằng Google</button>
+          <button class="google-fallback" type="button" id="googleRegisterFallback"><i class="bi bi-google"></i>Đăng ký bằng Google</button>
         </div>
       </div>
       <p class="auth-switch">Đã có tài khoản? <button type="button" data-flip="login">Đăng nhập</button></p>
@@ -527,7 +527,8 @@
     icon.addEventListener('click', () => {
       const vis = inp.type === 'text';
       inp.type = vis ? 'password' : 'text';
-      icon.classList.toggle('fa-eye-slash', !vis);
+      icon.classList.toggle('bi-eye-slash', !vis);
+      icon.classList.toggle('bi-eye', vis);
     });
   };
   setPwToggle('login-password', 'toggleLoginPassword');
@@ -607,8 +608,8 @@
       goToRegStep(2);
       byId('reg-password').focus();
     } finally {
-      setLoading(btn, false, 'Tiếp tục <i class="fas fa-arrow-right" style="margin-left:6px;"></i>');
-      btn.innerHTML = 'Tiếp tục <i class="fas fa-arrow-right" style="margin-left:6px;"></i>';
+      setLoading(btn, false, 'Tiếp tục <i class="bi bi-arrow-right" style="margin-left:6px;"></i>');
+      btn.innerHTML = 'Tiếp tục <i class="bi bi-arrow-right" style="margin-left:6px;"></i>';
     }
   });
 
@@ -717,7 +718,7 @@
       if (remain <= 0) {
         clearInterval(otpTimerInterval);
         btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-rotate-right"></i> Gửi lại mã OTP';
+        btn.innerHTML = '<i class="bi bi-arrow-clockwise"></i> Gửi lại mã OTP';
         cd.style.display = 'none';
       } else {
         cd.textContent = `Gửi lại sau (${remain}s)`;
@@ -734,7 +735,7 @@
 
     if (currentOtpChannel === 'email') {
       btn.disabled = true;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi...';
+      btn.innerHTML = '<i class="bi bi-arrow-repeat bi-spin"></i> Đang gửi...';
       try {
         const r = await fetch('/api/otp/send-email', {
           method: 'POST',
@@ -766,7 +767,7 @@
       if (window.FIREBASE_CONFIG && window.FIREBASE_CONFIG.apiKey && window.firebase) {
         try {
           btn.disabled = true;
-          btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Kết nối Firebase...';
+          btn.innerHTML = '<i class="bi bi-arrow-repeat bi-spin"></i> Kết nối Firebase...';
 
           if (!firebase.apps.length) {
             firebase.initializeApp(window.FIREBASE_CONFIG);
@@ -808,7 +809,7 @@
             try { window.recaptchaVerifier.clear(); window.recaptchaVerifier = null; } catch(_) {}
           }
           btn.disabled = false;
-          btn.innerHTML = '<i class="fas fa-paper-plane"></i> Thử lại';
+          btn.innerHTML = '<i class="bi bi-send"></i> Thử lại';
         }
       } else {
         showMsg('Chưa tìm thấy cấu hình Firebase trong `User/Frontend/js/firebase-config.js`.', 'info');
@@ -941,7 +942,7 @@
       showMsg(err.message || 'Không thể tạo tài khoản.');
     } finally {
       setLoading(btn, false, 'Hoàn tất');
-      btn.innerHTML = '<i class="fas fa-check-circle"></i> Hoàn tất';
+      btn.innerHTML = '<i class="bi bi-check-circle"></i> Hoàn tất';
     }
   });
 
@@ -970,7 +971,7 @@
 
       byId('googleProfileNote').classList.add('show');
       byId('registerAuxSection').style.display = 'none';
-      byId('btnNextStep1').innerHTML = '<i class="fab fa-google"></i> Hoàn tất đăng ký bằng Google';
+      byId('btnNextStep1').innerHTML = '<i class="bi bi-google"></i> Hoàn tất đăng ký bằng Google';
     } catch (err) {
       showMsg(err.message || 'Không thể xác thực Google.');
     }

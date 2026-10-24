@@ -28,7 +28,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 15px;
-  border-bottom: 1px dashed #333;
+  border-bottom: 1px dashed var(--lt-border, #333);
   padding-bottom: 10px;
 }
 
@@ -56,7 +56,7 @@
   display: flex;
   justify-content: space-between;
   padding: 8px 0;
-  border-bottom: 1px solid #222;
+  border-bottom: 1px solid var(--lt-border, #222);
   font-size: 0.9rem;
 }
 
@@ -74,7 +74,7 @@
 
 /* Vùng Kéo & Thả File Upload */
 .upload-zone {
-  border: 2px dashed #444;
+  border: 2px dashed var(--lt-border, #444);
   border-radius: 8px;
   padding: 30px 20px;
   text-align: center;
@@ -127,7 +127,7 @@
 /* Tiến trình khôi phục */
 .restore-progress-container {
   margin-top: 20px;
-  background: #111;
+  background: var(--lt-surface, #111);
   border: 1px solid var(--color-border);
   border-radius: 6px;
   padding: 15px;
@@ -143,7 +143,7 @@
 }
 
 .progress-bar-bg {
-  background: #222;
+  background: var(--lt-surface, #222);
   height: 10px;
   border-radius: 5px;
   overflow: hidden;
@@ -161,8 +161,8 @@
 
 .progress-status-log {
   margin-top: 12px;
-  background: #050505;
-  border: 1px solid #222;
+  background: var(--lt-canvas, #050505);
+  border: 1px solid var(--lt-border, #222);
   border-radius: 4px;
   padding: 8px 12px;
   max-height: 100px;
@@ -242,14 +242,6 @@
 
 @keyframes spin {
   to { transform: rotate(360deg); }
-}
-
-.status-badge {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 600;
 }
 
 .status-badge-success {

@@ -1,3 +1,33 @@
+// Tùy chọn giao diện của từng trình duyệt: chế độ sáng/tối và ghim thanh menu trái.
+// Chạy đồng bộ trong <head> để trang không nháy sai giao diện khi tải.
+const JAVI_THEME_KEY = "javiAdminTheme";
+const JAVI_SIDEBAR_PIN_KEY = "javiSidebarPinned";
+const javiPinMedia = window.matchMedia("(min-width: 901px)");
+function applyJaviTheme(theme) {
+  document.documentElement.dataset.theme = theme === "light" ? "light" : "dark";
+  document.querySelectorAll(".theme-toggle").forEach(syncThemeToggle);
+}
+function syncThemeToggle(button) {
+  const light = document.documentElement.dataset.theme === "light";
+  button.setAttribute("aria-pressed", String(light));
+  button.title = light ? "Chuyển sang giao diện tối" : "Chuyển sang giao diện sáng";
+  button.setAttribute("aria-label", button.title);
+  button.innerHTML = `<i class="bi ${light ? "bi-moon-stars" : "bi-sun"}" aria-hidden="true"></i>`;
+}
+function applySidebarPin() {
+  const pinned = localStorage.getItem(JAVI_SIDEBAR_PIN_KEY) === "1";
+  document.documentElement.classList.toggle("sidebar-pinned", pinned && javiPinMedia.matches);
+  document.querySelectorAll(".sidebar-pin").forEach((button) => {
+    button.setAttribute("aria-pressed", String(pinned));
+    button.title = pinned ? "Bỏ ghim thanh menu" : "Ghim thanh menu";
+    button.setAttribute("aria-label", button.title);
+    button.innerHTML = `<i class="bi ${pinned ? "bi-pin-angle-fill" : "bi-pin-angle"}" aria-hidden="true"></i>`;
+  });
+}
+applyJaviTheme(localStorage.getItem(JAVI_THEME_KEY));
+applySidebarPin();
+javiPinMedia.addEventListener("change", applySidebarPin);
+
 // Tự động đính kèm token xác thực vào mọi lời gọi API của hệ thống.
 (function installAuthenticatedFetch() {
   const nativeFetch = window.fetch.bind(window);
@@ -58,23 +88,14 @@
 })();
 
 // =========================================================================
-// Nạp Font Awesome cho các màn hình cũ và Remix Icon cho hệ thống điều hướng mới.
+// Nạp bộ Bootstrap Icons nội bộ dùng chung cho toàn bộ màn hình quản trị.
 // =========================================================================
-(function ensureIconFonts() {
-  const oldIconLink=document.querySelector('link[href*="font-awesome"],link[href*="fontawesome/css/"]');
-  if(oldIconLink)oldIconLink.href="/vendor/fontawesome/css/all.min.css";
-  if (!oldIconLink) {
-    const faLink = document.createElement("link");
-    faLink.rel = "stylesheet";
-    faLink.href = "/vendor/fontawesome/css/all.min.css";
-    document.head.appendChild(faLink);
-  }
-  if (!document.querySelector('link[href*="remixicon"]')) {
-    const riLink = document.createElement("link");
-    riLink.rel = "stylesheet";
-    riLink.href = "/vendor/remixicon/remixicon.css";
-    document.head.appendChild(riLink);
-  }
+(function ensureIconFont() {
+  if (document.querySelector('link[href*="bootstrap-icons"]')) return;
+  const link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.href = "/vendor/bootstrap-icons/bootstrap-icons.min.css";
+  document.head.appendChild(link);
 })();
 
 // =========================================================================
@@ -213,10 +234,10 @@ window.showToast = function (message, type = "info", duration = 4000) {
     }
 
     const icons = {
-      success: '<i class="fas fa-check-circle"></i>',
-      error: '<i class="fas fa-times-circle"></i>',
-      warning: '<i class="fas fa-exclamation-triangle"></i>',
-      info: '<i class="fas fa-bell"></i>',
+      success: '<i class="bi bi-check-circle"></i>',
+      error: '<i class="bi bi-x-circle"></i>',
+      warning: '<i class="bi bi-exclamation-triangle"></i>',
+      info: '<i class="bi bi-bell"></i>',
     };
 
     const titles = {
@@ -562,7 +583,7 @@ function injectRightDrawerStyles() {
     body.javi-modal-open .sidebar,
     body.javi-modal-open .sidebar:hover,
     body.javi-modal-open .sidebar:has(:focus-visible) {
-      width: var(--sidebar-collapsed-w, 76px) !important;
+      width: var(--sidebar-rail-w, var(--sidebar-collapsed-w, 76px)) !important;
       pointer-events: none !important;
       opacity: .35 !important;
       filter: grayscale(.8) !important;
@@ -573,7 +594,7 @@ function injectRightDrawerStyles() {
       content: "";
       position: fixed;
       inset: 0 auto 0 0;
-      width: var(--sidebar-collapsed-w, 76px);
+      width: var(--sidebar-rail-w, var(--sidebar-collapsed-w, 76px));
       z-index: 1999;
       background: rgba(3, 5, 8, .5);
       backdrop-filter: blur(2px);
@@ -631,7 +652,7 @@ function injectRightDrawerStyles() {
     }
     .modal-overlay:not(#javiAlertModal):not(#javiConfirmModal):not(#profileModal):has(form) .form-group label {
       margin-bottom: 6px !important;
-      color: #cbd3de !important;
+      color: var(--ui-text-soft, #cbd3de) !important;
       font-size: 12px !important;
       font-weight: 650 !important;
     }
@@ -651,7 +672,7 @@ function injectRightDrawerStyles() {
     }
     .modal-overlay:not(#javiAlertModal):not(#javiConfirmModal):not(#profileModal) > .modal-content > .modal-header h3 {
       margin: 0 !important;
-      color: #f1f4f7 !important;
+      color: var(--ui-text, #f1f4f7) !important;
       font-size: 16px !important;
       line-height: 1.4 !important;
       min-width: 0;
@@ -725,9 +746,9 @@ function injectRightDrawerStyles() {
     .modal-overlay:not(#javiAlertModal):not(#javiConfirmModal):not(#profileModal):has(form) textarea {
       min-height: 42px !important;
       border-radius: 9px !important;
-      background: #0d1014 !important;
-      border-color: #34404d !important;
-      color: #edf1f5 !important;
+      background: var(--ui-input, #0d1014) !important;
+      border-color: var(--ui-border-strong, #34404d) !important;
+      color: var(--ui-text, #edf1f5) !important;
     }
     .modal-overlay:not(#javiAlertModal):not(#javiConfirmModal):not(#profileModal):has(form) textarea {
       min-height: 88px !important;
@@ -893,7 +914,7 @@ function renderGlobalSidebar() {
     "phieu-chi.html",
   ].includes(currentPage);
 
-  // Sidebar dùng Remix Icon để có nét đồng nhất và dễ nhận diện ở kích thước nhỏ.
+  // Sidebar dùng chung bộ Bootstrap Icons với toàn bộ quản trị.
   sidebar.innerHTML = `
     <div class="sidebar-brand">
       <a href="dashboard.html" title="JAVI COFFEE">
@@ -901,111 +922,120 @@ function renderGlobalSidebar() {
         <span class="sidebar-brand-symbol" aria-hidden="true"></span>
         <span class="sidebar-brand-name">JAVI COFFEE</span>
       </a>
+      <button type="button" class="sidebar-pin"></button>
     </div>
     <ul class="sidebar-menu">
       <li>
         <a href="dashboard.html" data-menu="Trang Chủ" class="${currentPage === "dashboard.html" ? "active" : ""}" title="Trang Chủ">
-           <i class="ri-home-4-line"></i>
+           <i class="bi bi-house"></i>
           <span class="menu-text">Trang Chủ</span>
         </a>
       </li>
       
       <li>
         <a href="don-hang.html" data-menu="Bán Hàng" class="${currentPage === "don-hang.html" ? "active" : ""}" title="Bán Hàng">
-           <i class="ri-shopping-cart-2-line"></i>
+           <i class="bi bi-cart3"></i>
           <span class="menu-text">Bán Hàng</span>
         </a>
       </li>
 
       <li>
         <a href="hoa-don.html" data-menu="Hóa Đơn" class="${currentPage === "hoa-don.html" ? "active" : ""}" title="Hóa Đơn">
-           <i class="ri-file-list-3-line"></i>
+           <i class="bi bi-journal-text"></i>
           <span class="menu-text">Hóa Đơn</span>
         </a>
       </li>
 
       <li>
         <a href="cong-no.html" data-menu="Công Nợ" class="${currentPage === "cong-no.html" ? "active" : ""}" title="Công Nợ">
-           <i class="ri-exchange-dollar-line"></i>
+           <i class="bi bi-currency-exchange"></i>
           <span class="menu-text">Công Nợ</span>
         </a>
       </li>
 
       <li class="has-submenu ${isKhoActive ? "open" : ""}">
          <a href="#" data-menu="Quản Lý Kho" onclick="toggleSubmenu(this); return false;" class="${isKhoActive ? "active" : ""}" title="Quản Lý Kho" aria-expanded="${isKhoActive}">
-           <i class="ri-store-2-line"></i>
+           <i class="bi bi-shop"></i>
            <span class="menu-text">
              <span>Quản Lý Kho</span>
-             <i class="ri-arrow-down-s-line submenu-arrow"></i>
+             <i class="bi bi-chevron-down submenu-arrow"></i>
            </span>
          </a>
          <ul class="submenu">
-           <li><a href="nhap-kho.html" data-menu="Nhập Kho" class="${currentPage === "nhap-kho.html" ? "active" : ""}"><i class="ri-inbox-archive-line"></i><span>Nhập Kho</span></a></li>
-           <li><a href="xuat-kho.html" data-menu="Xuất Kho" class="${currentPage === "xuat-kho.html" ? "active" : ""}"><i class="ri-truck-line"></i><span>Xuất Kho</span></a></li>
-           <li><a href="ton-kho.html" data-menu="Tồn Kho" class="${currentPage === "ton-kho.html" ? "active" : ""}"><i class="ri-archive-stack-line"></i><span>Tồn Kho</span></a></li>
+           <li><a href="nhap-kho.html" data-menu="Nhập Kho" class="${currentPage === "nhap-kho.html" ? "active" : ""}"><i class="bi bi-box-arrow-in-down"></i><span>Nhập Kho</span></a></li>
+           <li><a href="xuat-kho.html" data-menu="Xuất Kho" class="${currentPage === "xuat-kho.html" ? "active" : ""}"><i class="bi bi-truck"></i><span>Xuất Kho</span></a></li>
+           <li><a href="ton-kho.html" data-menu="Tồn Kho" class="${currentPage === "ton-kho.html" ? "active" : ""}"><i class="bi bi-archive"></i><span>Tồn Kho</span></a></li>
         </ul>
       </li>
 
       <li class="has-submenu ${isThuChiActive ? "open" : ""}">
          <a href="#" data-menu="Quản Lý Thu - Chi" onclick="toggleSubmenu(this); return false;" class="${isThuChiActive ? "active" : ""}" title="Quản Lý Thu - Chi" aria-expanded="${isThuChiActive}">
-           <i class="ri-wallet-3-line"></i>
+           <i class="bi bi-wallet2"></i>
            <span class="menu-text">
              <span>Quản Lý Thu - Chi</span>
-             <i class="ri-arrow-down-s-line submenu-arrow"></i>
+             <i class="bi bi-chevron-down submenu-arrow"></i>
            </span>
          </a>
          <ul class="submenu">
-           <li><a href="phieu-thu.html" data-menu="Phiếu Thu" class="${currentPage === "phieu-thu.html" ? "active" : ""}"><i class="ri-receipt-line"></i><span>Phiếu Thu</span></a></li>
-           <li><a href="phieu-chi.html" data-menu="Phiếu Chi" class="${currentPage === "phieu-chi.html" ? "active" : ""}"><i class="ri-hand-coin-line"></i><span>Phiếu Chi</span></a></li>
+           <li><a href="phieu-thu.html" data-menu="Phiếu Thu" class="${currentPage === "phieu-thu.html" ? "active" : ""}"><i class="bi bi-receipt"></i><span>Phiếu Thu</span></a></li>
+           <li><a href="phieu-chi.html" data-menu="Phiếu Chi" class="${currentPage === "phieu-chi.html" ? "active" : ""}"><i class="bi bi-cash-coin"></i><span>Phiếu Chi</span></a></li>
         </ul>
       </li>
 
       <li>
         <a href="nhan-vien.html" data-menu="Quản Lý Người Dùng" class="${currentPage === "nhan-vien.html" ? "active" : ""}" title="Quản Lý Người Dùng">
-           <i class="ri-shield-user-line"></i>
+           <i class="bi bi-shield-lock"></i>
           <span class="menu-text">Người Dùng</span>
         </a>
       </li>
 
       <li class="has-submenu ${isDanhSachActive ? "open" : ""}">
          <a href="#" data-menu="Danh Mục" onclick="toggleSubmenu(this); return false;" class="${isDanhSachActive ? "active" : ""}" title="Danh Mục" aria-expanded="${isDanhSachActive}">
-           <i class="ri-layout-grid-line"></i>
+           <i class="bi bi-grid"></i>
            <span class="menu-text">
              <span>Danh Mục</span>
-             <i class="ri-arrow-down-s-line submenu-arrow"></i>
+             <i class="bi bi-chevron-down submenu-arrow"></i>
            </span>
          </a>
          <ul class="submenu">
-           <li><a href="khach-hang.html" data-menu="Khách Hàng" class="${currentPage === "khach-hang.html" ? "active" : ""}"><i class="ri-user-star-line"></i><span>Khách Hàng</span></a></li>
-           <li><a href="loai-kh.html" data-menu="Loại Khách Hàng" class="${currentPage === "loai-kh.html" ? "active" : ""}"><i class="ri-vip-crown-line"></i><span>Loại Khách Hàng</span></a></li>
-           <li><a href="nha-cung-cap.html" data-menu="Nhà Cung Cấp" class="${currentPage === "nha-cung-cap.html" ? "active" : ""}"><i class="ri-building-2-line"></i><span>Nhà Cung Cấp</span></a></li>
-           <li><a href="san-pham.html" data-menu="Sản Phẩm" class="${currentPage === "san-pham.html" ? "active" : ""}"><i class="ri-cup-line"></i><span>Sản Phẩm</span></a></li>
-           <li><a href="loai-sp.html" data-menu="Loại Sản Phẩm" class="${currentPage === "loai-sp.html" ? "active" : ""}"><i class="ri-price-tag-3-line"></i><span>Loại Sản Phẩm</span></a></li>
-           <li><a href="trong-luong.html" data-menu="Trọng Lượng" class="${currentPage === 'trong-luong.html' ? 'active' : ''}"><i class="ri-scales-3-line"></i><span>Trọng lượng</span></a></li>
-           <li><a href="loai-xay.html" data-menu="Loại Xay" class="${currentPage === 'loai-xay.html' ? 'active' : ''}"><i class="ri-settings-3-line"></i><span>Loại xay</span></a></li>
-<li><a href="ma-giam-gia.html" data-menu="Mã Giảm Giá" class="${currentPage === 'ma-giam-gia.html' ? 'active' : ''}"><i class="ri-coupon-3-line"></i><span>Mã Giảm Giá</span></a></li>
-<li><a href="dia-diem-van-chuyen.html" data-menu="Danh Mục Địa Điểm" class="${currentPage === 'dia-diem-van-chuyen.html' ? 'active' : ''}"><i class="ri-map-pin-line"></i><span>Danh Mục Địa Điểm</span></a></li>
+           <li><a href="khach-hang.html" data-menu="Khách Hàng" class="${currentPage === "khach-hang.html" ? "active" : ""}"><i class="bi bi-person-badge"></i><span>Khách Hàng</span></a></li>
+           <li><a href="loai-kh.html" data-menu="Loại Khách Hàng" class="${currentPage === "loai-kh.html" ? "active" : ""}"><i class="bi bi-award"></i><span>Loại Khách Hàng</span></a></li>
+           <li><a href="nha-cung-cap.html" data-menu="Nhà Cung Cấp" class="${currentPage === "nha-cung-cap.html" ? "active" : ""}"><i class="bi bi-buildings"></i><span>Nhà Cung Cấp</span></a></li>
+           <li><a href="san-pham.html" data-menu="Sản Phẩm" class="${currentPage === "san-pham.html" ? "active" : ""}"><i class="bi bi-cup-hot"></i><span>Sản Phẩm</span></a></li>
+           <li><a href="loai-sp.html" data-menu="Loại Sản Phẩm" class="${currentPage === "loai-sp.html" ? "active" : ""}"><i class="bi bi-tag"></i><span>Loại Sản Phẩm</span></a></li>
+           <li><a href="trong-luong.html" data-menu="Trọng Lượng" class="${currentPage === 'trong-luong.html' ? 'active' : ''}"><i class="bi bi-speedometer"></i><span>Trọng lượng</span></a></li>
+           <li><a href="loai-xay.html" data-menu="Loại Xay" class="${currentPage === 'loai-xay.html' ? 'active' : ''}"><i class="bi bi-gear"></i><span>Loại xay</span></a></li>
+<li><a href="ma-giam-gia.html" data-menu="Mã Giảm Giá" class="${currentPage === 'ma-giam-gia.html' ? 'active' : ''}"><i class="bi bi-ticket-perforated"></i><span>Mã Giảm Giá</span></a></li>
+<li><a href="dia-diem-van-chuyen.html" data-menu="Danh Mục Địa Điểm" class="${currentPage === 'dia-diem-van-chuyen.html' ? 'active' : ''}"><i class="bi bi-geo-alt"></i><span>Danh Mục Địa Điểm</span></a></li>
         </ul>
       </li>
 
       <li>
         <a href="cau-hinh-website.html" data-menu="Cấu Hình Website" class="${currentPage === 'cau-hinh-website.html' ? 'active' : ''}" title="Cấu Hình Website">
-          <i class="ri-global-line"></i><span class="menu-text">Cấu Hình Website</span>
+          <i class="bi bi-globe2"></i><span class="menu-text">Cấu Hình Website</span>
         </a>
       </li>
 
 
       <li>
         <a href="quan-tri.html" data-menu="Quản Trị Hệ Thống" class="${currentPage === "quan-tri.html" ? "active" : ""}" title="Quản Trị Hệ Thống">
-           <i class="ri-settings-4-line"></i>
+           <i class="bi bi-sliders"></i>
           <span class="menu-text">Hệ Thống</span>
         </a>
       </li>
     </ul>
   `;
 
-  // Tự động đóng thanh menu và các phân hệ con khi di chuyển chuột rời khỏi menu
+  applySidebarPin();
+  sidebar.querySelector(".sidebar-pin").addEventListener("click", () => {
+    const pinned = localStorage.getItem(JAVI_SIDEBAR_PIN_KEY) === "1";
+    localStorage.setItem(JAVI_SIDEBAR_PIN_KEY, pinned ? "0" : "1");
+    applySidebarPin();
+  });
+
+  // Tự động đóng thanh menu và các phân hệ con khi di chuyển chuột rời khỏi menu (trừ khi đang ghim)
   sidebar.addEventListener("mouseleave", () => {
+    if (document.documentElement.classList.contains("sidebar-pinned")) return;
     if (sidebar.contains(document.activeElement)) {
       document.activeElement.blur();
     }
@@ -1024,6 +1054,135 @@ function renderGlobalSidebar() {
   });
 }
 
+// Vùng đầu trang danh sách: header (tiêu đề + người dùng) → card thống kê (ẩn, bật bằng icon Dashboard) →
+// hàng nút thao tác (Thêm, Nhập file, Xuất file, Dashboard) → thanh tìm kiếm + bộ lọc + Xem kéo dài hết chiều ngang.
+const normalizeGridSearch = (value) => String(value ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[đĐ]/g, "d").toLowerCase().replace(/\s+/g, " ").trim();
+
+window.applyGridSearch = function (table) {
+  if (table.dataset.gridSearch !== "true") return;
+  const term = normalizeGridSearch(document.querySelector(".grid-search input")?.value);
+  table.querySelectorAll("tbody tr").forEach((row) => {
+    if (row.cells.length <= 1) return;
+    const text = [...row.cells].filter((cell) => !cell.classList.contains("javi-action-column")).map((cell) => cell.textContent).join(" ");
+    row.classList.toggle("grid-search-hidden", Boolean(term) && !normalizeGridSearch(text).includes(term));
+  });
+  if (window.updatePagination) updatePagination(table);
+};
+
+function makeFilterResizable(field, key, widths) {
+  const MIN = 96, MAX = 560;
+  field.classList.add("filter-resizable");
+  const handle = document.createElement("span");
+  handle.className = "filter-resizer";
+  handle.tabIndex = 0;
+  handle.setAttribute("role", "separator");
+  handle.setAttribute("aria-orientation", "vertical");
+  const name = (field.querySelector("input, select, summary")?.getAttribute("aria-label") || field.textContent || "bộ lọc").trim().split("\n")[0].slice(0, 40);
+  handle.setAttribute("aria-label", `Điều chỉnh độ rộng ${name}`);
+  handle.title = "Kéo để đổi độ rộng, nhấp đúp để về mặc định";
+  const apply = (width, save) => {
+    if (width == null) { field.style.removeProperty("width"); delete widths[key]; }
+    else { width = Math.round(Math.min(MAX, Math.max(MIN, width))); field.style.setProperty("width", `${width}px`, "important"); widths[key] = width; }
+    handle.setAttribute("aria-valuenow", String(Math.round(field.getBoundingClientRect().width)));
+    if (save) localStorage.setItem(`javiFilterWidths:${location.pathname}`, JSON.stringify(widths));
+  };
+  if (widths[key]) apply(widths[key], false);
+  handle.addEventListener("pointerdown", (event) => {
+    event.preventDefault(); event.stopPropagation();
+    const startX = event.clientX, startWidth = field.getBoundingClientRect().width;
+    handle.setPointerCapture(event.pointerId);
+    field.classList.add("is-resizing");
+    const move = (e) => apply(startWidth + e.clientX - startX, false);
+    const end = () => {
+      handle.removeEventListener("pointermove", move);
+      field.classList.remove("is-resizing");
+      apply(field.getBoundingClientRect().width, true);
+    };
+    handle.addEventListener("pointermove", move);
+    handle.addEventListener("pointerup", end, { once: true });
+    handle.addEventListener("pointercancel", end, { once: true });
+  });
+  handle.addEventListener("click", (event) => { event.preventDefault(); event.stopPropagation(); });
+  handle.addEventListener("dblclick", (event) => { event.preventDefault(); apply(null, true); });
+  handle.addEventListener("keydown", (event) => {
+    const step = event.key === "ArrowRight" ? 16 : event.key === "ArrowLeft" ? -16 : 0;
+    if (!step) return;
+    event.preventDefault();
+    apply(field.getBoundingClientRect().width + step, true);
+  });
+  field.append(handle);
+}
+
+function buildListToolbar(header) {
+  const main = header.parentElement;
+  if (!main?.matches(".main-content:not(.overview-shell)") || main.querySelector(":scope > .page-header") !== header) return;
+  const actions = [...header.children].filter((el) => !el.matches("h2, .user-profile"));
+  const cards = [...main.querySelectorAll(":scope > .stat-cards")];
+  const filterBlocks = [...main.querySelectorAll(":scope > :is(.report-filters, .filter-bar, .directory-toolbar)")];
+  const ownSearch = filterBlocks.some((block) => block.querySelector("input[type=text], input[type=search], input:not([type])"));
+  const grids = ownSearch ? [] : [...main.querySelectorAll(".table-responsive table")].filter((table) =>
+    !table.matches(".no-filter") && !table.closest(".modal-overlay, .modal, .drawer, dialog") &&
+    !table.closest(".web-tab-panel")?.querySelector(".directory-toolbar input:not([type=hidden])"));
+  if (!actions.length && !cards.length && !filterBlocks.length && !grids.length) return;
+
+  const toolbar = document.createElement("div");
+  toolbar.className = "list-toolbar";
+  const filters = document.createElement("div");
+  filters.className = "list-filters";
+  const actionRow = document.createElement("div");
+  actionRow.className = "page-actions";
+  actionRow.append(...actions);
+
+  if (grids.length) {
+    const search = document.createElement("div");
+    search.className = "grid-search";
+    search.innerHTML = '<i class="bi bi-search" aria-hidden="true"></i><input type="search" placeholder="Tìm kiếm trong danh sách" aria-label="Tìm kiếm trong danh sách" autocomplete="off">';
+    grids.forEach((table) => { table.dataset.gridSearch = "true"; });
+    search.querySelector("input").addEventListener("input", () => grids.forEach((table) => { table.dataset.currentPage = "1"; applyGridSearch(table); }));
+    filters.append(search);
+  }
+  filters.append(...filterBlocks);
+
+  if (cards.length) {
+    cards.forEach((card, index) => {
+      if (!card.id) card.id = `pageStatCards${index ? index + 1 : ""}`;
+      card.classList.add("is-collapsed");
+    });
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "btn dashboard-toggle";
+    toggle.innerHTML = '<i class="bi bi-speedometer2" aria-hidden="true"></i>';
+    toggle.title = "Dashboard";
+    toggle.setAttribute("aria-label", "Dashboard thống kê");
+    toggle.setAttribute("aria-controls", cards.map((card) => card.id).join(" "));
+    toggle.setAttribute("aria-pressed", "false");
+    toggle.addEventListener("click", () => {
+      const show = toggle.getAttribute("aria-pressed") !== "true";
+      toggle.setAttribute("aria-pressed", String(show));
+      cards.forEach((card) => card.classList.toggle("is-collapsed", !show));
+    });
+    const exportControl = actionRow.querySelector(".grid-file-menu");
+    if (exportControl) exportControl.after(toggle); else actionRow.append(toggle);
+  }
+
+  if (actionRow.childElementCount) toolbar.append(actionRow);
+  if (filters.childElementCount) toolbar.append(filters);
+  (cards.at(-1) || header).after(toolbar);
+
+  const widths = JSON.parse(localStorage.getItem(`javiFilterWidths:${location.pathname}`) || "{}");
+  const fields = [];
+  for (const node of filters.querySelectorAll(":scope > .grid-search, :scope > :not(.grid-search) > :is(label, .filter-field, .search-box, input, select)")) {
+    let field = node;
+    if (node.matches("input, select")) {
+      field = document.createElement("div");
+      node.before(field);
+      field.append(node);
+    }
+    fields.push(field);
+  }
+  fields.forEach((field, index) => makeFilterResizable(field, field.querySelector("[id]")?.id || `field${index}`, widths));
+}
+
 function injectUserProfile(user) {
   const escapeHTML = (value) =>
     String(value ?? "")
@@ -1038,17 +1197,18 @@ function injectUserProfile(user) {
   const profileHTML = `
         <div class="user-profile">
           <div class="header-date-time" aria-label="Ngày giờ hiện tại"><span id="javiHeaderDate"></span><strong id="javiHeaderTime"></strong></div>
+          <button type="button" class="theme-toggle"></button>
           <div class="user-info" onclick="toggleUserDropdown()" role="button" tabindex="0" aria-label="Mở menu tài khoản">
             <div class="user-avatar">${initial}</div>
             <div class="user-copy">
               <span class="user-name">${fullName}</span>
               <span class="user-role">${jobTitle}</span>
             </div>
-            <i class="ri-arrow-down-s-line user-dropdown-arrow"></i>
+            <i class="bi bi-chevron-down user-dropdown-arrow"></i>
           </div>
           <div class="user-dropdown" id="userDropdown">
-            <a href="#" onclick="openProfileModal(); return false;"><i class="ri-user-3-line"></i><span>Hồ sơ cá nhân</span></a>
-            <a href="#" onclick="handleLogout(); return false;" class="text-danger"><i class="ri-logout-box-r-line"></i><span>Đăng xuất</span></a>
+            <a href="#" onclick="openProfileModal(); return false;"><i class="bi bi-person"></i><span>Hồ sơ cá nhân</span></a>
+            <a href="#" onclick="handleLogout(); return false;" class="text-danger"><i class="bi bi-box-arrow-right"></i><span>Đăng xuất</span></a>
           </div>
         </div>
     `;
@@ -1071,7 +1231,16 @@ function injectUserProfile(user) {
     header.style.display = "flex";
     header.style.alignItems = "center";
     header.insertAdjacentHTML("beforeend", profileHTML);
+    buildListToolbar(header);
   }
+  document.querySelectorAll(".user-profile .theme-toggle").forEach((button) => {
+    syncThemeToggle(button);
+    button.addEventListener("click", () => {
+      const next = document.documentElement.dataset.theme === "light" ? "dark" : "light";
+      localStorage.setItem(JAVI_THEME_KEY, next);
+      applyJaviTheme(next);
+    });
+  });
 
   const updateHeaderClock = () => {
     const now = new Date();
@@ -1087,7 +1256,7 @@ function injectUserProfile(user) {
   const modalHTML = `
     <div class="modal-overlay profile-modal" id="profileModal">
       <div class="profile-card" role="dialog" aria-modal="true" aria-labelledby="profileModalTitle">
-        <button class="profile-close" onclick="document.getElementById('profileModal').style.display = 'none'" aria-label="Đóng"><i class="ri-close-line"></i></button>
+        <button class="profile-close" onclick="document.getElementById('profileModal').style.display = 'none'" aria-label="Đóng"><i class="bi bi-x-lg"></i></button>
         <div class="profile-heading">
           <div class="profile-avatar">${initial}</div>
           <div>
@@ -1097,10 +1266,10 @@ function injectUserProfile(user) {
           </div>
         </div>
         <div class="profile-details">
-          <div class="profile-row"><i class="ri-id-card-line"></i><span>Mã nhân viên</span><strong>${escapeHTML(user.MaNV || "—")}</strong></div>
-          <div class="profile-row"><i class="ri-at-line"></i><span>Tài khoản</span><strong>${escapeHTML(user.TenDangNhap || "—")}</strong></div>
-          <div class="profile-row"><i class="ri-phone-line"></i><span>Số điện thoại</span><strong>${escapeHTML(user.SoDTNV || "Chưa cập nhật")}</strong></div>
-          <div class="profile-row"><i class="ri-mail-line"></i><span>Email</span><strong>${escapeHTML(user.EmailNV || "Chưa cập nhật")}</strong></div>
+          <div class="profile-row"><i class="bi bi-person-vcard"></i><span>Mã nhân viên</span><strong>${escapeHTML(user.MaNV || "—")}</strong></div>
+          <div class="profile-row"><i class="bi bi-at"></i><span>Tài khoản</span><strong>${escapeHTML(user.TenDangNhap || "—")}</strong></div>
+          <div class="profile-row"><i class="bi bi-telephone"></i><span>Số điện thoại</span><strong>${escapeHTML(user.SoDTNV || "Chưa cập nhật")}</strong></div>
+          <div class="profile-row"><i class="bi bi-envelope"></i><span>Email</span><strong>${escapeHTML(user.EmailNV || "Chưa cập nhật")}</strong></div>
         </div>
       </div>
     </div>`;
@@ -1112,7 +1281,7 @@ function injectGlobalModals() {
   const modalHTML = `
     <div class="modal-overlay" id="javiConfirmModal" style="display:none;justify-content:center;align-items:center;z-index:9999">
       <div class="modal-content javi-confirm-card" role="dialog" aria-modal="true" aria-labelledby="javiConfirmTitle" aria-describedby="javiConfirmMessage" tabindex="-1">
-        <div class="javi-confirm-emblem" aria-hidden="true"><i class="ri-question-line"></i></div>
+        <div class="javi-confirm-emblem" aria-hidden="true"><i class="bi bi-question-circle"></i></div>
         <span class="javi-confirm-eyebrow">JAVI COFFEE</span>
         <h3 id="javiConfirmTitle">Xác nhận thao tác</h3>
         <div id="javiConfirmMessage"></div>
@@ -1197,7 +1366,7 @@ document.addEventListener("dblclick", (event) => {
   const actions = Array.from(row.querySelectorAll("button, a"));
   const viewAction = actions.find((action) =>
     action.classList.contains("btn-view") ||
-    action.querySelector(".fa-eye") ||
+    action.querySelector(".bi-eye") ||
     /view(?:Detail|Invoice|CustomerInvoices)\s*\(/i.test(action.getAttribute("onclick") || ""),
   );
   if (viewAction) {
@@ -1656,7 +1825,7 @@ paginationCSS.textContent = `
   }
   .row-hidden-by-page { display: none !important; }
   .filter-hidden { display: none !important; }
-  .col-filter-hidden { display: none !important; }
+  .grid-search-hidden { display: none !important; }
   /* Nút lọc bo tròn viên thuốc (Pill shape) */
   .filter-section {
     display: flex !important;
@@ -1789,7 +1958,7 @@ window.formatTableStatusBadges = function (table) {
   const statusColumns = Array.from(headerRow.cells)
     .map((header, index) => ({
       index,
-      title: (header.querySelector(".col-header-label") || header).textContent.trim().toLowerCase(),
+      title: header.textContent.trim().toLowerCase(),
     }))
     .filter(({ title }) => title.includes("trạng thái") || title.includes("tình trạng"))
     .map(({ index }) => index);
@@ -1822,7 +1991,8 @@ window.formatTableStatusBadges = function (table) {
   });
 };
 
-window.setupColumnFilters = function (table) {
+// Lưới chuẩn: cố định cột thao tác và độ rộng cột; tìm kiếm nằm ở hàng công cụ phía trên.
+window.setupGridColumns = function (table) {
   if (!table || table.matches('.no-col-filter, .no-filter') || table.closest('.dashboard-cards, .tables-grid, .modal-overlay, .modal, .drawer')) return;
   const scrollport=table.closest('.table-responsive');if(scrollport&&!scrollport.hasAttribute('tabindex'))scrollport.tabIndex=0;
   if (window.setupRowReportFilters) setupRowReportFilters(table);
@@ -1832,64 +2002,14 @@ window.setupColumnFilters = function (table) {
   const rows = [...table.querySelectorAll('tbody tr')].filter(row => row.cells.length > 1);
   [...header.cells].forEach((th, index) => {
     if (th.style.display === 'none' || th.classList.contains('d-none')) return;
-    const title = (th.querySelector('.col-header-label') || th).textContent.trim();
-    const lower = title.toLowerCase();
-    if (th.dataset.gridAction === 'true' || /hành động|thao tác/.test(lower) || (index === header.cells.length - 1 && !title)) {
+    const title = th.textContent.trim();
+    if (th.dataset.gridAction === 'true' || /hành động|thao tác/.test(title.toLowerCase()) || (index === header.cells.length - 1 && !title)) {
       th.classList.add('javi-action-column');
       rows.forEach(row=>{if(row.cells[index])row.cells[index].classList.add('javi-action-column');});
-      th.textContent = th.dataset.gridAction === 'true' ? title : ''; th.setAttribute('aria-label', th.dataset.gridAction === 'true' ? title : 'Thao tác'); return;
-    }
-    const isDate = /ngày|thời gian/.test(lower);
-    const isMulti = /trạng thái|tình trạng|thanh toán|hình thức|giới tính|quyền|phân loại|nguồn đơn/.test(lower) && !isDate && !/mã|tiền/.test(lower);
-    let box = th.querySelector('.col-header-box');
-    if (!box) {
-      th.replaceChildren(); box = document.createElement('div'); box.className = 'col-header-box';
-      const label = document.createElement('div'); label.className = 'col-header-label'; label.textContent = title; label.title = title;
-      const wrapper = document.createElement('div'); wrapper.className = 'col-filter-wrapper';
-      box.append(label, wrapper); th.append(box);
-      if (isMulti) {
-        const control = document.createElement('details'); control.className = 'multi-filter col-multi-filter'; control.setAttribute('aria-label', `Lọc ${title}`);
-        const summary = document.createElement('summary'); summary.textContent = 'Tất cả';
-        const options = document.createElement('div'); options.className = 'multi-options';
-        control.append(summary, options); wrapper.append(control);
-      } else {
-        const input = document.createElement('input'); input.className = 'col-filter-input'; input.type = isDate ? 'date' : 'text';
-        input.placeholder = `Tìm ${title.toLowerCase()}`; input.setAttribute('aria-label', `Tìm theo ${title}`);
-        if (isDate) input.addEventListener('click', () => { try { input.showPicker?.(); } catch (_) {} });
-        input.addEventListener('input', () => { table.dataset.currentPage = '1'; applyColumnFilters(table); });
-        const icon = document.createElement('span'); icon.className = 'col-filter-icon'; icon.setAttribute('aria-hidden', 'true');
-        icon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg>';
-        wrapper.append(icon, input);
-        if (isDate && window.enhanceFilterDate) enhanceFilterDate(input);
-      }
-    }
-    const control = th.querySelector('.col-multi-filter');
-    if (control && window.reportMulti) {
-      const values = [...new Set(rows.map(row => row.cells[index]?.textContent.trim()).filter(Boolean))].sort();
-      reportMulti(control, values, () => { table.dataset.currentPage = '1'; applyColumnFilters(table); });
+      th.textContent = th.dataset.gridAction === 'true' ? title : ''; th.setAttribute('aria-label', th.dataset.gridAction === 'true' ? title : 'Thao tác');
     }
   });
   if (window.lockGridColumns) lockGridColumns(table);
-};
-window.applyColumnFilters = function (table) {
-  const filters = table.querySelectorAll('thead .col-filter-input, thead .col-multi-filter');
-  const normalize = value => String(value).normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g,'d').toLowerCase().replace(/\s+/g,' ').trim();
-  table.querySelectorAll('tbody tr').forEach(row => {
-    if (row.cells.length <= 1) return;
-    const show = [...filters].every(input => {
-      const cell = row.cells[input.closest('th').cellIndex];
-      if (!cell) return true;
-      if (input.classList.contains('col-multi-filter')) {
-        const values = selectedReportValues(input);
-        return !values.length || values.includes(cell.textContent.trim());
-      }
-      if (!input.value) return true;
-      if (input.type === 'date') return gridCalendarDay(cell.textContent) === input.value;
-      return normalize(cell.textContent).includes(normalize(input.value));
-    });
-    row.classList.toggle('col-filter-hidden', !show);
-  });
-  if (window.updatePagination) updatePagination(table);
 };
 
 // ==========================================================================
@@ -1907,7 +2027,7 @@ window.updatePagination = function (table) {
   const visibleRows = rows.filter(
     (r) =>
       !r.classList.contains("filter-hidden") &&
-      !r.classList.contains("col-filter-hidden") &&
+      !r.classList.contains("grid-search-hidden") &&
       r.style.display !== "none" &&
       r.cells.length > 1,
   );
@@ -2140,23 +2260,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const tbody = table.querySelector("tbody");
     if (!tbody) return;
 
-    // Khởi tạo các filter cột ngay nếu có thead
-    setupColumnFilters(table);
+    setupGridColumns(table);
 
     const observer = new MutationObserver(() => {
-      setupColumnFilters(table);
+      setupGridColumns(table);
       setupPagination(table);
       autoFormatTableCells(table);
-      applyColumnFilters(table);
+      applyGridSearch(table);
       updateStatusBadges(table);
     });
     observer.observe(tbody, { childList: true, subtree: true });
 
     setTimeout(() => {
-      setupColumnFilters(table);
+      setupGridColumns(table);
       setupPagination(table);
       autoFormatTableCells(table);
-      applyColumnFilters(table);
+      applyGridSearch(table);
       updateStatusBadges(table);
     }, 500);
   });

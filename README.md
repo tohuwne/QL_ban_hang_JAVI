@@ -22,6 +22,8 @@ npm start chạy cửa hàng tại http://localhost:3000 và đăng nhập nhân
 
 Hai server dùng chung SQL Server (DB_SERVER, DB_NAME). Đơn website lưu vào dữ liệu đơn quản trị; tải/làm mới danh sách để thấy đơn mới. Khách xem cửa hàng không cần đăng nhập; giỏ hàng và thanh toán giữ cơ chế tài khoản hiện có.
 
+Dùng SQL Server LocalDB thay cho SQL Server Express: đặt `DB_SERVER=(localdb)\TenInstance` trong `.env` (cần ODBC Driver 17 for SQL Server). Tạo instance bằng `SqlLocalDB create TenInstance -s`, tạo database `BH_WEB2` rồi chạy `database.sql` vào đó.
+
 ## Cấu hình cà phê và tạo lại dữ liệu mẫu
 
 Chạy trực tiếp toàn bộ `database.sql` trong database đích bằng SSMS. File chứa CREATE TABLE và INSERT mẫu mới, xóa/tạo lại bảng; không có bước gộp hoặc migration. Bộ mẫu gồm bốn cà phê, giá và tồn cơ sở 100g, ba loại xay và bốn trọng lượng.

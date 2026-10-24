@@ -19,33 +19,24 @@ const product={MaSP:'SP001',TenSP:'Cà phê kiểm thử',DonViTinh:'Gói',SoLuo
   const table=page.locator('.main-content .table-responsive table').first();
   const widths=()=>table.locator('thead tr').first().locator('th').evaluateAll(cells=>cells.map(cell=>cell.getBoundingClientRect().width));
   const initial=await widths();
-  const inputs=table.locator('thead .col-filter-input');assert.equal(await table.locator('thead .col-filter-icon svg').count(),await inputs.count());
-  for(const el of await inputs.all())assert.notEqual(await el.evaluate(input=>getComputedStyle(input).backgroundColor),'rgba(0, 0, 0, 0)');
-  const text=table.locator('thead input[type=text]').first();
-  await text.fill('no-match-for-grid');assert.deepEqual(await widths(),initial);await text.fill('');assert.deepEqual(await widths(),initial);
-  const column=table.locator('thead .col-multi-filter').first();
-  if(await column.count()){
-   const options=column.locator('[role=option]:not([data-value=""])');
-   if(await options.count()>1){
-    await column.locator('summary').click();await options.nth(0).click();
-    assert.equal(await column.getAttribute('open'),null);
-    await column.locator('summary').click();await options.nth(1).click();
-    assert.equal(await column.locator('[role=option][aria-selected=true]:not([data-value=""])').count(),1);
-    assert.equal(await options.nth(0).getAttribute('aria-selected'),'false');
-    assert.deepEqual(await widths(),initial);
-    await column.locator('summary .filter-clear').hover();await column.locator('summary .filter-clear').click();assert.deepEqual(await widths(),initial);
-   }
+  assert.equal(await table.locator('thead input, thead details, thead select').count(),0,'no per-column quick filters');
+  const search=page.locator('.list-toolbar .grid-search input');
+  if(await search.count()){
+   await search.fill('no-match-for-grid');assert.equal(await table.locator('tbody tr:not(.grid-search-hidden):not(.filter-hidden)').count(),0);assert.deepEqual(await widths(),initial);
+   await search.fill('');assert.deepEqual(await widths(),initial);
   }
-  const date=table.locator('thead input[type=date]').first();if(await date.count()){
-   await date.fill('2020-01-01');assert.deepEqual(await widths(),initial);
-   await date.locator('..').locator('.filter-clear').hover();await date.locator('..').locator('.filter-clear').click();assert.deepEqual(await widths(),initial);
+  const cards=page.locator('.main-content > .stat-cards');
+  if(await cards.count()){
+   assert.equal(await cards.first().isVisible(),false,'cards hidden by default');
+   await page.locator('.list-toolbar .dashboard-toggle').click();assert.equal(await cards.first().isVisible(),true);
+   await page.locator('.list-toolbar .dashboard-toggle').click();assert.equal(await cards.first().isVisible(),false);
   }
   const panel=page.locator('.report-filters .multi-filter').first();if(await panel.count()){
    const opts=panel.locator('[role=option]:not([data-value=""])');
    if(await opts.count()>1){await panel.locator('summary').click();await opts.nth(0).click();await opts.nth(1).click();assert.equal(await panel.locator('[role=option][aria-selected=true]:not([data-value=""])').count(),2);assert.equal(await panel.locator('.selection-extra').innerText(),'+1');}
   }
   if(name==='don-hang'){await page.mouse.click(110,80);await page.screenshot({path:'tests/.artifacts/grid-filter-boxes.png',fullPage:true});}
-  console.log('PASS',name,'icons, input backgrounds, single grid selection, stable columns during text/date/status filtering');
+  console.log('PASS',name,'toolbar search, dashboard toggle, stable columns during filtering');
  }
- assert.deepEqual(errors,[]);console.log('PASS: no browser runtime errors; stable validation layout; aligned equal-width filters; portal dropdown; date and multi-status column filters; all report panels; inventory threshold.');
+ assert.deepEqual(errors,[]);console.log('PASS: no browser runtime errors; toolbar search without per-column filters; cards behind Dashboard toggle; report panels; inventory threshold.');
 }finally{await browser.close();}})().catch(e=>{console.error(e);process.exitCode=1;});

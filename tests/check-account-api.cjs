@@ -6,6 +6,7 @@ const pool={request(){const inputs={};return {input(k,t,v){inputs[k]=v;return th
 const {router,routes}=makeRouter(),moduleStub={exports:{}};
 const dependencies={express:{Router:()=>router,raw:()=>()=>{}},'../../../Shared/Backend/config/database':{sql,poolPromise:Promise.resolve(pool)},'../../../Shared/Backend/middleware/auth':{authenticate(){},authorizeApi(){}},'../../../Shared/Backend/services/order-email':{},'../../../Shared/Backend/services/pos-pricing':{},'../../../Shared/Backend/services/checkout-pricing':{}};
 dependencies['../../../Shared/Backend/services/product-options']={};
+dependencies['../../../Shared/Backend/services/article-source']={};
 dependencies['../../../Shared/Backend/services/website-common']=require('../Shared/Backend/services/website-common');
 vm.runInNewContext(fs.readFileSync('User/Backend/routes/website.js','utf8'),{module:moduleStub,exports:moduleStub.exports,require:id=>{if(!(id in dependencies))throw Error(id);return dependencies[id];},console});
 function invoke(method,path,{role='KHACH_HANG',body={},query={}}={}){calls=[];return new Promise((resolve,reject)=>{const res={statusCode:200,status(code){this.statusCode=code;return this;},json(result){resolve({status:this.statusCode,...result});}};try{routes[method+' '+path]({user:{sub:'owner',vaiTro:role,maKH:'KH000001'},body,query},res);}catch(e){reject(e);}});}

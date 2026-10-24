@@ -5,11 +5,11 @@
   root.querySelectorAll('.field-error,.error-message,.form-error,.validation-error,[id$="Error"],[id$="Message"]').forEach(e=>{if(e.matches('p,small,span,div')&&!e.closest('.toast,.toast-container'))e.classList.add('javi-feedback-slot');});
   const buttons=[...(root.matches?.(selector)?[root]:[]),...root.querySelectorAll(selector)];
   for(const b of buttons){
-   if(!b.matches('button,a')||b.closest('.sidebar,.pagination-buttons,.col-filter-wrapper'))continue;
+   if(!b.matches('button,a')||b.closest('.sidebar,.pagination-buttons'))continue;
    const text=(b.textContent+' '+(b.getAttribute('aria-label')||'')+' '+(b.title||'')).trim().toLowerCase().replace(/^[^a-zà-ỹđ0-9]+/u,'');
    const icon=b.querySelector('i');
    let tone='primary';
-   if(b.matches('.btn-delete,.btn-danger')||/^(xóa|hủy xuất|hủy đơn|khóa|thất bại)/.test(text)||icon?.matches('.fa-trash,.fa-trash-alt,.fa-ban,.fa-times-circle'))tone='danger';
+   if(b.matches('.btn-delete,.btn-danger')||/^(xóa|hủy xuất|hủy đơn|khóa|thất bại)/.test(text)||icon?.matches('.bi-trash,.bi-trash3,.bi-slash-circle,.bi-x-circle'))tone='danger';
    else if(b.matches('.btn-secondary,.btn-cancel,.directory-cancel,.import-secondary')||/^(hủy|đóng|quay lại|làm mới|in |xuất file|tải file|kiểm tra lại)/.test(text)||b.closest('.report-filters'))tone='secondary';
    else if(/^(hoàn thành|thành công|giao hàng|thu nợ|trả nợ)/.test(text)||b.matches('.debt-collect,.debt-pay'))tone='success';
    else if(b.closest('td')||b.matches('.action-btn,.btn-edit,.btn-view'))tone='accent';
@@ -18,7 +18,7 @@
    if(!b.textContent.trim()&&b.querySelector('i,svg')){
     b.dataset.uiIcon='true';
     if(!b.getAttribute('aria-label')&&!b.title){
-     const label=icon?.matches('.fa-trash,.fa-trash-alt')?'Xóa':icon?.matches('.fa-edit,.fa-pen,.fa-pen-to-square')?'Chỉnh sửa':icon?.matches('.fa-file-invoice,.fa-file-invoice-dollar')?'Lập hóa đơn':icon?.matches('.fa-truck,.fa-truck-loading')?'Xuất kho':'Xem chi tiết';
+     const label=icon?.matches('.bi-trash,.bi-trash3')?'Xóa':icon?.matches('.bi-pencil-square,.bi-pencil,.bi-pencil-square')?'Chỉnh sửa':icon?.matches('.bi-file-earmark-text,.bi-receipt-cutoff')?'Lập hóa đơn':icon?.matches('.bi-truck,.bi-truck')?'Xuất kho':'Xem chi tiết';
      b.setAttribute('aria-label',label);b.title=label;
     }
    }

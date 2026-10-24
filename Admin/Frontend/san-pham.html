@@ -13,7 +13,7 @@
     <!-- Nhúng FontAwesome -->
     <link
       rel="stylesheet"
-      href="/vendor/fontawesome/css/all.min.css"
+      href="/vendor/bootstrap-icons/bootstrap-icons.min.css"
     />
     <script src="/admin/js/auth.js?v=20261021-form-unified"></script>
     <script src="/admin/js/report-filters.js?v=20261021-action-fit-2"></script>
@@ -34,9 +34,9 @@
     <!-- 2. MAIN CONTENT -->
     <div class="main-content">
       <div class="page-header">
-        <h2><i class="fas fa-coffee"></i> QUẢN LÝ DANH MỤC SẢN PHẨM</h2>
+        <h2><i class="bi bi-cup-hot"></i> QUẢN LÝ DANH MỤC SẢN PHẨM</h2>
         <button class="btn" onclick="openModal()">
-          <i class="fas fa-plus"></i> Thêm Sản Phẩm Mới
+          <i class="bi bi-plus-lg"></i> Thêm Sản Phẩm Mới
         </button>
       </div>
 
@@ -79,7 +79,7 @@
     <div class="modal-overlay" id="productModal">
       <div class="modal-content">
         <div class="modal-header">
-          <h3><i class="fas fa-plus-circle"></i> Thêm Sản Phẩm Mới</h3>
+          <h3><i class="bi bi-plus-circle"></i> Thêm Sản Phẩm Mới</h3>
           <button class="close-btn" onclick="closeModal()">&times;</button>
         </div>
         <form id="productForm">
@@ -179,7 +179,7 @@
         document.getElementById("maSP").readOnly = false;
         editId = null;
         document.querySelector(".modal-header h3").innerHTML =
-          '<i class="fas fa-plus-circle"></i> Thêm Sản Phẩm Mới';
+          '<i class="bi bi-plus-circle"></i> Thêm Sản Phẩm Mới';
         modal.style.display = "flex";
       }
       function closeModal() {
@@ -211,7 +211,7 @@
         document.getElementById("ghiChu").value = item.GhiChu || "";
 
         document.querySelector(".modal-header h3").innerHTML =
-          '<i class="fas fa-edit"></i> Cập Nhật Sản Phẩm';
+          '<i class="bi bi-pencil-square"></i> Cập Nhật Sản Phẩm';
         modal.style.display = "flex";
       }
 
@@ -349,7 +349,7 @@
 
             const slTonUI =
               slTon <= Number(item.TonToiThieu ?? 5)
-                ? `<span class="text-danger"><i class="fas fa-exclamation-triangle"></i> ${slTon}</span>`
+                ? `<span class="text-danger"><i class="bi bi-exclamation-triangle"></i> ${slTon}</span>`
                 : slTon;
             const slKDUI =
               slKD <= Number(item.TonToiThieu ?? 5) ? `<span class="text-danger">${slKD}</span>` : slKD;
@@ -367,7 +367,7 @@
               <td>${Number(item.TonToiThieu ?? 5)}</td>
               <td>${slKDUI}</td>
               <td>
-                <button class="action-btn btn-delete" style="background-color: #dc3545;" onclick="deleteProduct('${maSP}')" title="Xóa"><i class="fas fa-trash"></i> Xóa</button>
+                <button class="action-btn btn-delete" style="background-color: #dc3545;" onclick="deleteProduct('${maSP}')" title="Xóa"><i class="bi bi-trash"></i> Xóa</button>
               </td>
             </tr>`;
           });

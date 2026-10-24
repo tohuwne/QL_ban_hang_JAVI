@@ -5,7 +5,7 @@
 - Primary: JAVI gold `#CDA434`; hover gold `#B38B22`.
 - Supporting colors: coffee `#6F4E37`, charcoal `#10100F`, surface `#1A1A18`, warm white `#F5F3EE`, muted text `#A7A49C`.
 - Status colors: success `#2E9B63`, danger `#D84A43`; Zalo blue `#0878FF` is reserved for contact actions.
-- Shared CSS tokens and font are defined in `Shared/Frontend/css/style-guide.css` and imported by the shared `global.css`.
+- Shared CSS tokens are defined in `Shared/Frontend/css/brand-tokens.css` and imported by `global.css` (admin) and `storefront.css` (shop).
 
 ## Typography
 
@@ -15,7 +15,7 @@
 
 ## Icons
 
-- Use Font Awesome 6, already loaded by the application (`fas` for solid, `far` for regular, `fab` for brands).
+- Use Bootstrap Icons (Bootstrap 5 icon set), served locally from `/vendor/bootstrap-icons/bootstrap-icons.min.css`: `<i class="bi bi-plus-lg"></i>`. Do not mix other icon fonts.
 - Prefer a familiar icon paired with a tooltip or accessible label for icon-only actions.
 - Use the brand blue for Zalo and a neutral gold treatment for phone/contact actions.
 

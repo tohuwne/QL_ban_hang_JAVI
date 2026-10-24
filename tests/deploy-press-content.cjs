@@ -1,7 +1,0 @@
-const fs=require('fs'),path=require('path');require('dotenv').config({quiet:true});const {sql,poolPromise}=require('../Shared/Backend/config/database');
-(async()=>{const pool=await poolPromise;const location=(await pool.request().query("SELECT CONVERT(nvarchar(4000),SERVERPROPERTY('InstanceDefaultBackupPath')) path,DB_NAME() db")).recordset[0];if(!location.path)throw Error('Không xác định được vị trí backup');
- const backup=path.win32.join(location.path,location.db+'_before_press_'+Date.now()+'.bak');await pool.request().query("BACKUP DATABASE ["+location.db.replace(/]/g,']]')+"] TO DISK=N'"+backup.replace(/'/g,"''")+"' WITH COPY_ONLY, INIT, CHECKSUM");
- const before=(await pool.request().query("SELECT ID,Slug,TieuDe,TrangThai FROM WEB_BAI_VIET")).recordset;const tx=new sql.Transaction(pool);await tx.begin();try{await tx.request().query(fs.readFileSync('docs/sql/WEBSITE_BAO_CHI.sql','utf8'));await tx.commit();}catch(e){await tx.rollback();throw e;}
- const after=(await pool.request().query("SELECT ID,Slug,TieuDe,TrangThai,NgayDang FROM WEB_BAI_VIET WHERE ChuyenMuc=N'Bài truyền thông' ORDER BY NgayDang DESC")).recordset;
- fs.mkdirSync('outputs/press',{recursive:true});fs.writeFileSync('outputs/press/deployment.json',JSON.stringify({backup,before,after},null,2));console.log({before:before.length,pressArticles:after.length,backup});
-})().catch(e=>{console.error(e.message);process.exitCode=1;}).finally(async()=>{(await poolPromise).close();});

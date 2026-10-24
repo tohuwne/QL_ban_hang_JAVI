@@ -1,43 +1,69 @@
 /* Final presentation layer for every back-office module. Business layout and permissions stay in their existing modules. */
+/* Theme tokens: dark is the default; html[data-theme=light] (nút sáng/tối trên header) đổi toàn bộ bề mặt quản trị. */
 body.has-app-sidebar,body.import-page {
- --app-accent:#dfc282;--color-primary:#dfc282;--color-primary-hover:#eed6a1;--javi-gold:#dfc282;
- --app-surface:#12171d;--app-surface-raised:#192029;--app-surface-hover:#1b242e;--app-border:#303a46;
- --color-bg-main:#0a0e13;--color-bg-surface:#12171d;--color-bg-elevated:#192029;
- --color-border:#303a46;--color-input-bg:#0e141b;--color-input-border:#3b4654;
- --color-text-main:#edf0f4;--color-text-body:#d5dbe3;--color-text-muted:#a5afbc;
+ --ui-canvas:#0a0e13;--ui-surface:#12171d;--ui-surface-alt:#141b23;--ui-raised:#1a222c;--ui-hover:#1b242e;--ui-input:#0e141b;--ui-sidebar:#0b0f14;
+ --ui-border:#303a46;--ui-border-strong:#3b4654;--ui-border-soft:#27313b;--ui-border-hover:#637082;
+ --ui-text:#edf0f4;--ui-text-body:#d9e0e9;--ui-text-soft:#aeb9c8;--ui-text-muted:#8e9aab;
+ --ui-accent:#dfc282;--ui-accent-ink:#e8d09b;--ui-danger-ink:#f0a09b;--ui-success-ink:#9cd4bf;--ui-tint:#ffffff;
+ --cta-bg:#ffcc00;--cta-hover:#ffd83d;--cta-ink:#1a1400;--cta-glow:#ffcc0040;
+ --app-accent:var(--ui-accent);--color-primary:var(--ui-accent);--color-primary-hover:#eed6a1;--javi-gold:var(--ui-accent);
+ --app-canvas:var(--ui-canvas);--app-surface:var(--ui-surface);--app-surface-raised:var(--ui-raised);--app-surface-hover:var(--ui-hover);
+ --app-border:var(--ui-border);--app-border-strong:var(--ui-border-strong);--app-text:var(--ui-text);--app-text-muted:var(--ui-text-muted);
+ --color-bg-main:var(--ui-canvas);--color-bg-surface:var(--ui-surface);--color-bg-elevated:var(--ui-raised);--color-bg-card:var(--ui-surface);
+ --color-border:var(--ui-border);--color-input-bg:var(--ui-input);--color-input-border:var(--ui-border-strong);--color-input-text:var(--ui-text);
+ --color-text-main:var(--ui-text);--color-text-body:var(--ui-text-body);--color-text-muted:var(--ui-text-muted);
+ --javi-bg:var(--ui-canvas);--javi-surface:var(--ui-surface);--javi-text:var(--ui-text);--javi-muted:var(--ui-text-muted);
  --font-body:'Be Vietnam Pro','Segoe UI',sans-serif;--font-heading:var(--font-body);--font-main:var(--font-body);
  --ui-control:40px;--ui-button:38px;--ui-radius:9px;--ui-drawer:720px;
- background:#0a0e13!important;color:#edf0f4!important;font-size:13px;font-family:var(--font-body)!important;
+ background:var(--ui-canvas)!important;color:var(--ui-text)!important;font-size:13px;font-family:var(--font-body)!important;
 }
-body.has-app-sidebar .main-content {background:#0a0e13!important;padding:24px 28px!important;gap:0}
+html[data-theme=light] body.has-app-sidebar,html[data-theme=light] body.import-page {
+ --ui-canvas:#f3f4f6;--ui-surface:#ffffff;--ui-surface-alt:#f8f9fb;--ui-raised:#eef0f3;--ui-hover:#fff8db;--ui-input:#ffffff;--ui-sidebar:#ffffff;
+ --ui-border:#dfe3e8;--ui-border-strong:#c8ced6;--ui-border-soft:#eceef2;--ui-border-hover:#9aa3af;
+ --ui-text:#14181f;--ui-text-body:#262d37;--ui-text-soft:#4a5361;--ui-text-muted:#6b7480;
+ --ui-accent:#a87800;--ui-accent-ink:#7a5800;--ui-danger-ink:#b42318;--ui-success-ink:#16754b;--ui-tint:#000000;
+ --ui-status-danger:#c0362c;--ui-status-success:#17804f;--ui-status-warning:#9a6b00;--ui-status-info:#1f6fb2;
+ --app-success:#17804f;--app-danger:#c0362c;--app-info:#1f6fb2;--app-accent-soft:#ffcc0029;--app-shadow:0 10px 26px #1018280f;
+ --color-success:#17804f;--color-danger:#c0362c;--color-info:#1f6fb2;--color-warning:#9a6b00;
+ --cta-glow:#ffcc0059;--color-primary-hover:#8f6600;
+ --sidebar-bg:#ffffff;--sidebar-surface:#f6f7f9;--sidebar-border:#e3e6eb;--sidebar-text:#4a5361;--sidebar-text-strong:#14181f;--sidebar-accent:#b38600;
+ --lt-canvas:var(--ui-canvas);--lt-surface:var(--ui-surface);--lt-raised:var(--ui-raised);--lt-border:var(--ui-border);--lt-text:var(--ui-text);--lt-text-soft:var(--ui-text-soft);--lt-text-muted:var(--ui-text-muted);
+ color-scheme:light;
+}
+body.has-app-sidebar .main-content {background:var(--ui-canvas)!important;padding:24px 28px!important;gap:0}
 body.has-app-sidebar .page-header {min-height:48px;gap:12px!important;margin-bottom:20px!important}
-body.has-app-sidebar .page-header h2,body.has-app-sidebar .import-heading h1 {font-size:21px!important;line-height:1.45!important;font-weight:650!important;letter-spacing:-.035em!important;color:#edf0f4!important}
-body.has-app-sidebar .page-header h2>i {font-size:18px;color:var(--app-accent)!important;padding:10px;border:1px solid #dfc28230;border-radius:11px;background:#dfc2820b}
-body.has-app-sidebar .user-info {height:40px;border-radius:10px;background:#12171d;border-color:#303a46}
+body.has-app-sidebar .page-header h2,body.has-app-sidebar .import-heading h1 {font-size:21px!important;line-height:1.45!important;font-weight:650!important;letter-spacing:-.035em!important;color:var(--ui-text)!important}
+body.has-app-sidebar .page-header h2>i {font-size:18px;color:var(--app-accent)!important;padding:10px;border:1px solid #dfc28240;border-radius:11px;background:#dfc28212}
+body.has-app-sidebar .user-info {height:40px;border-radius:10px;background:var(--ui-surface);border-color:var(--ui-border)}
+body.has-app-sidebar .user-profile .theme-toggle {display:inline-grid;place-items:center;flex:0 0 40px;width:40px;height:40px;padding:0;border:1px solid var(--ui-border);border-radius:10px;background:var(--ui-surface);color:var(--ui-text-soft);font-size:16px;cursor:pointer;transition:color .16s ease,border-color .16s ease}
+body.has-app-sidebar .user-profile .theme-toggle:hover {color:var(--ui-text);border-color:var(--ui-border-hover)}
 body.has-app-sidebar .user-avatar {background:#dfc282;color:#17130b;box-shadow:none}
-body.has-app-sidebar .sidebar {background:#0b0f14!important;border-right-color:#26303b!important;box-shadow:none!important;--sidebar-accent:#dfc282}
+body.has-app-sidebar .sidebar {background:var(--ui-sidebar)!important;border-right-color:var(--ui-border)!important;box-shadow:none!important;--sidebar-accent:#dfc282}
 body.has-app-sidebar .sidebar-menu li>a.active,body.has-app-sidebar .sidebar-menu li>a:hover {background:#dfc2820b!important;border-color:#dfc28221!important}
 
-/* Two button sizes: 38px primary controls, 30px compact row actions. */
+/* Two button sizes: 38px primary controls, 30px compact row actions. CTA (tone primary) dùng vàng tươi phẳng. */
 body.has-app-sidebar .javi-ui-button,body.import-page .javi-ui-button,
 body.has-app-sidebar .btn,body.import-page .btn {
- --button-bg:linear-gradient(180deg,#ead3a0,#d5b772);--button-ink:#201a0e;--button-line:#e8d09b;
+ --button-bg:var(--cta-bg);--button-ink:var(--cta-ink);--button-line:var(--cta-bg);
  display:inline-flex;align-items:center!important;justify-content:center!important;gap:8px!important;
  height:var(--ui-button)!important;min-height:var(--ui-button)!important;padding:0 15px!important;
  border:1px solid var(--button-line)!important;border-radius:var(--ui-radius)!important;
  background:var(--button-bg)!important;color:var(--button-ink)!important;font-family:var(--font-body)!important;
  font-size:12px!important;font-weight:650!important;line-height:1.35!important;letter-spacing:0!important;
- text-decoration:none!important;white-space:nowrap!important;box-shadow:inset 0 1px #ffffff21,0 2px 5px #0002!important;
+ text-decoration:none!important;white-space:nowrap!important;box-shadow:0 1px 2px #0000002e!important;
  transform:none!important;cursor:pointer;transition:background .16s ease,border-color .16s ease,box-shadow .16s ease!important;
 }
+body.has-app-sidebar :is(.javi-ui-button,.btn):not([data-ui-tone]):not(.btn-secondary):not(.btn-danger),
+body.has-app-sidebar .javi-ui-button[data-ui-tone=primary],body.import-page .javi-ui-button[data-ui-tone=primary] {font-weight:700!important;box-shadow:0 1px 2px #0000002e,0 6px 16px -6px var(--cta-glow)!important}
+body.has-app-sidebar .javi-ui-button[data-ui-tone=primary]:hover:not(:disabled),body.import-page .javi-ui-button[data-ui-tone=primary]:hover:not(:disabled) {--button-bg:var(--cta-hover);--button-line:var(--cta-hover);filter:none!important}
 body.has-app-sidebar .javi-ui-button[data-ui-tone=secondary],body.import-page .javi-ui-button[data-ui-tone=secondary],
 body.has-app-sidebar .btn-secondary,body.has-app-sidebar .directory-cancel,body.has-app-sidebar .import-secondary {
- --button-bg:#1a222c;--button-ink:#dce2eb;--button-line:#455160;
+ --button-bg:var(--ui-raised);--button-ink:var(--ui-text-body);--button-line:var(--ui-border-strong);
 }
-body.has-app-sidebar .javi-ui-button[data-ui-tone=danger] {--button-bg:#ce72700c;--button-ink:#f0a09b;--button-line:#a35d5b70}
-body.has-app-sidebar .javi-ui-button[data-ui-tone=success] {--button-bg:#78b9a10d;--button-ink:#9cd4bf;--button-line:#589c8166}
-body.has-app-sidebar .javi-ui-button[data-ui-tone=accent] {--button-bg:#dfc2820c;--button-ink:#e8d09b;--button-line:#dfc28255}
-body.has-app-sidebar :is(.javi-ui-button,.btn):hover:not(:disabled) {filter:brightness(1.12);border-color:#e8d09b!important;box-shadow:0 0 0 3px #dfc2820a!important;transform:none!important}
+body.has-app-sidebar .javi-ui-button[data-ui-tone=danger] {--button-bg:#ce72700c;--button-ink:var(--ui-danger-ink);--button-line:#a35d5b70}
+body.has-app-sidebar .javi-ui-button[data-ui-tone=success] {--button-bg:#78b9a10d;--button-ink:var(--ui-success-ink);--button-line:#589c8166}
+body.has-app-sidebar .javi-ui-button[data-ui-tone=accent] {--button-bg:#dfc2820c;--button-ink:var(--ui-accent-ink);--button-line:#dfc28255}
+body.has-app-sidebar :is(.javi-ui-button,.btn):hover:not(:disabled) {filter:brightness(1.12);border-color:var(--ui-accent-ink)!important;box-shadow:0 0 0 3px #dfc2820a!important;transform:none!important}
 body.has-app-sidebar :is(.javi-ui-button,.btn):active:not(:disabled) {filter:brightness(.97)}
 body.has-app-sidebar :is(.javi-ui-button,.btn):disabled,body.import-page :is(.javi-ui-button,.btn):disabled {opacity:.42!important;cursor:not-allowed!important;filter:none;box-shadow:none!important}
 body.has-app-sidebar :is(button,a,input,select,textarea,summary):focus-visible {outline:2px solid #dfc282!important;outline-offset:3px!important}
@@ -50,54 +76,43 @@ body.has-app-sidebar .javi-ui-button i {color:inherit!important;font-size:13px!i
 body.has-app-sidebar :is(.main-content,.modal-overlay,dialog) :is(input,select,textarea):not([type=checkbox]):not([type=radio]):not([type=hidden]):not([type=file]),
 body.import-page :is(input,select,textarea):not([type=checkbox]):not([type=radio]):not([type=hidden]):not([type=file]) {
  font-family:var(--font-body)!important;font-size:13px!important;font-weight:400!important;line-height:1.5!important;
- border:1px solid #3b4654!important;border-radius:8px!important;background:#0e141b!important;color:#edf0f4!important;
+ border:1px solid var(--ui-border-strong)!important;border-radius:8px!important;background:var(--ui-input)!important;color:var(--ui-text)!important;
  min-width:0;min-height:var(--ui-control)!important;height:var(--ui-control)!important;padding:9px 12px!important;box-shadow:inset 0 1px 3px #0002!important;color-scheme:dark;
 }
-body.has-app-sidebar :is(.main-content,.modal-overlay,dialog) textarea {height:auto!important;min-height:104px!important;resize:vertical}
-body.has-app-sidebar :is(input,textarea)::placeholder {color:#7f8b9b!important;font-size:12px}
+body.has-app-sidebar :is(input,textarea)::placeholder {color:var(--ui-text-muted)!important;font-size:12px}
 body.has-app-sidebar :is(input,select,textarea):disabled {opacity:.6}
-body.has-app-sidebar :is(input[type=checkbox],input[type=radio]) {accent-color:#dfc282}
-body.has-app-sidebar :is(.form-group>label,.form-field>label,.web-form-grid>label,.field-label) {font-size:12px!important;font-weight:550!important;line-height:1.6;color:#bbc4d0!important;letter-spacing:0!important}
-body.has-app-sidebar :is(.form-row,.web-form-grid) {gap:16px!important}
+body.has-app-sidebar :is(.form-group>label,.form-field>label,.web-form-grid>label,.field-label) {font-size:12px!important;font-weight:550!important;line-height:1.6;color:var(--ui-text-soft)!important;letter-spacing:0!important}
 body.has-app-sidebar .form-group {margin-bottom:18px!important;min-width:0}
-body.has-app-sidebar :is(.filter-bar,.report-filters,.directory-toolbar) {gap:12px!important;border-color:#303a46!important;border-radius:11px!important;background:#12171d!important;padding:14px 16px!important;margin-bottom:16px!important}
-body.has-app-sidebar .report-filters {padding-bottom:28px!important}
-body.has-app-sidebar .report-filters :is(input,select) {height:38px!important;min-height:38px!important}
-body.has-app-sidebar .search-box input {padding-left:36px!important}
-body.has-app-sidebar :is(.filter-btn,.status-filter-tab,.web-tabs button) {height:36px!important;min-height:36px!important;padding:0 13px!important;border-radius:8px!important;font-family:var(--font-body)!important;font-size:12px!important;font-weight:500!important;border:1px solid #303a46!important;background:#12171d!important;color:#aeb9c8!important;box-shadow:none!important}
-body.has-app-sidebar :is(.filter-btn.active,.status-filter-tab[aria-pressed=true],.web-tabs button[aria-selected=true]) {color:#ead3a0!important;border-color:#dfc28266!important;background:#dfc28213!important}
+body.has-app-sidebar :is(.filter-bar,.report-filters,.directory-toolbar) {gap:12px!important;border-color:var(--ui-border)!important;border-radius:11px!important;background:var(--ui-surface)!important;padding:14px 16px!important;margin-bottom:16px!important}
+body.has-app-sidebar :is(.filter-btn,.status-filter-tab,.web-tabs button) {height:36px!important;min-height:36px!important;padding:0 13px!important;border-radius:8px!important;font-family:var(--font-body)!important;font-size:12px!important;font-weight:500!important;border:1px solid var(--ui-border)!important;background:var(--ui-surface)!important;color:var(--ui-text-soft)!important;box-shadow:none!important}
+body.has-app-sidebar :is(.filter-btn.active,.status-filter-tab[aria-pressed=true],.web-tabs button[aria-selected=true]) {color:var(--ui-accent-ink)!important;border-color:#dfc28266!important;background:#dfc28213!important}
 
 /* Uniform grid surface; preserve measured column widths and sticky positioning. */
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive {border:1px solid #303a46!important;border-radius:12px!important;background:#12171d!important;box-shadow:none!important}
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table {font-family:var(--font-body)!important;font-size:12px!important;color:#d9e0e9!important;border-collapse:separate!important;border-spacing:0!important}
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th {background:#1a222c!important;color:#aebaca!important;border-bottom:1px solid #3b4654!important;font-size:11px!important;font-weight:600!important;letter-spacing:.025em!important;text-transform:none!important;padding:12px 14px!important;vertical-align:top!important}
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table tbody td {height:48px!important;padding:10px 14px!important;font-size:12px!important;line-height:1.6!important;border-bottom:1px solid #27313b!important;background:#12171d!important;color:#d9e0e9}
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table tbody tr:nth-child(even) td {background:#141b23!important}
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table tbody tr:hover td {background:#1b242e!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive {border:1px solid var(--ui-border)!important;border-radius:12px!important;background:var(--ui-surface)!important;box-shadow:none!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table {font-family:var(--font-body)!important;font-size:12px!important;color:var(--ui-text-body)!important;border-collapse:separate!important;border-spacing:0!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th {background:var(--ui-raised)!important;color:var(--ui-text-soft)!important;border-bottom:1px solid var(--ui-border-strong)!important;font-size:11px!important;font-weight:600!important;letter-spacing:.025em!important;text-transform:none!important;padding:12px 14px!important;vertical-align:top!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table tbody td {height:48px!important;padding:10px 14px!important;font-size:12px!important;line-height:1.6!important;border-bottom:1px solid var(--ui-border-soft)!important;background:var(--ui-surface)!important;color:var(--ui-text-body)}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table tbody tr:nth-child(even) td {background:var(--ui-surface-alt)!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table tbody tr:hover td {background:var(--ui-hover)!important}
 body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table tbody tr:last-child td {border-bottom:0!important}
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table :is(th,td).javi-action-column {box-shadow:none!important;filter:none!important}
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive thead :is(.col-filter-input,.col-multi-filter summary) {height:30px!important;min-height:30px!important;margin-top:7px!important;padding:4px 8px 4px 25px!important;border:1px solid #3a4655!important;border-radius:6px!important;background:#111922!important;font-size:11px!important}
-body.has-app-sidebar .pagination-container {color:#9ca8b8!important}
-body.has-app-sidebar .pagination-buttons button {border-color:#303a46!important;background:#12171d!important;color:#b7c1cf!important;box-shadow:none!important}
-body.has-app-sidebar .pagination-buttons button.active {background:#dfc2821c!important;border-color:#dfc28266!important;color:#ead3a0!important}
+body.has-app-sidebar .pagination-container {color:var(--ui-text-muted)!important}
+body.has-app-sidebar .pagination-buttons button {border-color:var(--ui-border)!important;background:var(--ui-surface)!important;color:var(--ui-text-soft)!important;box-shadow:none!important}
 
 /* Consistent right-hand editor; wider documents share one larger shell. */
 body.has-app-sidebar .modal-overlay:not(#javiAlertModal):not(#javiConfirmModal):not(#profileModal)>.modal-content.javi-fixed-modal {
- width:min(var(--ui-drawer),100%)!important;max-width:100%!important;border-left:1px solid #46505d!important;border-radius:16px 0 0 16px!important;background:#12171d!important;
+ width:min(var(--ui-drawer),100%)!important;max-width:100%!important;border-left:1px solid var(--ui-border-strong)!important;border-radius:16px 0 0 16px!important;background:var(--ui-surface)!important;
 }
 body.has-app-sidebar .modal-overlay:not(#javiAlertModal):not(#javiConfirmModal):not(#profileModal)>.modal-content.javi-fixed-modal:is(:has(table),.document-detail) {width:min(1020px,100%)!important}
-body.has-app-sidebar .modal-overlay>.modal-content.javi-fixed-modal>.modal-header {min-height:64px!important;padding:16px 24px!important;border-bottom:1px solid #303a46!important;background:linear-gradient(110deg,#dfc2820c,transparent 65%),#151c24!important}
-body.has-app-sidebar .modal-header h3 {font-size:17px!important;font-weight:600!important;color:#ead3a0!important;letter-spacing:-.02em!important}
-body.has-app-sidebar .modal-overlay>.modal-content.javi-fixed-modal .javi-modal-body {padding:24px!important;background:#12171d!important}
-body.has-app-sidebar .modal-overlay>.modal-content.javi-fixed-modal :is(.javi-modal-footer,.modal-footer) {min-height:70px!important;padding:14px 24px!important;background:#151c24!important;border-top-color:#303a46!important;gap:10px!important}
-body.has-app-sidebar :is(.modal-header .close-btn,.modal-header>.btn-close,.pos-dialog-close) {width:30px!important;height:30px!important;padding:0!important;display:inline-grid!important;place-items:center;background:#ffffff05!important;border:1px solid #ffffff16!important;border-radius:8px!important;color:#b6c0ce!important;font-size:20px!important;line-height:1!important}
+body.has-app-sidebar .modal-header h3 {font-size:17px!important;font-weight:600!important;color:var(--ui-accent-ink)!important;letter-spacing:-.02em!important}
+body.has-app-sidebar .modal-overlay>.modal-content.javi-fixed-modal .javi-modal-body {padding:24px!important;background:var(--ui-surface)!important}
+body.has-app-sidebar :is(.modal-header .close-btn,.modal-header>.btn-close,.pos-dialog-close) {width:30px!important;height:30px!important;padding:0!important;display:inline-grid!important;place-items:center;background:#ffffff05!important;border:1px solid #ffffff16!important;border-radius:8px!important;color:var(--ui-text-soft)!important;font-size:20px!important;line-height:1!important}
 body.has-app-sidebar :is(.section-title,.card-panel-header) {color:#dfc282!important;font-size:12px!important;font-weight:600!important;border-color:#dfc28226!important;letter-spacing:.025em!important}
-body.has-app-sidebar :is(.pos-options-dialog,.pos-coupon-dialog,.pos-coupon-terms,.coupon-description-dialog) {background:#12171d!important;border:1px solid #46505d!important;border-radius:16px!important;color:#edf0f4!important;font-family:var(--font-body)!important}
-body.has-app-sidebar :is(.pos-options-heading,.pos-options-footer,.pos-coupon-heading,.pos-coupon-footer) {background:#151c24!important;border-color:#303a46!important;padding:16px 20px!important}
+body.has-app-sidebar :is(.pos-options-dialog,.pos-coupon-dialog,.pos-coupon-terms,.coupon-description-dialog) {background:var(--ui-surface)!important;border:1px solid var(--ui-border-strong)!important;border-radius:16px!important;color:var(--ui-text)!important;font-family:var(--font-body)!important}
+body.has-app-sidebar :is(.pos-options-heading,.pos-options-footer,.pos-coupon-heading,.pos-coupon-footer) {background:var(--ui-raised)!important;border-color:var(--ui-border)!important;padding:16px 20px!important}
 body.has-app-sidebar .pos-options-form {background:transparent}
 body.has-app-sidebar .qty-controls input {height:30px!important;min-height:30px!important;padding:3px!important;text-align:center}
 body.has-app-sidebar .pos-item-discount input {height:26px!important;min-height:26px!important;padding:2px 5px!important;font-size:11px!important}
-body.has-app-sidebar .pos-catalog,body.has-app-sidebar .pos-order,body.has-app-sidebar .pos-panel {background:#12171d!important;border-color:#303a46!important;border-radius:12px!important}
+body.has-app-sidebar .pos-catalog,body.has-app-sidebar .pos-order,body.has-app-sidebar .pos-panel {background:var(--ui-surface)!important;border-color:var(--ui-border)!important;border-radius:12px!important}
 @media(max-width:760px) {
  body.has-app-sidebar .main-content {padding:16px 14px!important}
  body.has-app-sidebar .page-header h2 {font-size:18px!important}
@@ -124,45 +139,24 @@ body.has-app-sidebar .main-content .report-filters :is(input:not([type=checkbox]
 }
 body.has-app-sidebar .main-content .report-filters > .btn {height:30px!important;min-height:30px!important;margin:18px 0 0!important;padding:0 13px!important;font-size:11px!important;align-self:start!important}
 body.has-app-sidebar .main-content .report-filters .filter-clear {width:18px!important;height:18px!important;min-height:18px!important;top:50%!important;transform:translateY(-50%)!important;font-size:14px!important}
-body.has-app-sidebar .main-content .report-filters .filter-select-control select {padding-right:40px!important}
-body.has-app-sidebar .main-content .report-filters .filter-date-control input {padding-right:28px!important}
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th {padding:10px 14px!important}
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-filter-wrapper {height:30px!important;margin:7px 0 0!important;position:relative!important}
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-filter-wrapper :is(input.col-filter-input,select.col-filter-select),
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-multi-filter summary {
- box-sizing:border-box!important;width:100%!important;height:30px!important;min-height:30px!important;max-height:30px!important;
- margin:0!important;padding:4px 9px 4px 27px!important;font-size:11px!important;line-height:20px!important;border-radius:6px!important;
-}
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-multi-filter {margin-top:7px!important}
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-multi-filter summary {padding-left:9px!important}
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-filter-wrapper .col-filter-icon {
- left:8px!important;top:50%!important;transform:translateY(-50%)!important;width:13px!important;height:13px!important;margin:0!important;line-height:1!important;
-}
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-filter-wrapper:has(input[type=date]) .col-filter-icon {display:none!important}
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-filter-wrapper input.col-filter-input[type=date] {padding-left:8px!important;padding-right:7px!important}
 /* Opaque sticky cells share exactly the header/row surface, without a visible rail. */
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table.stable-table-layout thead th.javi-action-column {background:#1a222c!important;border-left:0!important;box-shadow:none!important}
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table.stable-table-layout tbody tr td.javi-action-column {background:#12171d!important;border-left:0!important;box-shadow:none!important}
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table.stable-table-layout tbody tr:nth-child(even) td.javi-action-column {background:#141b23!important}
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table.stable-table-layout tbody tr:hover td.javi-action-column {background:#1b242e!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table.stable-table-layout thead th.javi-action-column {background:var(--ui-raised)!important;border-left:0!important;box-shadow:none!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table.stable-table-layout tbody tr:nth-child(even) td.javi-action-column {background:var(--ui-surface-alt)!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table.stable-table-layout tbody tr:hover td.javi-action-column {background:var(--ui-hover)!important}
 body.has-app-sidebar .main-content .table-responsive :is(th,td).javi-action-column::before,
 body.has-app-sidebar .main-content .table-responsive :is(th,td).javi-action-column::after {box-shadow:none!important;background:none!important;border:0!important}
 @media(max-width:600px){body.has-app-sidebar .main-content .report-filters > :is(label,.filter-field){flex:1 1 calc(50% - 10px)!important;width:auto!important;max-width:none!important;min-width:120px!important}}
 body.has-app-sidebar .main-content:not(.overview-shell) .report-filters input:not([type=checkbox]):not([type=radio]):not([type=hidden]):not([type=file]) {
  box-sizing:border-box!important;height:30px!important;min-height:30px!important;max-height:30px!important;margin:0!important;padding:4px 10px!important;font-size:11px!important;line-height:20px!important;
 }
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-filter-wrapper .col-multi-filter {margin-top:0!important}
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-filter-wrapper .filter-date-control {height:30px!important}
 /* Keep the overview shell's vertical rhythm separate from compact directory pages. */
 body.admin-overview.has-app-sidebar .main-content.overview-shell {display:flex!important;flex-direction:column!important;gap:16px!important;padding:20px 24px!important}
 body.admin-overview.has-app-sidebar .overview-shell .page-header.overview-header {margin-bottom:0!important}
 body.admin-overview.has-app-sidebar .overview-shell .overview-metrics {gap:16px!important}
 body.admin-overview.has-app-sidebar .overview-shell .overview-workspace {gap:16px!important}
-body.admin-overview.has-app-sidebar .overview-shell .overview-toolbar select {height:32px!important;min-height:32px!important;padding:4px 9px!important;font-size:12px!important}
 body.has-app-sidebar .status-filter-tab b {display:inline-flex!important;align-items:center!important;justify-content:center!important;width:22px!important;min-width:22px!important;height:22px!important;padding:0!important;border-radius:50%!important;font-size:11px!important;line-height:1!important;font-weight:600!important;font-variant-numeric:tabular-nums;background:#ffffff0b;color:inherit}
 body.has-app-sidebar .status-filter-tab[aria-pressed=true] b {background:#dfc282!important;color:#17130b!important}
-body.has-app-sidebar #couponDirectory .coupon-description-info {display:inline-grid;place-items:center;width:30px;height:30px;padding:0;border:1px solid #dfc28255;border-radius:7px;background:#dfc2820c;color:#e8d09b;font-size:14px;cursor:pointer}
-body.has-app-sidebar #couponDirectory :is(th,td):last-child {text-align:center!important}
+body.has-app-sidebar #couponDirectory .coupon-description-info {display:inline-grid;place-items:center;width:30px;height:30px;padding:0;border:1px solid #dfc28255;border-radius:7px;background:#dfc2820c;color:var(--ui-accent-ink);font-size:14px;cursor:pointer}
 @media(max-height:800px){body.admin-overview.has-app-sidebar .main-content.overview-shell{gap:10px!important;padding:14px 20px!important}body.admin-overview.has-app-sidebar .overview-shell .overview-metrics,body.admin-overview.has-app-sidebar .overview-shell .overview-workspace{gap:10px!important}}
 /* Compact controls across the administration interface. */
 body.has-app-sidebar,body.import-page {--ui-control:32px;--ui-button:32px}
@@ -197,16 +191,12 @@ body.has-app-sidebar.pos-page .main-content select#categoryPos {height:32px!impo
 /* One outline shape for report/grid inputs and dropdowns, without a filled face. */
 body.has-app-sidebar .main-content:not(.overview-shell) .report-filters input:not([type=checkbox]):not([type=radio]):not([type=hidden]):not([type=file]),
 body.has-app-sidebar .main-content:not(.overview-shell) .report-filters select,
-body.has-app-sidebar .main-content:not(.overview-shell) .report-filters .multi-filter summary,
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-filter-wrapper :is(input.col-filter-input,select.col-filter-select),
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-multi-filter summary {
- border-radius:6px!important;background:transparent!important;box-shadow:none!important;border-color:#3b4654!important;
+body.has-app-sidebar .main-content:not(.overview-shell) .report-filters .multi-filter summary {
+ border-radius:6px!important;background:transparent!important;box-shadow:none!important;border-color:var(--ui-border-strong)!important;
 }
-body.has-app-sidebar .main-content:not(.overview-shell) .report-filters :is(.filter-date-control,.filter-select-control,.multi-filter),
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th :is(.col-filter-wrapper,.filter-date-control,.col-multi-filter) {background:transparent!important;box-shadow:none!important;border-radius:6px!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .report-filters :is(.filter-date-control,.filter-select-control,.multi-filter) {background:transparent!important;box-shadow:none!important;border-radius:6px!important}
 body.has-app-sidebar .main-content:not(.overview-shell) .report-filters :is(input,select)[aria-invalid=true] {border-color:#ed8b81!important}
-body.has-app-sidebar .main-content:not(.overview-shell) .report-filters :is(input,select,summary):focus-visible,
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th :is(input.col-filter-input,summary):focus-visible {border-color:#dfc282!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .report-filters :is(input,select,summary):focus-visible {border-color:#dfc282!important}
 /* Square grid and toolbar containers; field/button shapes are independent. */
 body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive,
 body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table,
@@ -219,20 +209,12 @@ body.has-app-sidebar .main-content:not(.overview-shell) .filter-section,
 body.has-app-sidebar .main-content:not(.overview-shell) .status-filter-tabs {gap:7px!important;margin:0 0 9px!important;padding:3px 0 0!important;min-height:0!important}
 body.has-app-sidebar .main-content:not(.overview-shell) :is(.filter-btn,.status-filter-tab) {height:28px!important;min-height:28px!important;padding:0 10px!important;font-size:11px!important;border-radius:5px!important;display:inline-flex!important;align-items:center!important;gap:6px!important}
 body.has-app-sidebar .main-content:not(.overview-shell) .filter-btn .status-badge {position:static!important;top:auto!important;right:auto!important;width:auto!important;min-width:18px!important;height:18px!important;padding:0 4px!important;font-size:10px!important;border:0!important;box-shadow:none!important;flex-shrink:0}
-body.has-app-sidebar .main-content:not(.overview-shell) .status-filter-tab b {width:auto!important;min-width:18px!important;height:18px!important;padding:0 4px!important;font-size:10px!important}
 body.has-app-sidebar .main-content:not(.overview-shell) .pagination-container {height:28px!important;min-height:28px!important;max-height:28px!important;margin:3px 0 0!important;padding:0 2px!important;flex-shrink:0!important}
 body.has-app-sidebar .main-content:not(.overview-shell) .pagination-container .pagination-buttons button {height:22px!important;min-height:22px!important;max-height:22px!important;min-width:22px!important;line-height:20px!important;padding:0 5px!important;font-size:10px!important}
 body.has-app-sidebar .main-content:not(.overview-shell) .pagination-info {font-size:10px!important}
 body.has-app-sidebar .main-content:not(.overview-shell):has(>.table-responsive) {padding-bottom:10px!important}
 /* Slightly tighter column headings and their search controls. */
 body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th {padding:7px 12px!important;font-size:10px!important;line-height:14px!important}
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-header-box {gap:0!important}
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-header-label {font-size:10px!important;line-height:14px!important;min-height:14px!important;margin:0!important}
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-filter-wrapper {height:26px!important;margin-top:5px!important}
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-filter-wrapper :is(input.col-filter-input,select.col-filter-select),
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-multi-filter summary {height:26px!important;min-height:26px!important;max-height:26px!important;font-size:10px!important;line-height:18px!important;padding-top:3px!important;padding-bottom:3px!important}
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-filter-wrapper .filter-date-control {height:26px!important}
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th .col-filter-input::placeholder {font-size:10px!important}
 /* Keep compact count badges at the top-right of status filter buttons. */
 body.has-app-sidebar .main-content:not(.overview-shell) :is(.filter-btn,.status-filter-tab) {position:relative!important;overflow:visible!important}
 body.has-app-sidebar .main-content:not(.overview-shell) .filter-btn .status-badge,
@@ -240,8 +222,58 @@ body.has-app-sidebar .main-content:not(.overview-shell) .status-filter-tab b {
  position:absolute!important;top:-6px!important;right:-6px!important;bottom:auto!important;left:auto!important;
  display:inline-flex!important;align-items:center!important;justify-content:center!important;
  width:18px!important;min-width:18px!important;height:18px!important;padding:0!important;margin:0!important;
- border-radius:50%!important;border:1px solid #0a0e13!important;font-size:10px!important;line-height:1!important;
+ border-radius:50%!important;border:1px solid var(--ui-canvas)!important;font-size:10px!important;line-height:1!important;
  box-shadow:none!important;z-index:2!important;pointer-events:none;
 }
 body.has-app-sidebar .main-content:not(.overview-shell) .filter-section,
 body.has-app-sidebar .main-content:not(.overview-shell) .status-filter-tabs {column-gap:12px!important;padding-top:6px!important}
+/* Danh sách: hàng nút thao tác (không khung) phía trên; khung tìm kiếm + bộ lọc + Xem kéo dài hết chiều ngang phía dưới. */
+body.has-app-sidebar .main-content .list-toolbar {padding:0!important;border:0!important;background:transparent!important;margin-bottom:14px!important}
+body.has-app-sidebar .main-content .list-toolbar > .list-filters {padding:10px 12px!important;border:1px solid var(--ui-border)!important;border-radius:0!important;background:var(--ui-surface)!important}
+body.has-app-sidebar .main-content .list-filters > :is(.report-filters,.filter-bar,.directory-toolbar),
+body.has-app-sidebar .main-content .list-filters > .report-filters:has(.date-range-error:not([hidden])) {display:flex!important;flex-wrap:wrap!important;align-items:flex-end!important;gap:10px!important;flex:1 1 auto!important;min-width:0!important;padding:0!important;margin:0!important;border:0!important;background:transparent!important;position:relative!important}
+body.has-app-sidebar .main-content .list-filters > .grid-search:last-child:not([style*=width]) {flex:1 1 200px!important}
+body.has-app-sidebar .main-content .list-filters > .report-filters:has(.date-range-error:not([hidden])) {padding-bottom:20px!important}
+body.has-app-sidebar .main-content .list-filters > .report-filters .date-range-error {left:0!important;right:auto!important;bottom:0!important}
+body.has-app-sidebar .main-content .list-filters > .report-filters > .btn {margin:0!important;align-self:flex-end!important}
+body.has-app-sidebar .main-content .list-filters .filter-resizable {flex:0 0 auto!important;min-width:96px!important;max-width:none!important}
+body.has-app-sidebar .main-content .list-filters > :is(.filter-bar,.directory-toolbar) > .filter-resizable {width:220px}
+body.has-app-sidebar .main-content .list-filters :is(.grid-search,.filter-bar,.directory-toolbar) :is(input,select) {box-sizing:border-box!important;width:100%!important;max-width:none!important;height:30px!important;min-height:30px!important;margin:0!important;font-size:11px!important;border-radius:6px!important;border-color:var(--ui-border-strong)!important;background:transparent!important;box-shadow:none!important}
+body.has-app-sidebar .main-content .list-toolbar .list-filters .grid-search input[type=search],
+body.has-app-sidebar .main-content .list-toolbar .list-filters .search-box input {padding:4px 10px 4px 28px!important}
+body.has-app-sidebar .main-content .list-filters .search-box > i {position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:11px;pointer-events:none}
+body.has-app-sidebar .main-content .list-toolbar .page-actions .btn {height:30px!important;min-height:30px!important;font-size:11px!important}
+body.has-app-sidebar .main-content .list-toolbar .dashboard-toggle {width:30px!important;min-width:30px!important;padding:0!important;justify-content:center!important;background:transparent!important;border:1px solid var(--ui-border-strong)!important;color:var(--ui-text-soft)!important}
+body.has-app-sidebar .main-content .list-toolbar .dashboard-toggle:hover {border-color:var(--ui-border-hover)!important;color:var(--ui-text)!important}
+body.has-app-sidebar .main-content .list-toolbar .dashboard-toggle[aria-pressed=true] {color:var(--ui-accent-ink)!important;border-color:#dfc28266!important;background:#dfc28213!important}
+body.has-app-sidebar .main-content .list-filters .filter-resizable :is(input,select,summary,.filter-date-control,.filter-select-control,.multi-filter) {min-width:0!important;max-width:none!important}
+body.has-app-sidebar .main-content .list-filters > .report-filters > .filter-resizable {width:150px!important}
+body.has-app-sidebar .main-content .list-filters > .grid-search {width:240px!important}
+
+/* ===== Giao diện sáng: ghi đè các màu cố định của module cũ (chỉ khi html[data-theme=light]). ===== */
+html[data-theme=light] .sidebar .sidebar-brand-name {color:var(--ui-text)!important}
+html[data-theme=light] .sidebar-menu li > a > i:first-child,html[data-theme=light] .sidebar-menu li a i {color:var(--ui-text-muted)!important}
+html[data-theme=light] .sidebar-menu li > a:is(:hover,.active) > i:first-child,html[data-theme=light] .sidebar-menu .has-submenu.open > a > i:first-child {color:var(--ui-accent)!important}
+html[data-theme=light] .sidebar-menu li > a:is(:hover,.active),html[data-theme=light] .sidebar-menu .has-submenu.open > a {color:var(--ui-text)!important;background:#ffcc0017!important;border-color:#ffcc0040!important}
+html[data-theme=light] .user-name {color:var(--ui-text)!important}
+html[data-theme=light] :is(.user-role,.user-dropdown-arrow,.user-dropdown a i) {color:var(--ui-text-muted)!important}
+html[data-theme=light] .user-dropdown {background:var(--ui-surface)!important;border-color:var(--ui-border)!important}
+html[data-theme=light] :is(.table-responsive,.import-preview-wrap) thead th,html[data-theme=light] #inventoryTable :is(thead,thead th) {background:var(--ui-raised)!important;color:var(--ui-text-soft)!important}
+[data-theme=light] :where(table tbody td) {color:var(--ui-text-body)!important}
+html[data-theme=light] .summary-row>span:first-child {color:var(--ui-text-muted)!important}
+html[data-theme=light] .filter-btn:not(.active) .status-badge {background:var(--ui-raised)!important;color:var(--ui-text-soft)!important;border-color:var(--ui-surface)!important}
+html[data-theme=light] .invoice-status {color:var(--ui-status-success)!important}
+html[data-theme=light] .invoice-status.unpaid {color:var(--ui-status-warning)!important}
+html[data-theme=light] .panel-foot a,html[data-theme=light] #couponDirectory .coupon-copy-code {color:var(--ui-accent-ink)!important}
+html[data-theme=light] .product-rank {background:var(--ui-raised)!important;color:var(--ui-text-soft)!important}
+html[data-theme=light] :is(.option-intro,.option-empty,.pos-coupon-choice small,.pos-coupon-meta small) {color:var(--ui-text-muted)!important}
+html[data-theme=light] .status-badge-success {color:var(--ui-status-success)!important}
+html[data-theme=light] .backup-btn-download {color:var(--ui-status-info)!important;border-color:var(--ui-status-info)!important}
+html[data-theme=light] .pos-customer-search>kbd {color:var(--ui-text-muted)!important;border-color:var(--ui-border)!important}
+html[data-theme=light] .pos-page .main-content .pos-clear {color:var(--ui-danger-ink)!important}
+html[data-theme=light] .pos-cart-empty strong {color:var(--ui-text-soft)!important}
+html[data-theme=light] :is(.pos-discount-value,.pos-options-error) {color:var(--ui-danger-ink)!important}
+html[data-theme=light] .product-card {background:var(--ui-surface)!important;border-color:var(--ui-border)!important}
+html[data-theme=light] .product-card .product-name {color:var(--ui-text)!important}
+html[data-theme=light] :is(.section-title,.card-panel-header) {color:var(--ui-accent-ink)!important}
+html[data-theme=light] .modal-overlay:not(#javiAlertModal):not(#javiConfirmModal):not(#profileModal) {background:#1018284d!important}

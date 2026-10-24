@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
@@ -10,7 +10,7 @@
     <!-- Tái sử dụng CSS để có UI đẹp -->
     <link
       rel="stylesheet"
-      href="/vendor/fontawesome/css/all.min.css"
+      href="/vendor/bootstrap-icons/bootstrap-icons.min.css"
     />
     <script src="/admin/js/auth.js?v=20261021-form-unified"></script>
     <script src="/admin/js/report-filters.js?v=20261021-action-fit-2"></script>
@@ -29,9 +29,9 @@
 
     <div class="main-content">
       <div class="page-header">
-        <h2><i class="fas fa-users"></i> QUẢN LÝ KHÁCH HÀNG</h2>
+        <h2><i class="bi bi-people"></i> QUẢN LÝ KHÁCH HÀNG</h2>
         <button class="btn" onclick="openModal()">
-          <i class="fas fa-plus"></i> Thêm Khách Hàng
+          <i class="bi bi-plus-lg"></i> Thêm Khách Hàng
         </button>
       </div>
 
@@ -72,7 +72,7 @@
     <div class="modal-overlay" id="addModal">
       <div class="modal-content">
         <div class="modal-header">
-          <h3><i class="fas fa-user-plus"></i> Thêm Khách Hàng Mới</h3>
+          <h3><i class="bi bi-person-plus"></i> Thêm Khách Hàng Mới</h3>
           <button class="close-btn" onclick="closeModal()">&times;</button>
         </div>
         <form id="addForm">
@@ -138,7 +138,7 @@
         document.getElementById("addForm").reset();
         editId = null;
         document.querySelector(".modal-header h3").innerHTML =
-          '<i class="fas fa-user-plus"></i> Thêm Khách Hàng Mới';
+          '<i class="bi bi-person-plus"></i> Thêm Khách Hàng Mới';
         modal.style.display = "flex";
       }
       function closeModal() {
@@ -156,7 +156,7 @@
         document.getElementById("diaChi").value = item.DiaChiKH;
         document.getElementById("maLoai").value = item.MaLoaiKH;
         document.querySelector(".modal-header h3").innerHTML =
-          '<i class="fas fa-edit"></i> Cập Nhật Khách Hàng';
+          '<i class="bi bi-pencil-square"></i> Cập Nhật Khách Hàng';
         modal.style.display = "flex";
       }
 
@@ -247,7 +247,7 @@
                   <td>${item.EmailKH || ""}</td>
                   <td style="color: var(--color-primary)">${item.TenLoaiKH}</td>
                   <td>
-                    <button class="action-btn btn-delete" onclick="deleteKhachHang('${item.MaKH}')"><i class="fas fa-trash"></i></button>
+                    <button class="action-btn btn-delete" onclick="deleteKhachHang('${item.MaKH}')"><i class="bi bi-trash"></i></button>
                   </td>
                 </tr>
               `;

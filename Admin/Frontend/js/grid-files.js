@@ -8,8 +8,8 @@
  function tableData(table){
   const headers=[...table.tHead.rows[0].cells];
   const indexes=headers.map((cell,i)=>({cell,i})).filter(({cell})=>cell.textContent.trim()&&!cell.hidden&&getComputedStyle(cell).display!=='none'&&!cell.querySelector('input[type=checkbox]'));
-  const text=cell=>{const clone=cell.cloneNode(true);clone.querySelectorAll('input,select,.col-filter-control,.col-filter-icon,.filter-clear').forEach(e=>e.remove());return clone.textContent.replace(/\s+/g,' ').trim();};
-  const rows=[...table.tBodies[0].rows].filter(r=>!r.classList.contains('filter-hidden')&&!r.classList.contains('col-filter-hidden')&&r.style.display!=='none'&&!r.hidden&&r.cells.length===headers.length&&!r.querySelector('td[colspan]'));
+  const text=cell=>{const clone=cell.cloneNode(true);clone.querySelectorAll('input,select,.filter-clear').forEach(e=>e.remove());return clone.textContent.replace(/\s+/g,' ').trim();};
+  const rows=[...table.tBodies[0].rows].filter(r=>!r.classList.contains('filter-hidden')&&!r.classList.contains('grid-search-hidden')&&r.style.display!=='none'&&!r.hidden&&r.cells.length===headers.length&&!r.querySelector('td[colspan]'));
   return {columns:indexes.map(({cell})=>text(cell)),rows:rows.map(r=>indexes.map(({i})=>text(r.cells[i])))};
  }
  function openImport(){
@@ -21,10 +21,10 @@
   const user=JSON.parse(localStorage.getItem('currentUser')||'null');
   const canImport=masterPages.has(page)&&!(page==='san-pham'&&['Bán hàng','Kho'].includes(user?.ChucVu));
   const box=document.createElement('div');box.className='grid-file-menu';
-  box.innerHTML=canImport?'<button type="button" class="btn" aria-expanded="false" aria-haspopup="true"><i class="fas fa-file-excel"></i> Nhập / Xuất file <span aria-hidden="true">▾</span></button><div class="grid-file-options" hidden><button type="button" data-file-import>Nhập file</button><button type="button" data-file-export>Xuất file</button></div>':'<button type="button" class="btn" data-file-export><i class="fas fa-file-excel"></i> Xuất file</button>';
+  box.innerHTML=(canImport?'<button type="button" class="btn btn-secondary" data-file-import><i class="bi bi-file-earmark-arrow-up" aria-hidden="true"></i> Nhập file</button>':'')+'<button type="button" class="btn btn-secondary" data-file-export><i class="bi bi-file-earmark-arrow-down" aria-hidden="true"></i> Xuất file</button>';
   header.classList.add('has-grid-files');
   if(page==='dia-diem-van-chuyen'){
-   const place=()=>{const toolbar=document.querySelector('.web-tab-panel:not([hidden]) .directory-toolbar');if(toolbar)toolbar.append(box);};
+   const place=()=>{const actions=document.querySelector('.web-tab-panel:not([hidden]) .page-actions');if(actions)actions.append(box);};
    place();document.addEventListener('click',event=>{if(event.target.closest('.web-tabs [role=tab]'))place();});
   }else{
    const add=[...header.querySelectorAll('button,a.btn')].find(b=>!b.closest('.user-profile')&&/thêm|lên đơn|tạo|lập/i.test(b.textContent));
@@ -33,15 +33,9 @@
     else{add.parentElement.classList.add('grid-file-actions');add.after(box);}
    }else header.insertBefore(box,header.querySelector('.user-profile'));
   }
-  const toggle=box.querySelector('.btn'),menu=box.querySelector('.grid-file-options');
-  const close=()=>{if(menu){menu.hidden=true;toggle.setAttribute('aria-expanded','false');}};
-  if(canImport){
-   toggle.onclick=()=>{menu.hidden=!menu.hidden;toggle.setAttribute('aria-expanded',String(!menu.hidden));};
-   document.addEventListener('click',e=>{if(!box.contains(e.target))close();});box.addEventListener('keydown',e=>{if(e.key==='Escape'){close();toggle.focus();}});
-   box.querySelector('[data-file-import]').onclick=()=>{close();openImport();};
-  }
+  if(canImport)box.querySelector('[data-file-import]').onclick=openImport;
   box.querySelector('[data-file-export]').onclick=async e=>{
-   close();const button=e.currentTarget;button.disabled=true;
+   const button=e.currentTarget;button.disabled=true;
    try{
     const table=[...document.querySelectorAll('.main-content .table-responsive table')].find(t=>t.offsetParent!==null&&t.tHead&&t.tBodies.length);
     if(!table)throw Error('Không có lưới dữ liệu để xuất.');const data=tableData(table);

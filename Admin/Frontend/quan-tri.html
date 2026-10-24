@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="vi">
 
 <head>
@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="/css/global.css?v=20261021-form-unified" />
   <link rel="stylesheet" href="/admin/css/sidebar.css?v=20261021-action-fit-2" />
   <link rel="stylesheet" href="/admin/css/quan-tri.css" />
-  <link rel="stylesheet" href="/vendor/fontawesome/css/all.min.css" />
+  <link rel="stylesheet" href="/vendor/bootstrap-icons/bootstrap-icons.min.css" />
   <script src="/admin/js/auth.js?v=20261021-form-unified"></script>
     <script src="/admin/js/report-filters.js?v=20261021-action-fit-2"></script>
       <!-- Google Fonts: 2 font chuẩn xuyên suốt hệ thống (Hỗ trợ 100% tiếng Việt) -->
@@ -29,7 +29,7 @@
   <!-- MAIN CONTENT -->
   <div class="main-content">
     <div class="page-header">
-      <h2><i class="fas fa-cogs"></i> QUẢN TRỊ HỆ THỐNG</h2>
+      <h2><i class="bi bi-gear-wide-connected"></i> QUẢN TRỊ HỆ THỐNG</h2>
     </div>
 
     <!-- BẢNG ĐIỀU KHIỂN SAO LƯU -->
@@ -37,7 +37,7 @@
       <!-- 1. Card thông tin cơ sở dữ liệu -->
       <div class="admin-card">
         <div class="admin-card-header">
-          <h3><i class="fas fa-database admin-card-icon"></i> Cơ Sở Dữ Liệu</h3>
+          <h3><i class="bi bi-database admin-card-icon"></i> Cơ Sở Dữ Liệu</h3>
           <span class="status-badge status-badge-success">Kết nối tốt</span>
         </div>
         <ul class="db-info-list">
@@ -67,7 +67,7 @@
       <!-- 2. Card tác vụ sao lưu -->
       <div class="admin-card">
         <div class="admin-card-header">
-          <h3><i class="fas fa-file-export admin-card-icon"></i> Sao Lưu Hệ Thống</h3>
+          <h3><i class="bi bi-file-earmark-arrow-down admin-card-icon"></i> Sao Lưu Hệ Thống</h3>
         </div>
         <p style="font-size: 0.9rem; color: var(--color-text-muted); margin-bottom: 20px;">
           Xuất toàn bộ cấu trúc dữ liệu, tài khoản nhân viên, hàng tồn kho và lịch sử giao dịch thành file sao lưu JSON
@@ -75,17 +75,17 @@
         </p>
         <button id="btnCreateBackup" class="btn"
           style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px;">
-          <i class="fas fa-cloud-download-alt"></i> Tạo Bản Sao Lưu Mới
+          <i class="bi bi-cloud-download"></i> Tạo Bản Sao Lưu Mới
         </button>
       </div>
 
       <!-- 3. Card tải lên file sao lưu -->
       <div class="admin-card">
         <div class="admin-card-header">
-          <h3><i class="fas fa-file-import admin-card-icon"></i> Tải Lên Bản Backup</h3>
+          <h3><i class="bi bi-file-earmark-arrow-up admin-card-icon"></i> Tải Lên Bản Backup</h3>
         </div>
         <div class="upload-zone" id="uploadZone">
-          <i class="fas fa-cloud-upload-alt"></i>
+          <i class="bi bi-cloud-upload"></i>
           <p><span class="highlight">Chọn file</span> hoặc kéo thả file backup vào đây</p>
           <p style="font-size: 0.75rem; color: #666;">Định dạng cho phép: .json</p>
           <input type="file" id="fileInput" accept=".json" />
@@ -97,7 +97,7 @@
     <div class="restore-progress-container" id="restoreProgressContainer">
       <div class="progress-header">
         <span style="color: var(--color-primary); font-weight: bold;">
-          <i class="fas fa-spinner fa-spin"></i> Đang khôi phục cơ sở dữ liệu...
+          <i class="bi bi-arrow-repeat bi-spin"></i> Đang khôi phục cơ sở dữ liệu...
         </span>
         <span id="progressPercentage" style="color: var(--color-primary); font-weight: bold;">0%</span>
       </div>
@@ -112,7 +112,7 @@
     <!-- DANH SÁCH BẢN SAO LƯU -->
     <div class="page-header"
       style="margin-top: 30px; border-bottom: 1px solid var(--color-border); padding-bottom: 10px;">
-      <h3><i class="fas fa-list-ul"></i> Lịch Sử Bản Sao Lưu</h3>
+      <h3><i class="bi bi-list-ul"></i> Lịch Sử Bản Sao Lưu</h3>
     </div>
 
     <div class="table-responsive" style="margin-top: 15px;">
@@ -161,7 +161,7 @@
           await javiAlert("Lỗi kết nối máy chủ khi tạo sao lưu!");
         } finally {
           btnCreate.disabled = false;
-          btnCreate.innerHTML = '<i class="fas fa-cloud-download-alt"></i> Tạo Bản Sao Lưu Mới';
+          btnCreate.innerHTML = '<i class="bi bi-cloud-download"></i> Tạo Bản Sao Lưu Mới';
         }
       });
 
@@ -254,19 +254,19 @@
 
             const tr = document.createElement("tr");
             tr.innerHTML = `
-                <td style="font-weight: 500; color: #fff;"><i class="far fa-file-code" style="color: var(--color-primary); margin-right: 10px;"></i>${file.name}</td>
+                <td style="font-weight: 500; color: #fff;"><i class="bi bi-file-earmark-code" style="color: var(--color-primary); margin-right: 10px;"></i>${file.name}</td>
                 <td>${dateStr}</td>
                 <td>${sizeStr}</td>
                 <td>
                   <div class="action-btn-group">
                     <a href="/backups/${file.name}" download="${file.name}" class="backup-btn backup-btn-download" title="Tải về file sao lưu">
-                      <i class="fas fa-download"></i> Tải về
+                      <i class="bi bi-download"></i> Tải về
                     </a>
                     <button class="backup-btn backup-btn-restore" onclick="confirmRestore('${file.name}')" title="Khôi phục dữ liệu từ bản sao lưu này">
-                      <i class="fas fa-undo-alt"></i> Khôi phục
+                      <i class="bi bi-arrow-counterclockwise"></i> Khôi phục
                     </button>
                     <button class="backup-btn backup-btn-delete" onclick="confirmDelete('${file.name}')" title="Xóa file sao lưu này">
-                      <i class="fas fa-trash-alt"></i> Xóa
+                      <i class="bi bi-trash3"></i> Xóa
                     </button>
                   
       </div>

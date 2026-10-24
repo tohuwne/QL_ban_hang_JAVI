@@ -18,7 +18,7 @@ Tài liệu quy định và chuẩn hóa toàn bộ giao diện người dùng (
    - **Các vị trí ĐƯỢC DÙNG Icon**:
      - Menu Sidebar (giúp nhận diện danh mục phân hệ nhanh)
      - Nút hành động chính (`.btn-primary` như `+ Thêm`, `Xuất Excel`, `In phiếu`)
-     - Ô nhập tìm kiếm (kính lúp `fa-search`)
+     - Ô nhập tìm kiếm (kính lúp `bi-search`)
      - Tiêu đề Phân hệ Header và Modal Popup (icon vừa phải, tinh tế)
 
 3. **Phông chữ & Kiểu chữ (Typography)**:
@@ -66,7 +66,7 @@ Tất cả các Form Chi Tiết Chứng Từ (Phiếu Thu, Phiếu Chi, Đơn H�
   <div class="modal-content" style="max-width: 550px">
     <!-- 1. Header Modal tiêu chuẩn -->
     <div class="modal-header">
-      <h3><i class="fas fa-receipt"></i> CHI TIẾT PHIẾU THU</h3>
+      <h3><i class="bi bi-receipt"></i> CHI TIẾT PHIẾU THU</h3>
       <button class="close-btn" onclick="closeDetailModal()">&times;</button>
     </div>
 
@@ -106,7 +106,7 @@ Tất cả các Form Chi Tiết Chứng Từ (Phiếu Thu, Phiếu Chi, Đơn H�
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" onclick="closeDetailModal()">Đóng</button>
       <button type="button" class="btn btn-primary" onclick="printDetail()">
-        <i class="fas fa-print"></i> In Chứng Từ (PDF)
+        <i class="bi bi-printer"></i> In Chứng Từ (PDF)
       </button>
     </div>
   </div>
@@ -154,9 +154,9 @@ Khi tạo một file HTML phân hệ mới (ví dụ `khuyen-mai.html`), copy m�
     <div class="main-content">
       <!-- HEADER PHÂN HỆ -->
       <div class="page-header">
-        <h2><i class="fas fa-tag"></i> QUẢN LÝ TÊN PHÂN HỆ</h2>
+        <h2><i class="bi bi-tag"></i> QUẢN LÝ TÊN PHÂN HỆ</h2>
         <button class="btn btn-primary" onclick="openCreateModal()">
-          <i class="fas fa-plus"></i> Thêm Mới
+          <i class="bi bi-plus-lg"></i> Thêm Mới
         </button>
       </div>
 
@@ -204,8 +204,8 @@ Khi tạo một file HTML phân hệ mới (ví dụ `khuyen-mai.html`), copy m�
               <td>03/10/2026</td>
               <td><span class="badge completed">Hoạt động</span></td>
               <td style="text-align: right;">
-                <button class="btn-action-icon btn-edit-icon" title="Sửa"><i class="fas fa-pen"></i></button>
-                <button class="btn-action-icon btn-delete-icon" title="Xóa"><i class="fas fa-trash"></i></button>
+                <button class="btn-action-icon btn-edit-icon" title="Sửa"><i class="bi bi-pencil"></i></button>
+                <button class="btn-action-icon btn-delete-icon" title="Xóa"><i class="bi bi-trash"></i></button>
               </td>
             </tr>
           </tbody>

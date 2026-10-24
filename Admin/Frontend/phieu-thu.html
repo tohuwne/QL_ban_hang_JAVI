@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="/admin/css/phieu-thu.css" />
     <link
       rel="stylesheet"
-      href="/vendor/fontawesome/css/all.min.css"
+      href="/vendor/bootstrap-icons/bootstrap-icons.min.css"
     />
     <script src="/admin/js/auth.js?v=20261021-form-unified"></script>
     <script src="/admin/js/report-filters.js?v=20261021-action-fit-2"></script>
@@ -29,9 +29,9 @@
 
     <div class="main-content">
       <div class="page-header">
-        <h2><i class="fas fa-receipt"></i> QUẢN LÝ PHIẾU THU</h2>
+        <h2><i class="bi bi-receipt"></i> QUẢN LÝ PHIẾU THU</h2>
         <button class="btn" onclick="openModal()">
-          <i class="fas fa-plus"></i> Lập Phiếu Thu
+          <i class="bi bi-plus-lg"></i> Lập Phiếu Thu
         </button>
       </div>
 
@@ -39,7 +39,7 @@
         <label>Từ ngày<input type="date" id="incomeFrom" aria-describedby="incomeFromError" /><small id="incomeFromError" class="date-range-error" aria-live="polite" hidden></small></label>
         <label>Đến ngày<input type="date" id="incomeTo" /></label>
         <div class="filter-field"><span>Hình thức thanh toán</span><details class="multi-filter" id="incomeValues" data-default-values="Tiền mặt|Chuyển khoản"><summary>Tất cả</summary><div class="multi-options"></div></details></div>
-        <button class="btn" type="submit"><i class="fas fa-filter"></i> Xem</button>
+        <button class="btn" type="submit"><i class="bi bi-funnel"></i> Xem</button>
       </form>
 
       <div class="table-responsive">
@@ -70,7 +70,7 @@
     <div class="modal-overlay" id="phieuThuModal">
       <div class="modal-content">
         <div class="modal-header">
-          <h3><i class="fas fa-plus-circle"></i> Lập Phiếu Thu Mới</h3>
+          <h3><i class="bi bi-plus-circle"></i> Lập Phiếu Thu Mới</h3>
           <button class="close-btn" onclick="closeModal()">&times;</button>
         </div>
         <form id="phieuThuForm">
@@ -162,7 +162,7 @@
     <div class="modal-overlay" id="detailModal">
       <div class="modal-content">
         <div class="modal-header">
-          <h3><i class="fas fa-receipt"></i> Chi Tiết Phiếu Thu</h3>
+          <h3><i class="bi bi-receipt"></i> Chi Tiết Phiếu Thu</h3>
           <button class="close-btn" onclick="closeDetailModal()">
             &times;
           </button>
@@ -212,7 +212,7 @@
             style="background-color: #17a2b8; color: white"
             onclick="printDetail()"
           >
-            <i class="fas fa-print"></i> In Phiếu Thu
+            <i class="bi bi-printer"></i> In Phiếu Thu
           </button>
         </div>
       </div>

@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="/admin/css/don-hang.css" />
     <link
       rel="stylesheet"
-      href="/vendor/fontawesome/css/all.min.css"
+      href="/vendor/bootstrap-icons/bootstrap-icons.min.css"
     />
     <script src="/admin/js/auth.js?v=20261021-form-unified"></script>
     <script src="/admin/js/report-filters.js?v=20261021-order-source"></script>
@@ -32,9 +32,9 @@
     <!-- 2. MAIN CONTENT -->
     <div class="main-content">
       <div class="page-header">
-        <h2><i class="fas fa-shopping-basket"></i> QUẢN LÝ BÁN HÀNG</h2>
+        <h2><i class="bi bi-basket"></i> QUẢN LÝ BÁN HÀNG</h2>
         <button class="btn" onclick="window.location.href = 'ban-hang.html'">
-          <i class="fas fa-plus"></i> Lên Đơn Hàng Mới
+          <i class="bi bi-plus-lg"></i> Lên Đơn Hàng Mới
         </button>
       </div>
 
@@ -45,7 +45,7 @@
         <label>Đến ngày<input type="date" id="orderTo" /></label>
         <div class="filter-field"><span>Trạng thái đơn hàng</span><details class="multi-filter" id="orderStatuses"><summary>Tất cả</summary><div class="multi-options"></div></details></div>
         <div class="filter-field"><span>Trạng thái thanh toán</span><details class="multi-filter" id="paymentStatuses"><summary>Tất cả</summary><div class="multi-options"></div></details></div>
-        <button class="btn" type="submit"><i class="fas fa-filter"></i> Xem</button>
+        <button class="btn" type="submit"><i class="bi bi-funnel"></i> Xem</button>
       </form>
 
       <!-- KHU VỰC 2: Bảng Dữ Liệu -->
@@ -84,7 +84,7 @@
     <div class="modal-overlay" id="orderDetailModal">
       <div class="modal-content">
         <div class="modal-header">
-          <h3><i class="fas fa-shopping-bag"></i> CHI TIẾT ĐƠN HÀNG</h3>
+          <h3><i class="bi bi-bag"></i> CHI TIẾT ĐƠN HÀNG</h3>
           <button class="close-btn" onclick="document.getElementById('orderDetailModal').style.display = 'none'">&times;</button>
         </div>
         <div class="detail-body">
@@ -137,7 +137,7 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" onclick="document.getElementById('orderDetailModal').style.display = 'none'">Đóng</button>
           <button type="button" class="btn btn-primary" onclick="printPDFCurrentOrder()">
-            <i class="fas fa-print"></i> In Hóa Đơn (PDF)
+            <i class="bi bi-printer"></i> In Hóa Đơn (PDF)
           </button>
         </div>
       </div>
@@ -228,7 +228,7 @@
                   <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 4px 0;">
                     <span class="status-info">${pStatusText}</span>
                     <button class="action-btn" style="background-color: var(--color-primary); color: #000; font-size: 11px; padding: 2px 6px; font-weight: bold; border-radius: 4px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; line-height: 1.2;" onclick="redirectLapHD('${item.MaDH.trim()}')">
-                      <i class="fas fa-file-invoice" style="font-size: 10px;"></i></button>
+                      <i class="bi bi-file-earmark-text" style="font-size: 10px;"></i></button>
                   </div>
                 `;
               }
@@ -238,12 +238,12 @@
               // Chỉ hiển thị nút Sửa, Xóa nếu chưa lập hóa đơn và chưa lập phiếu xuất
               if (!pStatus && !item.MaPX) {
                 btnHtml += `
-                  ${!['Website','Online'].includes(item.NguonDon) ? `<button class="action-btn" style="background-color: #dc3545; color: white;" onclick="event.stopPropagation(); deleteOrder('${item.MaDH.trim()}')"><i class="fas fa-trash-alt"></i></button>` : ''}
+                  ${!['Website','Online'].includes(item.NguonDon) ? `<button class="action-btn" style="background-color: #dc3545; color: white;" onclick="event.stopPropagation(); deleteOrder('${item.MaDH.trim()}')"><i class="bi bi-trash3"></i></button>` : ''}
                 `;
               }
  
               if (item.TrangThaiDonHang === "Chờ giao" && !item.MaPX) {
-                btnHtml += `<button class="action-btn" style="background-color: #ffc107; color: #000;" onclick="event.stopPropagation(); window.location.href='xuat-kho.html?maDH=${item.MaDH.trim()}'"><i class="fas fa-truck-loading"></i></button>`;
+                btnHtml += `<button class="action-btn" style="background-color: #ffc107; color: #000;" onclick="event.stopPropagation(); window.location.href='xuat-kho.html?maDH=${item.MaDH.trim()}'"><i class="bi bi-truck"></i></button>`;
               }
               btnHtml += `</div>`;
  

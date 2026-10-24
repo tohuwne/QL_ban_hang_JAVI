@@ -1,6 +1,6 @@
 # Đặc tả yêu cầu hệ thống JAVI COFFEE
 
-Phiên bản 2.23 — cập nhật 22/10/2026.
+Phiên bản 2.25 — cập nhật 24/10/2026.
 
 ## Yêu cầu đã chốt
 
@@ -45,7 +45,7 @@ Phiên bản 2.23 — cập nhật 22/10/2026.
 ## Đồng bộ giao diện và giỏ hàng — chốt 20/10/2026
 
 - GH-02: Giỏ hàng khách hàng sắp xếp theo lần cập nhật mới nhất xuống cũ nhất. Thêm mới, thêm trùng tổ hợp hoặc sửa số lượng phải đưa đúng dòng vừa cập nhật lên đầu, đồng thời cập nhật số lượng. Giữ MaGH và quy tắc gộp GH-01; không tạo dòng trùng khi tăng số lượng. Nếu các thao tác gần nhau thì thứ tự vẫn xác định được.
-- GD-04: Icon trong các phân hệ, tiêu đề và nút quản trị phải tải đúng; dùng bộ Font Awesome lưu trong tài nguyên nội bộ, giữ Remix Icon cho sidebar. Không phụ thuộc đường dẫn CDN bị sai.
+- GD-04: Icon trong các phân hệ, tiêu đề, nút và sidebar quản trị cùng trang đăng nhập dùng thống nhất một bộ Bootstrap Icons (bộ icon Bootstrap 5) lưu trong tài nguyên nội bộ /vendor/bootstrap-icons; không dùng song song Font Awesome/Remix Icon, không phụ thuộc CDN. (Điều chỉnh 24/10/2026.)
 - GD-05: Chi tiết bán hàng/đơn hàng và công nợ dùng cùng mẫu drawer thông tin, bảng dữ liệu và nút với nhập/xuất/tồn/thu/chi/hóa đơn. Mở chi tiết có trạng thái tải/lỗi rõ, không giữ dữ liệu cũ khi đổi đơn; dữ liệu lỗi/thiếu không làm hỏng form.
 - GD-06: Tất cả form nghiệp vụ/chi tiết quản trị cố định header và footer; chỉ vùng nội dung cuộn. Footer nút luôn ở trong form gốc để giữ submit/validation, không đổi nghiệp vụ. Bảng nội dung không tạo thêm vùng cuộn dọc lồng nhau. Popup cà phê vẫn ở giữa màn hình.
 - GD-07: Các toast cùng khung kích thước 420×80px trên máy tính, thu hẹp theo màn hình nhỏ; nội dung gọn, hơi dài theo chiều ngang, không chiếm khối lớn. Nội dung dài vẫn đọc được, có đóng và tự ẩn; đồng bộ kích thước giữa khách hàng và quản trị, giữ màu trạng thái.
@@ -100,6 +100,12 @@ Phiên bản 2.23 — cập nhật 22/10/2026.
 
 - WEB-05: Thẻ Tin tức/Bài truyền thông có liên kết nguồn báo HTTPS mở trực tiếp bài gốc trong tab mới, giữ cửa hàng ở tab hiện tại, có rel noopener noreferrer. Bài không có nguồn báo mở bài nội bộ như hiện có; không mở URL giao thức không an toàn.
 
+## Thanh công cụ danh sách quản trị — chốt 23/10/2026
+
+- GD-15: Màn hình danh sách quản trị có card thống kê mặc định ẩn; icon Dashboard bấm để hiện/ẩn các card phía trên. Thứ tự từ trên xuống: tiêu đề “Quản lý…” (cùng khối người dùng) → hàng nút thao tác theo thứ tự Thêm/Lập (nút chính), Nhập file (trang được phép nhập), Xuất file, icon Dashboard → thanh tìm kiếm + các trường bộ lọc + nút Xem kéo dài hết chiều ngang, thẳng mép với hàng nút phía trên. Nhập file và Xuất file là hai nút riêng, không gộp trong menu thả xuống. Tìm kiếm áp dụng ngay khi gõ trên mọi cột hiển thị của các dòng đã tải, không phân biệt dấu/hoa thường, kết hợp với bộ lọc đã bấm Xem và nút trạng thái hiện có; Xuất file và phân trang theo kết quả đang hiển thị. Trang đã có ô tìm riêng giữ ô đó. Người dùng kéo mép phải từng trường bộ lọc/tìm kiếm (hoặc phím mũi tên khi focus) để đổi độ rộng; trình duyệt nhớ theo từng trang, nhấp đúp về mặc định. Bỏ hàng lọc nhanh theo cột trong header bảng. (Điều chỉnh bố cục 24/10/2026.)
+- GD-16 (24/10/2026): Cổng quản trị có chế độ sáng và tối. Nút sáng/tối đặt cạnh khối người dùng trên header mọi màn hình quản trị (kể cả POS); bấm đổi ngay toàn bộ sidebar, lưới, bộ lọc, drawer, popup mà không tải lại trang. Lựa chọn lưu trên trình duyệt và áp dụng ngay khi mở trang khác/tải lại, không nháy giao diện cũ. Mặc định tối. Chữ, nhãn trạng thái và nút đều đọc rõ trên cả hai nền; không đổi nghiệp vụ, quyền hay dữ liệu.
+- GD-17 (24/10/2026): Sidebar quản trị có nút ghim (icon ghim) hiện khi menu mở rộng. Khi ghim, menu luôn mở rộng kèm nhãn và submenu, không tự thu gọn khi rời chuột; nội dung chính và drawer nghiệp vụ dịch sang phải theo bề rộng menu, không bị che. Bỏ ghim trở lại hành vi thu gọn/mở khi hover của GD-08. Trạng thái ghim lưu trên trình duyệt; màn hình ≤ 900px luôn dùng menu thu gọn để không chiếm chỗ nội dung.
+
 ## Phạm vi chưa chốt
 
 - Thanh toán không tài khoản chưa được chốt. Giỏ hàng và thêm sản phẩm yêu cầu tài khoản theo KH-04; KH-01 áp dụng cho việc vào xem cửa hàng.
@@ -144,7 +150,7 @@ Mỗi giao diện gọi /api trên chính cổng của mình. Hai server dùng c
 23. POS trên máy tính giữ hai cột như cũ, danh sách hàng và trường thanh toán đọc rõ; khi thêm nhiều dòng, chỉ vùng danh sách cuộn và nút lưu/tổng cần trả vẫn thấy được. Popup và trang hoạt động trên màn hình nhỏ, không tràn ngang. Các nghiệp vụ chiết khấu/giảm giá/lưu/sửa đơn giữ kết quả hiện có.
 
 24. Giỏ thêm A rồi B hiển thị B trước A; thêm trùng A hoặc sửa số lượng A đưa A lên đầu, giữ mã dòng và cập nhật đúng số lượng.
-25. Các màn hình và nút quản trị hiển thị icon, tất cả file font được phục vụ nội bộ thành công.
+25. Các màn hình, nút, sidebar quản trị và trang đăng nhập hiển thị icon Bootstrap Icons, file font phục vụ nội bộ thành công; trang không còn tham chiếu Font Awesome/Remix Icon.
 26. Chi tiết đơn hàng và công nợ hiển thị cùng phong cách chứng từ; khi nội dung dài, header/footer giữ nguyên vị trí và chỉ body cuộn, nút submit/đóng/in vẫn hoạt động. Lỗi tải đơn phải hiện trong form và không ghi đè dữ liệu của đơn mở sau.
 27. Toast các trạng thái dùng cùng khung 420×80px, không tràn màn hình nhỏ; các dòng POS thấp hơn nhưng vẫn sửa số lượng/giảm món/xóa được.
 
@@ -189,7 +195,16 @@ Mỗi giao diện gọi /api trên chính cổng của mình. Hai server dùng c
 
 58. Bấm thẻ hoặc nút đọc của cả sáu bài báo mở đúng nguồn trong tab mới; bài viết nội bộ vẫn mở trang chi tiết. Bộ lọc và tìm kiếm giữ nguyên.
 
+59. Trang có card (Đơn hàng, Hóa đơn, Nhập kho, Tồn kho) mở ra không thấy card; bấm icon Dashboard hiện card, bấm lại ẩn. Header bảng không còn ô/dropdown lọc theo cột. Gõ tìm kiếm lọc ngay các dòng, kết hợp khoảng ngày đã Xem; xóa ô tìm trả lại đúng tập theo bộ lọc. Kéo đổi độ rộng một trường giữ nguyên sau tải lại trang; nhấp đúp trả về mặc định.
+60. Trang danh sách (Đơn hàng, Khách hàng…) hiển thị từ trên xuống: tiêu đề → hàng nút Thêm, Nhập file, Xuất file, icon Dashboard → thanh tìm kiếm/bộ lọc rộng hết chiều ngang, mép trái thẳng với hàng nút. Bấm Nhập file mở đúng trang nhập; Xuất file tải đúng dữ liệu đang lọc; trang không được nhập chỉ có Xuất file.
+61. Bấm nút sáng/tối đổi ngay giao diện; tải lại/mở trang khác giữ lựa chọn. Ở chế độ sáng, lưới, bộ lọc, drawer, POS và nhãn trạng thái không còn nền tối hay chữ mờ khó đọc.
+62. Bấm ghim: menu giữ mở rộng khi rời chuột, nội dung chính bắt đầu sau mép menu; tải lại vẫn ghim. Bỏ ghim trở lại thu gọn 76px. Màn hình ≤ 900px không bị menu ghim che nội dung.
+
 ## Nhật ký
+
+- 24/10/2026: Điều chỉnh GD-04 sang bộ Bootstrap Icons nội bộ cho toàn bộ quản trị và trang đăng nhập; điều chỉnh bố cục GD-15 (tiêu đề → nút Thêm/Nhập/Xuất/Dashboard → thanh bộ lọc kéo dài, tách Nhập file/Xuất file thành hai nút); chốt GD-16 chế độ sáng/tối và GD-17 ghim sidebar.
+
+- 23/10/2026: Chốt GD-15: icon Dashboard bật/tắt card thống kê (mặc định ẩn), thanh tìm kiếm + bộ lọc + Xem cùng hàng nút thao tác, trường bộ lọc đổi được độ rộng, bỏ lọc nhanh theo cột trong bảng.
 
 - 22/10/2026: Chốt WEB-05: đọc bài báo trực tiếp ở tab mới, giữ luồng bài nội bộ.
 
