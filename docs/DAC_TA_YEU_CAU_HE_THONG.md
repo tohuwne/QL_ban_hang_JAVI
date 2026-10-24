@@ -1,6 +1,6 @@
 # Đặc tả yêu cầu hệ thống JAVI COFFEE
 
-Phiên bản 2.25 — cập nhật 24/10/2026.
+Phiên bản 2.26 — cập nhật 24/10/2026.
 
 ## Yêu cầu đã chốt
 
@@ -103,8 +103,15 @@ Phiên bản 2.25 — cập nhật 24/10/2026.
 ## Thanh công cụ danh sách quản trị — chốt 23/10/2026
 
 - GD-15: Màn hình danh sách quản trị có card thống kê mặc định ẩn; icon Dashboard bấm để hiện/ẩn các card phía trên. Thứ tự từ trên xuống: tiêu đề “Quản lý…” (cùng khối người dùng) → hàng nút thao tác theo thứ tự Thêm/Lập (nút chính), Nhập file (trang được phép nhập), Xuất file, icon Dashboard → thanh tìm kiếm + các trường bộ lọc + nút Xem kéo dài hết chiều ngang, thẳng mép với hàng nút phía trên. Nhập file và Xuất file là hai nút riêng, không gộp trong menu thả xuống. Tìm kiếm áp dụng ngay khi gõ trên mọi cột hiển thị của các dòng đã tải, không phân biệt dấu/hoa thường, kết hợp với bộ lọc đã bấm Xem và nút trạng thái hiện có; Xuất file và phân trang theo kết quả đang hiển thị. Trang đã có ô tìm riêng giữ ô đó. Người dùng kéo mép phải từng trường bộ lọc/tìm kiếm (hoặc phím mũi tên khi focus) để đổi độ rộng; trình duyệt nhớ theo từng trang, nhấp đúp về mặc định. Bỏ hàng lọc nhanh theo cột trong header bảng. (Điều chỉnh bố cục 24/10/2026.)
-- GD-16 (24/10/2026): Cổng quản trị có chế độ sáng và tối. Nút sáng/tối đặt cạnh khối người dùng trên header mọi màn hình quản trị (kể cả POS); bấm đổi ngay toàn bộ sidebar, lưới, bộ lọc, drawer, popup mà không tải lại trang. Lựa chọn lưu trên trình duyệt và áp dụng ngay khi mở trang khác/tải lại, không nháy giao diện cũ. Mặc định tối. Chữ, nhãn trạng thái và nút đều đọc rõ trên cả hai nền; không đổi nghiệp vụ, quyền hay dữ liệu.
+- GD-16 (24/10/2026): Cổng quản trị có chế độ sáng và tối. Nút sáng/tối đặt cạnh khối người dùng trên header mọi màn hình quản trị (kể cả POS); bấm đổi ngay toàn bộ sidebar, lưới, bộ lọc, drawer, popup mà không tải lại trang. Lựa chọn lưu trên trình duyệt và áp dụng ngay khi mở trang khác/tải lại trong phiên, không nháy giao diện cũ. Mặc định tối: mỗi lần đăng nhập thành công vào trang Admin bắt đầu ở chế độ tối, bỏ lựa chọn sáng của lần trước. Chữ, nhãn trạng thái và nút đều đọc rõ trên cả hai nền; không đổi nghiệp vụ, quyền hay dữ liệu.
 - GD-17 (24/10/2026): Sidebar quản trị có nút ghim (icon ghim) hiện khi menu mở rộng. Khi ghim, menu luôn mở rộng kèm nhãn và submenu, không tự thu gọn khi rời chuột; nội dung chính và drawer nghiệp vụ dịch sang phải theo bề rộng menu, không bị che. Bỏ ghim trở lại hành vi thu gọn/mở khi hover của GD-08. Trạng thái ghim lưu trên trình duyệt; màn hình ≤ 900px luôn dùng menu thu gọn để không chiếm chỗ nội dung.
+- GD-18 (24/10/2026): Thanh tìm kiếm + bộ lọc trên màn hình danh sách đóng/mở được bằng nút icon bộ lọc ở cuối hàng nút thao tác; thu gọn chỉ ẩn thanh, giữ nguyên giá trị lọc và kết quả đang áp dụng. Trạng thái đóng/mở lưu trên trình duyệt theo từng trang. Hàng nút Thêm/Nhập file/Xuất file/Dashboard/bộ lọc canh phải.
+
+## Bán hàng: thao tác dòng và chi tiết — chốt 24/10/2026
+
+- DH-04: Lưới Quản lý bán hàng đặt mọi thao tác ở cột nút cố định cuối dòng: Chỉnh sửa và Xóa (đơn nhân viên lập, chưa lập hóa đơn và chưa có phiếu xuất; đơn khách đặt website không sửa/xóa), Lập hóa đơn (đơn chưa lập hóa đơn), Xuất kho (đơn Chờ giao chưa có phiếu xuất). Cột Thanh toán chỉ hiển thị nhãn trạng thái, không chứa nút. Chỉnh sửa mở POS ở chế độ sửa đơn hiện có; Xóa giữ bước xác nhận.
+- DH-05: Double-click một dòng bán hàng luôn chỉ mở form xem chi tiết, không mở sửa đơn. Footer chi tiết có các nút thao tác nhanh đúng bằng các nút khả dụng của dòng đó (cùng điều kiện, cùng xử lý, cùng xác nhận) cùng Đóng và In.
+- DH-06: Chi tiết đơn hàng và chi tiết hóa đơn có mục Thông tin khách hàng: mã KH, tên, số điện thoại, email, loại khách hàng, địa chỉ lấy từ hồ sơ KHACH_HANG của đơn; trường trống được ẩn, không có khách thì hiển thị Khách lẻ/không có thông tin. Thông tin giao hàng của đơn website giữ riêng theo KHO-05.
 
 ## Phạm vi chưa chốt
 
@@ -195,12 +202,19 @@ Mỗi giao diện gọi /api trên chính cổng của mình. Hai server dùng c
 
 58. Bấm thẻ hoặc nút đọc của cả sáu bài báo mở đúng nguồn trong tab mới; bài viết nội bộ vẫn mở trang chi tiết. Bộ lọc và tìm kiếm giữ nguyên.
 
-59. Trang có card (Đơn hàng, Hóa đơn, Nhập kho, Tồn kho) mở ra không thấy card; bấm icon Dashboard hiện card, bấm lại ẩn. Header bảng không còn ô/dropdown lọc theo cột. Gõ tìm kiếm lọc ngay các dòng, kết hợp khoảng ngày đã Xem; xóa ô tìm trả lại đúng tập theo bộ lọc. Kéo đổi độ rộng một trường giữ nguyên sau tải lại trang; nhấp đúp trả về mặc định.
+59. Trang có card (Đơn hàng, Công nợ, Nhập kho, Tồn kho) mở ra không thấy card; bấm icon Dashboard hiện card, bấm lại ẩn. Header bảng không còn ô/dropdown lọc theo cột. Gõ tìm kiếm lọc ngay các dòng, kết hợp khoảng ngày đã Xem; xóa ô tìm trả lại đúng tập theo bộ lọc. Kéo đổi độ rộng một trường giữ nguyên sau tải lại trang; nhấp đúp trả về mặc định.
 60. Trang danh sách (Đơn hàng, Khách hàng…) hiển thị từ trên xuống: tiêu đề → hàng nút Thêm, Nhập file, Xuất file, icon Dashboard → thanh tìm kiếm/bộ lọc rộng hết chiều ngang, mép trái thẳng với hàng nút. Bấm Nhập file mở đúng trang nhập; Xuất file tải đúng dữ liệu đang lọc; trang không được nhập chỉ có Xuất file.
 61. Bấm nút sáng/tối đổi ngay giao diện; tải lại/mở trang khác giữ lựa chọn. Ở chế độ sáng, lưới, bộ lọc, drawer, POS và nhãn trạng thái không còn nền tối hay chữ mờ khó đọc.
 62. Bấm ghim: menu giữ mở rộng khi rời chuột, nội dung chính bắt đầu sau mép menu; tải lại vẫn ghim. Bỏ ghim trở lại thu gọn 76px. Màn hình ≤ 900px không bị menu ghim che nội dung.
+63. Chọn chế độ sáng, đăng xuất rồi đăng nhập lại: trang Admin mở ở chế độ tối. Bấm icon bộ lọc ẩn/hiện thanh bộ lọc, tải lại giữ trạng thái; kết quả lọc không đổi khi thu gọn.
+64. Đơn nhân viên chưa có HĐ/PX có Chỉnh sửa, Lập hóa đơn, Xóa (và Xuất kho nếu Chờ giao) ở cột cố định; đơn đã có HĐ hoặc PX không có Chỉnh sửa/Xóa. Double-click bất kỳ dòng chỉ mở chi tiết, footer có đúng các nút của dòng. Chi tiết đơn và hóa đơn hiển thị mã, tên, SĐT, email, loại khách, địa chỉ khách hàng.
+65. Hóa đơn không còn card thống kê/icon Dashboard. Công nợ có bốn card Tổng tiền hóa đơn, Đã thu bằng tiền mặt, Đã thu chuyển khoản, Còn nợ phải thu, tính trên toàn bộ hóa đơn như trước; lập phiếu thu nợ xong các số được cập nhật.
 
 ## Nhật ký
+
+- 24/10/2026: Chuyển bốn card thống kê tiền hóa đơn (tổng, đã thu tiền mặt/chuyển khoản, còn nợ phải thu) từ module Hóa đơn sang Công nợ; cách tính giữ nguyên, card vẫn ẩn mặc định theo GD-15.
+
+- 24/10/2026: Chốt DH-04 đến DH-06 (nút Chỉnh sửa/Lập hóa đơn vào cột thao tác cố định, double-click chỉ xem chi tiết kèm thao tác nhanh, thông tin khách hàng trong chi tiết đơn/hóa đơn), GD-18 thu gọn thanh bộ lọc và điều chỉnh GD-16 về mặc định tối mỗi lần đăng nhập Admin. Kiểm chứng trên trình duyệt: lưới lịch sử sao lưu hiển thị lại, chi tiết DH000020/HD000020 có đủ thông tin khách, thu gọn bộ lọc lưu theo trang, đăng nhập lại về chế độ tối.
 
 - 24/10/2026: Điều chỉnh GD-04 sang bộ Bootstrap Icons nội bộ cho toàn bộ quản trị và trang đăng nhập; điều chỉnh bố cục GD-15 (tiêu đề → nút Thêm/Nhập/Xuất/Dashboard → thanh bộ lọc kéo dài, tách Nhập file/Xuất file thành hai nút); chốt GD-16 chế độ sáng/tối và GD-17 ghim sidebar.
 

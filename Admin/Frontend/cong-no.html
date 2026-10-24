@@ -70,6 +70,12 @@
         color: #dc3545;
         font-weight: 600;
       }
+      .card-value.danger {
+        color: #ff4d4d;
+      }
+      .card-value.success {
+        color: #28a745;
+      }
     </style>
       <!-- Google Fonts: 2 font chuẩn xuyên suốt hệ thống (Hỗ trợ 100% tiếng Việt) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -90,6 +96,26 @@
         <button class="btn" onclick="window.location.href = 'phieu-thu.html'">
           <i class="bi bi-cash-coin"></i> Tới Phiếu Thu Thu Tiền
         </button>
+      </div>
+
+      <!-- Thống kê thu tiền hóa đơn (chuyển từ module Hóa đơn) -->
+      <div class="stat-cards" id="invoiceDebtStats">
+        <div class="card">
+          <div class="card-title">Tổng Tiền Hóa Đơn</div>
+          <div class="card-value">0 đ</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Đã Thu Bằng Tiền Mặt</div>
+          <div class="card-value success">0 đ</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Đã Thu Chuyển Khoản</div>
+          <div class="card-value success">0 đ</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Còn Nợ Phải Thu</div>
+          <div class="card-value danger">0 đ</div>
+        </div>
       </div>
 
       <form class="report-filters" onsubmit="event.preventDefault(); filterCN()">
@@ -441,11 +467,34 @@
               const debtModal=document.getElementById('customerInvoicesModal');
               if(debtModal.dataset.customerId)viewCustomerInvoices(debtModal.dataset.customerId,debtModal.dataset.customerName);
               loadCongNo();
+              loadInvoiceDebtStats();
             } else alert("Lỗi: " + data.message);
           } catch (err) {
             alert("Lỗi Server khi thực hiện thu nợ!");
           }
         });
+
+      // Thống kê tiền hóa đơn: tổng, đã thu theo hình thức, còn nợ phải thu.
+      async function loadInvoiceDebtStats() {
+        try {
+          const res = await fetch("/api/hoa-don", { cache: "no-store" });
+          const data = await res.json();
+          if (!res.ok || !data.success) return;
+          const totals = [0, 0, 0, 0];
+          data.data.forEach((item) => {
+            const total = Number(item.TongTienThanhToan || 0);
+            const debt = item.TrangThaiThanhToan === "Đã thanh toán" ? 0 : Number(item.SoDuCN ?? total);
+            totals[0] += total; totals[3] += debt;
+            if (item.HinhThucThanhToan === "Tiền mặt") totals[1] += Math.max(0, total - debt);
+            if (item.HinhThucThanhToan === "Chuyển khoản") totals[2] += Math.max(0, total - debt);
+          });
+          document.querySelectorAll("#invoiceDebtStats .card-value").forEach((card, i) => {
+            card.textContent = new Intl.NumberFormat("vi-VN").format(totals[i]) + " đ";
+          });
+        } catch (err) {
+          console.error("Lỗi tải thống kê hóa đơn:", err);
+        }
+      }
 
       // Gọi API đổ dữ liệu sổ Công Nợ
       async function loadCongNo() {
@@ -594,6 +643,7 @@
       document.addEventListener("DOMContentLoaded", () => {
         loadDataForForm();
         loadCongNo();
+        loadInvoiceDebtStats();
       });
     </script>
   </body>

@@ -5,7 +5,7 @@ body.has-app-sidebar,body.import-page {
  --ui-border:#303a46;--ui-border-strong:#3b4654;--ui-border-soft:#27313b;--ui-border-hover:#637082;
  --ui-text:#edf0f4;--ui-text-body:#d9e0e9;--ui-text-soft:#aeb9c8;--ui-text-muted:#8e9aab;
  --ui-accent:#dfc282;--ui-accent-ink:#e8d09b;--ui-danger-ink:#f0a09b;--ui-success-ink:#9cd4bf;--ui-tint:#ffffff;
- --cta-bg:#ffcc00;--cta-hover:#ffd83d;--cta-ink:#1a1400;--cta-glow:#ffcc0040;
+ --cta-bg:#ffcc00;--cta-hover:#ffd83d;--cta-ink:#1a1400;--cta-glow:#ffcc0040;--grid-head-ink:#ffcc00;
  --app-accent:var(--ui-accent);--color-primary:var(--ui-accent);--color-primary-hover:#eed6a1;--javi-gold:var(--ui-accent);
  --app-canvas:var(--ui-canvas);--app-surface:var(--ui-surface);--app-surface-raised:var(--ui-raised);--app-surface-hover:var(--ui-hover);
  --app-border:var(--ui-border);--app-border-strong:var(--ui-border-strong);--app-text:var(--ui-text);--app-text-muted:var(--ui-text-muted);
@@ -25,7 +25,7 @@ html[data-theme=light] body.has-app-sidebar,html[data-theme=light] body.import-p
  --ui-status-danger:#c0362c;--ui-status-success:#17804f;--ui-status-warning:#9a6b00;--ui-status-info:#1f6fb2;
  --app-success:#17804f;--app-danger:#c0362c;--app-info:#1f6fb2;--app-accent-soft:#ffcc0029;--app-shadow:0 10px 26px #1018280f;
  --color-success:#17804f;--color-danger:#c0362c;--color-info:#1f6fb2;--color-warning:#9a6b00;
- --cta-glow:#ffcc0059;--color-primary-hover:#8f6600;
+ --cta-glow:#ffcc0059;--color-primary-hover:#8f6600;--grid-head-ink:#8a6200;
  --sidebar-bg:#ffffff;--sidebar-surface:#f6f7f9;--sidebar-border:#e3e6eb;--sidebar-text:#4a5361;--sidebar-text-strong:#14181f;--sidebar-accent:#b38600;
  --lt-canvas:var(--ui-canvas);--lt-surface:var(--ui-surface);--lt-raised:var(--ui-raised);--lt-border:var(--ui-border);--lt-text:var(--ui-text);--lt-text-soft:var(--ui-text-soft);--lt-text-muted:var(--ui-text-muted);
  color-scheme:light;
@@ -90,7 +90,7 @@ body.has-app-sidebar :is(.filter-btn.active,.status-filter-tab[aria-pressed=true
 /* Uniform grid surface; preserve measured column widths and sticky positioning. */
 body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive {border:1px solid var(--ui-border)!important;border-radius:12px!important;background:var(--ui-surface)!important;box-shadow:none!important}
 body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table {font-family:var(--font-body)!important;font-size:12px!important;color:var(--ui-text-body)!important;border-collapse:separate!important;border-spacing:0!important}
-body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th {background:var(--ui-raised)!important;color:var(--ui-text-soft)!important;border-bottom:1px solid var(--ui-border-strong)!important;font-size:11px!important;font-weight:600!important;letter-spacing:.025em!important;text-transform:none!important;padding:12px 14px!important;vertical-align:top!important}
+body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table thead th {background:var(--ui-raised)!important;color:var(--grid-head-ink)!important;border-bottom:1px solid var(--ui-border-strong)!important;font-size:11px!important;font-weight:700!important;letter-spacing:.05em!important;text-transform:uppercase!important;padding:12px 14px!important;vertical-align:top!important}
 body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table tbody td {height:48px!important;padding:10px 14px!important;font-size:12px!important;line-height:1.6!important;border-bottom:1px solid var(--ui-border-soft)!important;background:var(--ui-surface)!important;color:var(--ui-text-body)}
 body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table tbody tr:nth-child(even) td {background:var(--ui-surface-alt)!important}
 body.has-app-sidebar .main-content:not(.overview-shell) .table-responsive table tbody tr:hover td {background:var(--ui-hover)!important}
@@ -243,9 +243,9 @@ body.has-app-sidebar .main-content .list-toolbar .list-filters .grid-search inpu
 body.has-app-sidebar .main-content .list-toolbar .list-filters .search-box input {padding:4px 10px 4px 28px!important}
 body.has-app-sidebar .main-content .list-filters .search-box > i {position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:11px;pointer-events:none}
 body.has-app-sidebar .main-content .list-toolbar .page-actions .btn {height:30px!important;min-height:30px!important;font-size:11px!important}
-body.has-app-sidebar .main-content .list-toolbar .dashboard-toggle {width:30px!important;min-width:30px!important;padding:0!important;justify-content:center!important;background:transparent!important;border:1px solid var(--ui-border-strong)!important;color:var(--ui-text-soft)!important}
-body.has-app-sidebar .main-content .list-toolbar .dashboard-toggle:hover {border-color:var(--ui-border-hover)!important;color:var(--ui-text)!important}
-body.has-app-sidebar .main-content .list-toolbar .dashboard-toggle[aria-pressed=true] {color:var(--ui-accent-ink)!important;border-color:#dfc28266!important;background:#dfc28213!important}
+body.has-app-sidebar .main-content .list-toolbar :is(.dashboard-toggle,.filter-toggle) {width:30px!important;min-width:30px!important;padding:0!important;justify-content:center!important;background:transparent!important;border:1px solid var(--ui-border-strong)!important;color:var(--ui-text-soft)!important}
+body.has-app-sidebar .main-content .list-toolbar :is(.dashboard-toggle,.filter-toggle):hover {border-color:var(--ui-border-hover)!important;color:var(--ui-text)!important}
+body.has-app-sidebar .main-content .list-toolbar :is(.dashboard-toggle[aria-pressed=true],.filter-toggle[aria-expanded=true]) {color:var(--ui-accent-ink)!important;border-color:#dfc28266!important;background:#dfc28213!important}
 body.has-app-sidebar .main-content .list-filters .filter-resizable :is(input,select,summary,.filter-date-control,.filter-select-control,.multi-filter) {min-width:0!important;max-width:none!important}
 body.has-app-sidebar .main-content .list-filters > .report-filters > .filter-resizable {width:150px!important}
 body.has-app-sidebar .main-content .list-filters > .grid-search {width:240px!important}
@@ -258,7 +258,7 @@ html[data-theme=light] .sidebar-menu li > a:is(:hover,.active),html[data-theme=l
 html[data-theme=light] .user-name {color:var(--ui-text)!important}
 html[data-theme=light] :is(.user-role,.user-dropdown-arrow,.user-dropdown a i) {color:var(--ui-text-muted)!important}
 html[data-theme=light] .user-dropdown {background:var(--ui-surface)!important;border-color:var(--ui-border)!important}
-html[data-theme=light] :is(.table-responsive,.import-preview-wrap) thead th,html[data-theme=light] #inventoryTable :is(thead,thead th) {background:var(--ui-raised)!important;color:var(--ui-text-soft)!important}
+html[data-theme=light] :is(.table-responsive,.import-preview-wrap) thead th,html[data-theme=light] #inventoryTable :is(thead,thead th) {background:var(--ui-raised)!important;color:var(--grid-head-ink)!important}
 [data-theme=light] :where(table tbody td) {color:var(--ui-text-body)!important}
 html[data-theme=light] .summary-row>span:first-child {color:var(--ui-text-muted)!important}
 html[data-theme=light] .filter-btn:not(.active) .status-badge {background:var(--ui-raised)!important;color:var(--ui-text-soft)!important;border-color:var(--ui-surface)!important}

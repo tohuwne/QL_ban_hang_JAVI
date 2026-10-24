@@ -155,11 +155,12 @@ router.get("/don-hang/:id/chi-tiet", async (req, res) => {
     const dhResult = await pool
       .request()
       .input("MaDH", sql.Char(8), req.params.id.trim())
-      .query(`SELECT dh.*, kh.TenKH, kh.SoDTKH, kh.DiaChiKH, nv.HoTenNV AS NguoiLapPhieu, w.NguoiNhan, w.SoDT AS SoDTNhan, w.Email AS EmailNhan, w.DiaChi AS DiaChiGiaoHang, w.GhiChu AS GhiChuGiaoHang, w.HinhThucTT AS HinhThucTTWebsite, w.PhiVanChuyen, promo.MaGiamGia, promo.TienGiam AS TienGiamMa
+      .query(`SELECT dh.*, kh.TenKH, kh.SoDTKH, kh.EmailKH, kh.DiaChiKH, lkh.TenLoaiKH, nv.HoTenNV AS NguoiLapPhieu, w.NguoiNhan, w.SoDT AS SoDTNhan, w.Email AS EmailNhan, w.DiaChi AS DiaChiGiaoHang, w.GhiChu AS GhiChuGiaoHang, w.HinhThucTT AS HinhThucTTWebsite, w.PhiVanChuyen, promo.MaGiamGia, promo.TienGiam AS TienGiamMa
               FROM DON_HANG dh
               LEFT JOIN WEB_DON_HANG w ON w.MaDH=dh.MaDH
               OUTER APPLY (SELECT STRING_AGG(CONVERT(varchar(max),a.MaGiamGia),', ') AS MaGiamGia,SUM(a.TienGiam) AS TienGiam FROM WEB_AP_DUNG_MA a WHERE a.MaDH=dh.MaDH) promo
               LEFT JOIN KHACH_HANG kh ON dh.MaKH = kh.MaKH
+              LEFT JOIN LOAI_KHACH_HANG lkh ON lkh.MaLoaiKH = kh.MaLoaiKH
               LEFT JOIN NHAN_VIEN nv ON dh.MaNV = nv.MaNV
               WHERE dh.MaDH = @MaDH`);
     if (dhResult.recordset.length === 0)

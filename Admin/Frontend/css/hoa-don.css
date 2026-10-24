@@ -36,15 +36,6 @@
   border-color: var(--color-primary);
 }
 
-/* 2. Thẻ thống kê (Stat Cards) */
-
-.card-value.danger {
-  color: #ff4d4d;
-}
-.card-value.success {
-  color: #28a745;
-}
-
 /* 3. Bảng dữ liệu */
 
 .status-success {

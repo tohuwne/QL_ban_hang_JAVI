@@ -33,10 +33,11 @@ router.get("/hoa-don/:id/chi-tiet", async (req, res) => {
     const hdResult = await pool
       .request()
       .input("MaHD", sql.Char(8), req.params.id.trim()).query(`
-        SELECT hd.*, dh.MaKH, dh.TongTienDonHang, dh.TongGiamGiaSP, kh.TenKH, kh.SoDTKH, kh.DiaChiKH, nv.HoTenNV AS NguoiLapPhieu
+        SELECT hd.*, dh.MaKH, dh.TongTienDonHang, dh.TongGiamGiaSP, kh.TenKH, kh.SoDTKH, kh.EmailKH, kh.DiaChiKH, lkh.TenLoaiKH, nv.HoTenNV AS NguoiLapPhieu
         FROM HOA_DON hd
         LEFT JOIN DON_HANG dh ON hd.MaDH = dh.MaDH
         LEFT JOIN KHACH_HANG kh ON dh.MaKH = kh.MaKH
+        LEFT JOIN LOAI_KHACH_HANG lkh ON lkh.MaLoaiKH = kh.MaLoaiKH
         LEFT JOIN NHAN_VIEN nv ON hd.MaNV = nv.MaNV
         WHERE hd.MaHD = @MaHD
       `);

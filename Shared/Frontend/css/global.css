@@ -1196,6 +1196,9 @@ html.scrollable-page {
 .main-content:not(:has(.table-responsive)) {
   overflow-y: auto !important;
 }
+/* Trang cuộn toàn khung (Quản trị hệ thống): lưới giữ chiều cao tự nhiên, không bị ép về 0. */
+.main-content.scrollable-content > * { flex-shrink: 0 !important; }
+.main-content.scrollable-content > .table-responsive { flex: none !important; overflow-y: visible !important; }
 
 /* 2. CÁC KHỐI ĐẦU TRANG & BỘ LỌC CỐ ĐỊNH */
 .page-header {
@@ -1663,8 +1666,9 @@ html.sidebar-pinned .sidebar .submenu {
 .main-content:not(.overview-shell) .page-header { flex-wrap: wrap; }
 .main-content:not(.overview-shell) .page-header > h2 { margin-right: auto; }
 .list-toolbar { display: flex; flex-direction: column; align-items: stretch; gap: 10px; flex-shrink: 0; margin-bottom: 14px; }
-.page-actions { display: flex; flex-wrap: wrap; justify-content: flex-start; align-items: center; gap: 8px; }
+.page-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 8px; }
 .list-filters { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 10px; width: 100%; min-width: 0; box-sizing: border-box; }
+.list-filters[hidden] { display: none !important; }
 .stat-cards.is-collapsed { display: none !important; }
 .grid-search { position: relative; width: 240px; }
 .grid-search > i { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 11px; color: var(--color-text-muted); pointer-events: none; }
@@ -1766,7 +1770,7 @@ html.sidebar-pinned .sidebar .submenu {
 .main-content:not(.overview-shell) .table-responsive td:has(.status-orange),
 .main-content:not(.overview-shell) .table-responsive td:has(.status-danger),
 .main-content:not(.overview-shell) .table-responsive td:has(.status-info) {
-  text-align: center !important;
+  text-align: left !important;
 }
 
 /* Khối thông tin, modal và phân trang */

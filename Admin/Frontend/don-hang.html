@@ -94,8 +94,8 @@
               <span class="voucher-value" id="v-maDH"></span>
             </div>
             <div class="voucher-info-item">
-              <span class="voucher-label">Khách hàng</span>
-              <span class="voucher-value" id="v-maKH"></span>
+              <span class="voucher-label">Ngày Đặt</span>
+              <span class="voucher-value" id="v-ngayDat"></span>
             </div>
             <div class="voucher-info-item">
               <span class="voucher-label">Tổng Tiền Gốc</span>
@@ -108,6 +108,8 @@
           </div>
 
           <div class="voucher-info-item" style="margin-bottom:12px"><span class="voucher-label">Trạng thái thanh toán</span><span class="voucher-value" id="v-paymentStatus"></span></div>
+          <div class="card-panel-header" style="font-size: 14px; margin: 4px 0 8px;">Thông Tin Khách Hàng</div>
+          <div class="voucher-info-grid" id="orderCustomerInfo"></div>
           <div class="voucher-info-grid" id="webOrderDelivery" hidden><div class="voucher-info-item"><span class="voucher-label">Người nhận & liên hệ</span><span class="voucher-value" id="v-webRecipient"></span></div><div class="voucher-info-item"><span class="voucher-label">Địa chỉ giao hàng</span><span class="voucher-value" id="v-webAddress"></span></div><div class="voucher-info-item"><span class="voucher-label">Phương thức thanh toán</span><span class="voucher-value" id="v-webMethod"></span></div><div class="voucher-info-item"><span class="voucher-label">Ghi chú giao hàng</span><span class="voucher-value" id="v-webNote"></span></div></div>
           <div class="voucher-highlight-banner">
             <span class="voucher-highlight-label">Tổng Thanh Toán</span>
@@ -150,15 +152,39 @@
 
       // XEM CHI TIẾT
       const orderDetailEscape=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      const orderRows=new Map();
       let orderDetailVersion=0;
-      async function viewOrder(maDH,maKH,tongTien,giamGia,tongSauGiam,trangThaiTT){
+      // Một nguồn điều kiện cho nút trên lưới và nút thao tác nhanh trong chi tiết.
+      function orderActions(item){
+        const noDocs=!item.TrangThaiThanhToan&&!item.MaPX,staffOrder=!['Website','Online'].includes(item.NguonDon);
+        return {edit:noDocs&&staffOrder,delete:noDocs&&staffOrder,export:item.TrangThaiDonHang==='Chờ giao'&&!item.MaPX,invoice:!item.TrangThaiThanhToan};
+      }
+      const orderActionHandlers={
+        edit:maDH=>{window.location.href='ban-hang.html?editMaDH='+encodeURIComponent(maDH);},
+        delete:maDH=>deleteOrder(maDH),
+        export:maDH=>{window.location.href='xuat-kho.html?maDH='+encodeURIComponent(maDH);},
+        invoice:maDH=>redirectLapHD(maDH),
+      };
+      function renderOrderCustomer(detail,maKH){
+        const fields=[['Mã KH',String(maKH||detail.MaKH||'').trim()],['Tên khách hàng',detail.TenKH],['Số điện thoại',detail.SoDTKH],['Email',detail.EmailKH],['Loại khách hàng',detail.TenLoaiKH],['Địa chỉ',detail.DiaChiKH]].filter(([,value])=>String(value??'').trim());
+        document.getElementById('orderCustomerInfo').innerHTML=fields.map(([label,value])=>'<div class="voucher-info-item javi-detail-field"><span class="voucher-label javi-detail-label">'+label+'</span><span class="voucher-value javi-detail-value">'+orderDetailEscape(value)+'</span></div>').join('')||'<div class="voucher-info-item"><span class="voucher-value">Không có thông tin khách hàng.</span></div>';
+      }
+      function printPDFCurrentOrder(){
+        const maDH=document.getElementById('v-maDH').textContent.trim();
+        if(maDH)window.open('in-chung-tu.html?type=DH&id='+encodeURIComponent(maDH),'_blank');
+      }
+      async function viewOrder(maDH){
+        const row=orderRows.get(String(maDH).trim());if(!row)return;
+        const {MaKH:maKH,TongTienDonHang:tongTien,TongGiamGiaSP:giamGia,TongTienSauGiam:tongSauGiam}=row,trangThaiTT=row.TrangThaiThanhToan||'Chưa lập HĐ';
         const version=++orderDetailVersion,modal=document.getElementById('orderDetailModal'),tbody=document.getElementById('orderDetailItems'),money=value=>new Intl.NumberFormat('vi-VN').format(Number(value)||0)+' đ';
-        document.getElementById('v-maDH').textContent=maDH;document.getElementById('v-maKH').textContent=maKH;document.getElementById('v-tongTien').textContent=money(tongTien);document.getElementById('v-giamGia').textContent=money(giamGia);document.getElementById('v-thanhToan').textContent=money(tongSauGiam);document.getElementById('v-paymentStatus').textContent=trangThaiTT||'Chưa cập nhật';document.getElementById('webOrderDelivery').hidden=true;
+        document.getElementById('v-maDH').textContent=row.MaDH.trim();document.getElementById('v-ngayDat').textContent=row.NgayDat?new Date(row.NgayDat).toLocaleDateString('vi-VN'):'';document.getElementById('v-tongTien').textContent=money(tongTien);document.getElementById('v-giamGia').textContent=money(giamGia);document.getElementById('v-thanhToan').textContent=money(tongSauGiam);document.getElementById('v-paymentStatus').textContent=trangThaiTT;document.getElementById('webOrderDelivery').hidden=true;
+        renderOrderCustomer({TenKH:row.TenKH,SoDTKH:row.SoDTKH,DiaChiKH:row.DiaChiKH},maKH);
         tbody.innerHTML='<tr><td colspan="5">Đang tải chi tiết...</td></tr>';modal.style.display='flex';
         try{
           const res=await fetch('/api/don-hang/'+encodeURIComponent(String(maDH).trim())+'/chi-tiet'),data=await res.json();if(version!==orderDetailVersion)return;if(!res.ok||!data.success)throw Error(data.message||'Không tải được chi tiết đơn hàng.');
           const detail=data.data||{},items=Array.isArray(detail.items)?detail.items:Array.isArray(detail)?detail:[];
-          document.getElementById('webOrderDelivery').hidden=!detail.DiaChiGiaoHang;document.getElementById('v-webRecipient').textContent=[detail.NguoiNhan,detail.SoDTNhan,detail.EmailNhan].filter(Boolean).join(' / ');document.getElementById('v-webAddress').textContent=detail.DiaChiGiaoHang||'';document.getElementById('v-webMethod').textContent=detail.HinhThucTTWebsite||'';document.getElementById('v-webNote').textContent=detail.GhiChuGiaoHang||'Không có';if(detail.TenKH)document.getElementById('v-maKH').textContent='('+String(maKH).trim()+') '+detail.TenKH;
+          document.getElementById('webOrderDelivery').hidden=!detail.DiaChiGiaoHang;document.getElementById('v-webRecipient').textContent=[detail.NguoiNhan,detail.SoDTNhan,detail.EmailNhan].filter(Boolean).join(' / ');document.getElementById('v-webAddress').textContent=detail.DiaChiGiaoHang||'';document.getElementById('v-webMethod').textContent=detail.HinhThucTTWebsite||'';document.getElementById('v-webNote').textContent=detail.GhiChuGiaoHang||'Không có';
+          renderOrderCustomer(detail,maKH);
           tbody.innerHTML=items.map(item=>{const discount=Number(item.GiamGiaSP||0)*100;return '<tr><td>'+orderDetailEscape(item.name??item.TenSP??'')+'</td><td>'+orderDetailEscape(item.SoLuong??item.quantity??0)+'</td><td>'+money(item.GiaBan??item.price??0)+'</td><td class="detail-discount">'+(discount?'-'+new Intl.NumberFormat('vi-VN',{maximumFractionDigits:2}).format(discount)+'%':'—')+'</td><td>'+money(item.ThanhTien)+'</td></tr>';}).join('')||'<tr><td colspan="5">Không có sản phẩm trong đơn.</td></tr>';
         }catch(error){if(version===orderDetailVersion)tbody.innerHTML='<tr><td colspan="5">'+orderDetailEscape(error.message||'Không tải được dữ liệu. Vui lòng thử lại.')+'</td></tr>';}
       }
@@ -198,10 +224,13 @@
  
             // Sắp xếp theo Mã ĐH giảm dần (mới nhất lên đầu)
             data.data.sort((a, b) => b.MaDH.localeCompare(a.MaDH));
- 
+            orderRows.clear();
+
             data.data.forEach((item) => {
+              const maDH = item.MaDH.trim();
+              orderRows.set(maDH, item);
               const date = new Date(item.NgayDat).toLocaleDateString("vi-VN");
-              
+
               // Trạng thái đơn hàng
               let statusClass = "";
               if (item.TrangThaiDonHang === "Hoàn thành")
@@ -214,47 +243,24 @@
               )
                 statusClass = "status-orange";
               else statusClass = "status-info";
- 
-              // Trạng thái thanh toán
-              let pStatus = item.TrangThaiThanhToan;
-              let pStatusText = pStatus ? pStatus : "Chưa lập HĐ";
-              let pStatusHtml = "";
-              if (pStatus === "Đã thanh toán") {
-                pStatusHtml = `<span class="status-success">${pStatusText}</span>`;
-              } else if (pStatus === "Chưa thanh toán") {
-                pStatusHtml = `<span class="status-orange">${pStatusText}</span>`;
-              } else {
-                pStatusHtml = `
-                  <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 4px 0;">
-                    <span class="status-info">${pStatusText}</span>
-                    <button class="action-btn" style="background-color: var(--color-primary); color: #000; font-size: 11px; padding: 2px 6px; font-weight: bold; border-radius: 4px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; line-height: 1.2;" onclick="redirectLapHD('${item.MaDH.trim()}')">
-                      <i class="bi bi-file-earmark-text" style="font-size: 10px;"></i></button>
-                  </div>
-                `;
-              }
- 
-              let btnHtml = `<div style="display: flex; gap: 5px; align-items: center; white-space: nowrap;">`;
-              
-              // Chỉ hiển thị nút Sửa, Xóa nếu chưa lập hóa đơn và chưa lập phiếu xuất
-              if (!pStatus && !item.MaPX) {
-                btnHtml += `
-                  ${!['Website','Online'].includes(item.NguonDon) ? `<button class="action-btn" style="background-color: #dc3545; color: white;" onclick="event.stopPropagation(); deleteOrder('${item.MaDH.trim()}')"><i class="bi bi-trash3"></i></button>` : ''}
-                `;
-              }
- 
-              if (item.TrangThaiDonHang === "Chờ giao" && !item.MaPX) {
-                btnHtml += `<button class="action-btn" style="background-color: #ffc107; color: #000;" onclick="event.stopPropagation(); window.location.href='xuat-kho.html?maDH=${item.MaDH.trim()}'"><i class="bi bi-truck"></i></button>`;
-              }
-              btnHtml += `</div>`;
- 
-              html += `
-                <tr
-                  style="cursor: pointer;"
-                  title="Double-click để xem chi tiết"
-                  ondblclick="${!pStatus && !item.MaPX && !['Website','Online'].includes(item.NguonDon) ? `window.location.href='ban-hang.html?editMaDH=${item.MaDH.trim()}'` : `viewOrder('${item.MaDH}', '${item.MaKH}', '${item.TongTienDonHang}', '${item.TongGiamGiaSP}', '${item.TongTienSauGiam}', '${pStatusText}')`}"
-                >
 
-<td>${item.MaDH}</td>
+              // Trạng thái thanh toán
+              const pStatus = item.TrangThaiThanhToan;
+              const pStatusClass = pStatus === "Đã thanh toán" ? "status-success" : pStatus === "Chưa thanh toán" ? "status-orange" : "status-info";
+              const pStatusHtml = `<span class="${pStatusClass}">${pStatus || "Chưa lập HĐ"}</span>`;
+
+              // Nút thao tác cố định cuối dòng; cùng điều kiện với footer chi tiết.
+              const actions = orderActions(item);
+              let btnHtml = `<div style="display: flex; gap: 5px; align-items: center; white-space: nowrap;">`;
+              if (actions.edit) btnHtml += `<button class="action-btn btn-edit" title="Chỉnh sửa" aria-label="Chỉnh sửa" onclick="event.stopPropagation(); orderActionHandlers.edit('${maDH}')"><i class="bi bi-pencil-square"></i></button>`;
+              if (actions.invoice) btnHtml += `<button class="action-btn" title="Lập hóa đơn" aria-label="Lập hóa đơn" onclick="event.stopPropagation(); orderActionHandlers.invoice('${maDH}')"><i class="bi bi-file-earmark-text"></i></button>`;
+              if (actions.export) btnHtml += `<button class="action-btn" title="Xuất kho" aria-label="Xuất kho" onclick="event.stopPropagation(); orderActionHandlers.export('${maDH}')"><i class="bi bi-truck"></i></button>`;
+              if (actions.delete) btnHtml += `<button class="action-btn btn-delete" title="Xóa" aria-label="Xóa" onclick="event.stopPropagation(); orderActionHandlers.delete('${maDH}')"><i class="bi bi-trash3"></i></button>`;
+              btnHtml += `</div>`;
+
+              html += `
+                <tr style="cursor: pointer;" title="Double-click để xem chi tiết" ondblclick="viewOrder('${maDH}')">
+                  <td>${item.MaDH}</td>
                   <td>${date}</td>
                   <td>${formatCustomer(item.MaKH, item.TenKH)}</td>
                   <td style="color: var(--color-primary); font-weight: bold;">${new Intl.NumberFormat("vi-VN").format(item.TongTienSauGiam)} đ</td>

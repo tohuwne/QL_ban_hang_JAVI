@@ -926,101 +926,101 @@ function renderGlobalSidebar() {
     </div>
     <ul class="sidebar-menu">
       <li>
-        <a href="dashboard.html" data-menu="Trang Chủ" class="${currentPage === "dashboard.html" ? "active" : ""}" title="Trang Chủ">
+        <a href="dashboard.html" data-menu="Trang Chủ" class="${currentPage === "dashboard.html" ? "active" : ""}" title="Trang chủ">
            <i class="bi bi-house"></i>
-          <span class="menu-text">Trang Chủ</span>
+          <span class="menu-text">Trang chủ</span>
         </a>
       </li>
       
       <li>
-        <a href="don-hang.html" data-menu="Bán Hàng" class="${currentPage === "don-hang.html" ? "active" : ""}" title="Bán Hàng">
+        <a href="don-hang.html" data-menu="Bán Hàng" class="${currentPage === "don-hang.html" ? "active" : ""}" title="Bán hàng">
            <i class="bi bi-cart3"></i>
-          <span class="menu-text">Bán Hàng</span>
+          <span class="menu-text">Bán hàng</span>
         </a>
       </li>
 
       <li>
-        <a href="hoa-don.html" data-menu="Hóa Đơn" class="${currentPage === "hoa-don.html" ? "active" : ""}" title="Hóa Đơn">
+        <a href="hoa-don.html" data-menu="Hóa Đơn" class="${currentPage === "hoa-don.html" ? "active" : ""}" title="Hóa đơn">
            <i class="bi bi-journal-text"></i>
-          <span class="menu-text">Hóa Đơn</span>
+          <span class="menu-text">Hóa đơn</span>
         </a>
       </li>
 
       <li>
-        <a href="cong-no.html" data-menu="Công Nợ" class="${currentPage === "cong-no.html" ? "active" : ""}" title="Công Nợ">
+        <a href="cong-no.html" data-menu="Công Nợ" class="${currentPage === "cong-no.html" ? "active" : ""}" title="Công nợ">
            <i class="bi bi-currency-exchange"></i>
-          <span class="menu-text">Công Nợ</span>
+          <span class="menu-text">Công nợ</span>
         </a>
       </li>
 
       <li class="has-submenu ${isKhoActive ? "open" : ""}">
-         <a href="#" data-menu="Quản Lý Kho" onclick="toggleSubmenu(this); return false;" class="${isKhoActive ? "active" : ""}" title="Quản Lý Kho" aria-expanded="${isKhoActive}">
+         <a href="#" data-menu="Quản Lý Kho" onclick="toggleSubmenu(this); return false;" class="${isKhoActive ? "active" : ""}" title="Quản lý kho" aria-expanded="${isKhoActive}">
            <i class="bi bi-shop"></i>
            <span class="menu-text">
-             <span>Quản Lý Kho</span>
+             <span>Quản lý kho</span>
              <i class="bi bi-chevron-down submenu-arrow"></i>
            </span>
          </a>
          <ul class="submenu">
-           <li><a href="nhap-kho.html" data-menu="Nhập Kho" class="${currentPage === "nhap-kho.html" ? "active" : ""}"><i class="bi bi-box-arrow-in-down"></i><span>Nhập Kho</span></a></li>
-           <li><a href="xuat-kho.html" data-menu="Xuất Kho" class="${currentPage === "xuat-kho.html" ? "active" : ""}"><i class="bi bi-truck"></i><span>Xuất Kho</span></a></li>
-           <li><a href="ton-kho.html" data-menu="Tồn Kho" class="${currentPage === "ton-kho.html" ? "active" : ""}"><i class="bi bi-archive"></i><span>Tồn Kho</span></a></li>
+           <li><a href="nhap-kho.html" data-menu="Nhập Kho" class="${currentPage === "nhap-kho.html" ? "active" : ""}"><i class="bi bi-box-arrow-in-down"></i><span>Nhập kho</span></a></li>
+           <li><a href="xuat-kho.html" data-menu="Xuất Kho" class="${currentPage === "xuat-kho.html" ? "active" : ""}"><i class="bi bi-truck"></i><span>Xuất kho</span></a></li>
+           <li><a href="ton-kho.html" data-menu="Tồn Kho" class="${currentPage === "ton-kho.html" ? "active" : ""}"><i class="bi bi-archive"></i><span>Tồn kho</span></a></li>
         </ul>
       </li>
 
       <li class="has-submenu ${isThuChiActive ? "open" : ""}">
-         <a href="#" data-menu="Quản Lý Thu - Chi" onclick="toggleSubmenu(this); return false;" class="${isThuChiActive ? "active" : ""}" title="Quản Lý Thu - Chi" aria-expanded="${isThuChiActive}">
+         <a href="#" data-menu="Quản Lý Thu - Chi" onclick="toggleSubmenu(this); return false;" class="${isThuChiActive ? "active" : ""}" title="Quản lý thu - chi" aria-expanded="${isThuChiActive}">
            <i class="bi bi-wallet2"></i>
            <span class="menu-text">
-             <span>Quản Lý Thu - Chi</span>
+             <span>Quản lý thu - chi</span>
              <i class="bi bi-chevron-down submenu-arrow"></i>
            </span>
          </a>
          <ul class="submenu">
-           <li><a href="phieu-thu.html" data-menu="Phiếu Thu" class="${currentPage === "phieu-thu.html" ? "active" : ""}"><i class="bi bi-receipt"></i><span>Phiếu Thu</span></a></li>
-           <li><a href="phieu-chi.html" data-menu="Phiếu Chi" class="${currentPage === "phieu-chi.html" ? "active" : ""}"><i class="bi bi-cash-coin"></i><span>Phiếu Chi</span></a></li>
+           <li><a href="phieu-thu.html" data-menu="Phiếu Thu" class="${currentPage === "phieu-thu.html" ? "active" : ""}"><i class="bi bi-receipt"></i><span>Phiếu thu</span></a></li>
+           <li><a href="phieu-chi.html" data-menu="Phiếu Chi" class="${currentPage === "phieu-chi.html" ? "active" : ""}"><i class="bi bi-cash-coin"></i><span>Phiếu chi</span></a></li>
         </ul>
       </li>
 
       <li>
-        <a href="nhan-vien.html" data-menu="Quản Lý Người Dùng" class="${currentPage === "nhan-vien.html" ? "active" : ""}" title="Quản Lý Người Dùng">
+        <a href="nhan-vien.html" data-menu="Quản Lý Người Dùng" class="${currentPage === "nhan-vien.html" ? "active" : ""}" title="Quản lý người dùng">
            <i class="bi bi-shield-lock"></i>
-          <span class="menu-text">Người Dùng</span>
+          <span class="menu-text">Người dùng</span>
         </a>
       </li>
 
       <li class="has-submenu ${isDanhSachActive ? "open" : ""}">
-         <a href="#" data-menu="Danh Mục" onclick="toggleSubmenu(this); return false;" class="${isDanhSachActive ? "active" : ""}" title="Danh Mục" aria-expanded="${isDanhSachActive}">
+         <a href="#" data-menu="Danh Mục" onclick="toggleSubmenu(this); return false;" class="${isDanhSachActive ? "active" : ""}" title="Danh mục" aria-expanded="${isDanhSachActive}">
            <i class="bi bi-grid"></i>
            <span class="menu-text">
-             <span>Danh Mục</span>
+             <span>Danh mục</span>
              <i class="bi bi-chevron-down submenu-arrow"></i>
            </span>
          </a>
          <ul class="submenu">
-           <li><a href="khach-hang.html" data-menu="Khách Hàng" class="${currentPage === "khach-hang.html" ? "active" : ""}"><i class="bi bi-person-badge"></i><span>Khách Hàng</span></a></li>
-           <li><a href="loai-kh.html" data-menu="Loại Khách Hàng" class="${currentPage === "loai-kh.html" ? "active" : ""}"><i class="bi bi-award"></i><span>Loại Khách Hàng</span></a></li>
-           <li><a href="nha-cung-cap.html" data-menu="Nhà Cung Cấp" class="${currentPage === "nha-cung-cap.html" ? "active" : ""}"><i class="bi bi-buildings"></i><span>Nhà Cung Cấp</span></a></li>
-           <li><a href="san-pham.html" data-menu="Sản Phẩm" class="${currentPage === "san-pham.html" ? "active" : ""}"><i class="bi bi-cup-hot"></i><span>Sản Phẩm</span></a></li>
-           <li><a href="loai-sp.html" data-menu="Loại Sản Phẩm" class="${currentPage === "loai-sp.html" ? "active" : ""}"><i class="bi bi-tag"></i><span>Loại Sản Phẩm</span></a></li>
+           <li><a href="khach-hang.html" data-menu="Khách Hàng" class="${currentPage === "khach-hang.html" ? "active" : ""}"><i class="bi bi-person-badge"></i><span>Khách hàng</span></a></li>
+           <li><a href="loai-kh.html" data-menu="Loại Khách Hàng" class="${currentPage === "loai-kh.html" ? "active" : ""}"><i class="bi bi-award"></i><span>Loại khách hàng</span></a></li>
+           <li><a href="nha-cung-cap.html" data-menu="Nhà Cung Cấp" class="${currentPage === "nha-cung-cap.html" ? "active" : ""}"><i class="bi bi-buildings"></i><span>Nhà cung cấp</span></a></li>
+           <li><a href="san-pham.html" data-menu="Sản Phẩm" class="${currentPage === "san-pham.html" ? "active" : ""}"><i class="bi bi-cup-hot"></i><span>Sản phẩm</span></a></li>
+           <li><a href="loai-sp.html" data-menu="Loại Sản Phẩm" class="${currentPage === "loai-sp.html" ? "active" : ""}"><i class="bi bi-tag"></i><span>Loại sản phẩm</span></a></li>
            <li><a href="trong-luong.html" data-menu="Trọng Lượng" class="${currentPage === 'trong-luong.html' ? 'active' : ''}"><i class="bi bi-speedometer"></i><span>Trọng lượng</span></a></li>
            <li><a href="loai-xay.html" data-menu="Loại Xay" class="${currentPage === 'loai-xay.html' ? 'active' : ''}"><i class="bi bi-gear"></i><span>Loại xay</span></a></li>
-<li><a href="ma-giam-gia.html" data-menu="Mã Giảm Giá" class="${currentPage === 'ma-giam-gia.html' ? 'active' : ''}"><i class="bi bi-ticket-perforated"></i><span>Mã Giảm Giá</span></a></li>
-<li><a href="dia-diem-van-chuyen.html" data-menu="Danh Mục Địa Điểm" class="${currentPage === 'dia-diem-van-chuyen.html' ? 'active' : ''}"><i class="bi bi-geo-alt"></i><span>Danh Mục Địa Điểm</span></a></li>
+<li><a href="ma-giam-gia.html" data-menu="Mã Giảm Giá" class="${currentPage === 'ma-giam-gia.html' ? 'active' : ''}"><i class="bi bi-ticket-perforated"></i><span>Mã giảm giá</span></a></li>
+<li><a href="dia-diem-van-chuyen.html" data-menu="Danh Mục Địa Điểm" class="${currentPage === 'dia-diem-van-chuyen.html' ? 'active' : ''}"><i class="bi bi-geo-alt"></i><span>Danh mục địa điểm</span></a></li>
         </ul>
       </li>
 
       <li>
-        <a href="cau-hinh-website.html" data-menu="Cấu Hình Website" class="${currentPage === 'cau-hinh-website.html' ? 'active' : ''}" title="Cấu Hình Website">
-          <i class="bi bi-globe2"></i><span class="menu-text">Cấu Hình Website</span>
+        <a href="cau-hinh-website.html" data-menu="Cấu Hình Website" class="${currentPage === 'cau-hinh-website.html' ? 'active' : ''}" title="Cấu hình website">
+          <i class="bi bi-globe2"></i><span class="menu-text">Cấu hình website</span>
         </a>
       </li>
 
 
       <li>
-        <a href="quan-tri.html" data-menu="Quản Trị Hệ Thống" class="${currentPage === "quan-tri.html" ? "active" : ""}" title="Quản Trị Hệ Thống">
+        <a href="quan-tri.html" data-menu="Quản Trị Hệ Thống" class="${currentPage === "quan-tri.html" ? "active" : ""}" title="Quản trị hệ thống">
            <i class="bi bi-sliders"></i>
-          <span class="menu-text">Hệ Thống</span>
+          <span class="menu-text">Hệ thống</span>
         </a>
       </li>
     </ul>
@@ -1163,6 +1163,30 @@ function buildListToolbar(header) {
     });
     const exportControl = actionRow.querySelector(".grid-file-menu");
     if (exportControl) exportControl.after(toggle); else actionRow.append(toggle);
+  }
+
+  if (filters.childElementCount) {
+    // Thu gọn/mở thanh tìm kiếm + bộ lọc; trạng thái lưu theo từng trang.
+    if (!filters.id) filters.id = "pageListFilters";
+    const storeKey = `javiFiltersCollapsed:${location.pathname}`;
+    const filterToggle = document.createElement("button");
+    filterToggle.type = "button";
+    filterToggle.className = "btn filter-toggle";
+    filterToggle.innerHTML = '<i class="bi bi-funnel" aria-hidden="true"></i>';
+    filterToggle.setAttribute("aria-controls", filters.id);
+    const setCollapsed = (collapsed) => {
+      filters.hidden = collapsed;
+      filterToggle.setAttribute("aria-expanded", String(!collapsed));
+      filterToggle.title = collapsed ? "Mở thanh bộ lọc" : "Thu gọn thanh bộ lọc";
+      filterToggle.setAttribute("aria-label", filterToggle.title);
+    };
+    setCollapsed(localStorage.getItem(storeKey) === "1");
+    filterToggle.addEventListener("click", () => {
+      const collapsed = !filters.hidden;
+      setCollapsed(collapsed);
+      localStorage.setItem(storeKey, collapsed ? "1" : "0");
+    });
+    actionRow.append(filterToggle);
   }
 
   if (actionRow.childElementCount) toolbar.append(actionRow);
@@ -1361,7 +1385,7 @@ window.openProfileModal = () => {
 document.addEventListener("dblclick", (event) => {
   if (event.target.closest("button, a, input, select, textarea, label")) return;
   const row = event.target.closest(".table-responsive tbody tr");
-  if (!row) return;
+  if (!row || row.hasAttribute("ondblclick")) return; // Dòng tự xử lý double-click (vd. Bán hàng chỉ xem chi tiết).
 
   const actions = Array.from(row.querySelectorAll("button, a"));
   const viewAction = actions.find((action) =>

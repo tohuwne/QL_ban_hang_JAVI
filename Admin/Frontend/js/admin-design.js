@@ -10,7 +10,7 @@
    const icon=b.querySelector('i');
    let tone='primary';
    if(b.matches('.btn-delete,.btn-danger')||/^(xóa|hủy xuất|hủy đơn|khóa|thất bại)/.test(text)||icon?.matches('.bi-trash,.bi-trash3,.bi-slash-circle,.bi-x-circle'))tone='danger';
-   else if(b.matches('.btn-secondary,.btn-cancel,.directory-cancel,.import-secondary')||/^(hủy|đóng|quay lại|làm mới|in |xuất file|tải file|kiểm tra lại)/.test(text)||b.closest('.report-filters'))tone='secondary';
+   else if(b.matches('.btn-secondary,.btn-cancel,.directory-cancel,.import-secondary')||/^(hủy|đóng|quay lại|làm mới|in |xuất file|tải file|kiểm tra lại)/.test(text)||b.closest('.report-filters')&&b.type!=='submit')tone='secondary';
    else if(/^(hoàn thành|thành công|giao hàng|thu nợ|trả nợ)/.test(text)||b.matches('.debt-collect,.debt-pay'))tone='success';
    else if(b.closest('td')||b.matches('.action-btn,.btn-edit,.btn-view'))tone='accent';
    b.classList.add('javi-ui-button');b.dataset.uiTone=tone;

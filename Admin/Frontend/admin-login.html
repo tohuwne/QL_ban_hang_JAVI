@@ -231,6 +231,7 @@
       if(!user.MaNV || user.VaiTro === 'KHACH_HANG') throw new Error('Vui lòng sử dụng tài khoản quản trị hoặc nhân viên.');
       localStorage.setItem('currentUser', JSON.stringify(user));
       localStorage.setItem('javiLastActivity', String(Date.now()));
+      localStorage.removeItem('javiAdminTheme'); // Mỗi lần vào trang Admin bắt đầu ở giao diện tối (GD-16).
       window.location.href = '/admin/dashboard.html';
     } catch(err){ showMsg(err.message || 'Không thể đăng nhập.'); } finally{ setLoading(btn, false); }
   });

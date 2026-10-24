@@ -161,7 +161,7 @@ html.sidebar-pinned .sidebar .sidebar-brand-name {
   border-radius: 10px !important;
   background: transparent !important;
   color: var(--sidebar-text) !important;
-  font-size: 14px !important;
+  font-size: 13px !important;
   font-weight: 540 !important;
   line-height: 1 !important;
   text-decoration: none !important;
@@ -180,14 +180,14 @@ html.sidebar-pinned .sidebar .sidebar-brand-name {
 }
 
 .sidebar-menu li > a > i:first-child {
-  width: 24px !important;
-  min-width: 24px !important;
-  height: 24px !important;
+  width: 20px !important;
+  min-width: 20px !important;
+  height: 20px !important;
   margin: 0 !important;
   display: grid !important;
   place-items: center !important;
   color: var(--lt-text-soft, #b0b0b0) !important;
-  font-size: 20px !important;
+  font-size: 16px !important;
   line-height: 1 !important;
   transition: color 0.18s ease, transform 0.18s ease !important;
 }
@@ -244,12 +244,13 @@ html:not(.sidebar-pinned) .sidebar:not(:hover):not(:focus-within) .submenu {
   display: none !important;
 }
 
-.submenu-arrow {
-  width: 18px !important;
-  min-width: 18px !important;
-  margin: 0 !important;
+.sidebar-menu li a i.submenu-arrow {
+  display: inline-block !important;
+  width: 14px !important;
+  min-width: 14px !important;
+  margin: 0 0 0 auto !important;
   color: var(--lt-text-muted, #777) !important;
-  font-size: 18px !important;
+  font-size: 11px !important;
   transition: transform 0.2s ease, color 0.2s ease !important;
 }
 
@@ -278,13 +279,13 @@ html:not(.sidebar-pinned) .sidebar:not(:hover):not(:focus-within) .submenu {
   gap: 9px !important;
   border-radius: 8px !important;
   color: var(--lt-text-muted, #8c8c8c) !important;
-  font-size: 13px !important;
+  font-size: 12px !important;
 }
 
 .sidebar .submenu li > a > i:first-child {
-  width: 19px !important;
-  min-width: 19px !important;
-  font-size: 16px !important;
+  width: 16px !important;
+  min-width: 16px !important;
+  font-size: 13px !important;
 }
 
 .sidebar .submenu li > a.active,
