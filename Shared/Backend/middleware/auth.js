@@ -102,7 +102,8 @@ function customerCanAccess(req) {
   if (path === '/website/quote' && method === 'POST') return true;
   if (path === '/website/addresses' && method === 'GET') return true;
   if (path === '/website/checkout' && method === 'POST') return true;
-  if (method === 'GET' && /^\/website\/orders\/[^/]+(?:\/email)?$/.test(path)) return true;
+  if (method === 'GET' && /^\/website\/orders\/[^/]+(?:\/email|\/payment)?$/.test(path)) return true;
+  if (method === 'POST' && /^\/website\/orders\/[^/]+\/payment\/(?:qr|confirm)$/.test(path)) return true;
 
   if (path === "/don-hang" && method === "POST") {
     return false; // Website checkout validates stock and prices on the server.

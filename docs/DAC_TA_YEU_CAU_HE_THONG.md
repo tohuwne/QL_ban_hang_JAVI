@@ -1,6 +1,6 @@
 # Đặc tả yêu cầu hệ thống JAVI COFFEE
 
-Phiên bản 2.26 — cập nhật 24/10/2026.
+Phiên bản 2.27 — cập nhật 25/10/2026.
 
 ## Yêu cầu đã chốt
 
@@ -67,8 +67,9 @@ Phiên bản 2.26 — cập nhật 24/10/2026.
 
 ## Thanh toán và sửa lỗi kiểm thử — chốt 22/10/2026
 
-- TT-01: Email đơn hàng chỉ được tạo/gửi khi đơn đã thanh toán thành công; không gửi email đơn ngay lúc tiếp nhận đơn chưa trả tiền. OTP đăng ký là email xác thực riêng, không chịu điều kiện thanh toán. COD chưa trả tiền không có email đơn; khi kế toán ghi nhận đã trả đủ mới gửi một email, trả trước một phần chưa gửi. Gửi lại/yêu cầu trùng không sinh thêm email cho cùng đơn. Lỗi gửi thư không làm mất giao dịch thanh toán/đơn đã lưu.
-- TT-02: Thanh toán chuyển khoản website hiện giả lập thành công phía server khi khách nhấn Thanh toán chuyển khoản và đặt đơn hợp lệ. Ghi nhận hóa đơn Đã thanh toán với đúng tổng tiền do server tính, giữ trạng thái giao hàng Chờ giao, rồi gửi email theo TT-01. Không dựa vào cờ đã thanh toán từ client. Callback/đối soát ngân hàng thật để phát triển sau, chưa tích hợp ở phiên bản này. Giao diện đơn/email phải phản ánh đúng Đã thanh toán; COD vẫn chờ thanh toán.
+- TT-01 (điều chỉnh 25/10/2026): Đặt đơn COD hợp lệ thì tự động: đơn xuất hiện trong danh sách đơn quản trị, lập hóa đơn Chưa thanh toán (kèm công nợ bằng tổng tiền do server tính) và gửi ngay một email “đơn hàng đã đặt thành công”. Kế toán thu nợ sau đó (một phần hoặc trả đủ) không gửi thêm email đơn. Đơn chuyển khoản chỉ gửi email khi thanh toán QR thành công (TT-02). OTP đăng ký là email xác thực riêng. Gửi lại/yêu cầu trùng không sinh thêm email cho cùng đơn; lỗi gửi thư không làm mất đơn/hóa đơn/giao dịch thanh toán đã lưu.
+- TT-02 (điều chỉnh 25/10/2026): Đặt đơn chuyển khoản lưu đơn Chờ giao, chưa lập hóa đơn, rồi chuyển khách tới trang thanh toán VietQR. Server gọi API VietQR /v2/generate với acqId (BIN ngân hàng tra từ tên/mã/BIN cấu hình website), accountNo, accountName, amount = tổng tiền server tính, addInfo = nội dung chuyển khoản duy nhất “JAVI MaDH xxxxxx”, template compact2; lưu ảnh QR trả về và hiển thị cho khách cùng số tiền, nội dung, tài khoản nhận. Không dựa vào số tiền/cờ thanh toán từ client.
+- TT-03 (25/10/2026): Mã QR có thời hạn (mặc định 5 phút, VIETQR_EXPIRE_MINUTES 1–60) với đồng hồ đếm ngược. Hết hạn: ảnh bị làm mờ, ẩn Tải mã QR, vô hiệu nút thanh toán, hiện icon Làm mới mã; làm mới tạo mã mới và đánh dấu mã cũ Hết hạn. Còn hạn thì mở lại trang dùng lại đúng mã đang chờ. Nút “Thanh toán thành công” là giả lập demo cho mã đang hiển thị (thay callback ngân hàng thật, chưa tích hợp): server kiểm tra mã thuộc đơn của khách, đang Chờ thanh toán và còn hạn, rồi trong một giao dịch lập hóa đơn Đã thanh toán (Chuyển khoản), phiếu thu đã thu đủ, đánh dấu mã Đã thanh toán gắn MaPT, và chuyển khách sang trang đặt hàng thành công; sau đó gửi email theo TT-01. Mã đã thanh toán (kể cả ảnh khách đã tải về) bị từ chối khi xác nhận lại; đơn đã thanh toán không tạo mã mới. Mã QR đã thanh toán được lưu (WEB_THANH_TOAN_QR) và hiển thị trong chi tiết đơn quản trị kèm nội dung, tài khoản nhận, số tiền, thời điểm, phiếu thu.
 - DK-02: Đăng ký bằng mật khẩu bắt buộc OTP email còn hạn, đúng mã và chưa dùng; bỏ otpType, khai phone hoặc gửi skipOtpCheck không được tạo KH/tài khoản/token. Chặn thử sai quá 5 lần; không lộ mã khi SMTP lỗi; chế độ mã thử chỉ bật rõ ràng trong môi trường phát triển/kiểm thử. OTP được tiêu thụ sau khi tạo tài khoản thành công, tránh hai yêu cầu dùng cùng mã. Tạm ngừng xác thực số điện thoại theo yêu cầu, để phát triển sau. Phải kiểm tra lại trùng tài khoản/SĐT trong giao dịch đăng ký, không chỉ dựa bước 1.
 - NV-01: Tạo/sửa hồ sơ nhân viên và tài khoản liên kết là một giao dịch; trùng account hoặc lỗi ghi phải rollback toàn bộ. Màn hình sửa tài khoản lưu đúng tên đăng nhập/mật khẩu được nhập; để trống mật khẩu giữ mật khẩu cũ, không tạo account mới thiếu mật khẩu; không tự xóa account khi bỏ trống tên.
 - KH-09: Thêm/sửa khách hàng phải kiểm tra trùng số điện thoại nhất quán, sửa được chính hồ sơ giữ nguyên số; không cho nhận số của khách khác. Liên kết hồ sơ sale với account web thực hiện theo KH-10, không ghép chỉ dựa trên SĐT.
@@ -209,8 +210,12 @@ Mỗi giao diện gọi /api trên chính cổng của mình. Hai server dùng c
 63. Chọn chế độ sáng, đăng xuất rồi đăng nhập lại: trang Admin mở ở chế độ tối. Bấm icon bộ lọc ẩn/hiện thanh bộ lọc, tải lại giữ trạng thái; kết quả lọc không đổi khi thu gọn.
 64. Đơn nhân viên chưa có HĐ/PX có Chỉnh sửa, Lập hóa đơn, Xóa (và Xuất kho nếu Chờ giao) ở cột cố định; đơn đã có HĐ hoặc PX không có Chỉnh sửa/Xóa. Double-click bất kỳ dòng chỉ mở chi tiết, footer có đúng các nút của dòng. Chi tiết đơn và hóa đơn hiển thị mã, tên, SĐT, email, loại khách, địa chỉ khách hàng.
 65. Hóa đơn không còn card thống kê/icon Dashboard. Công nợ có bốn card Tổng tiền hóa đơn, Đã thu bằng tiền mặt, Đã thu chuyển khoản, Còn nợ phải thu, tính trên toàn bộ hóa đơn như trước; lập phiếu thu nợ xong các số được cập nhật.
+66. Đặt COD: chuyển ngay trang thành công, một email đơn đã đặt được gửi; quản trị thấy đơn và hóa đơn Chưa thanh toán có công nợ; thu nợ sau đó không gửi email thứ hai. Đơn COD không tạo được mã QR.
+67. Đặt chuyển khoản: chưa có hóa đơn/email; trang thanh toán hiển thị ảnh VietQR thật, đúng số tiền, nội dung, tài khoản và đồng hồ đếm ngược. Hết hạn ảnh mờ, ẩn tải mã, nút thanh toán vô hiệu, có Làm mới mã; xác nhận mã hết hạn bị từ chối (410). Bấm Thanh toán thành công chuyển trang thành công; quản trị có đúng một hóa đơn Đã thanh toán (Chuyển khoản), một phiếu thu đủ tiền, chi tiết đơn hiển thị ảnh QR đã thanh toán. Xác nhận lại cùng mã bị từ chối (409), không sinh thêm hóa đơn/phiếu thu/email.
 
 ## Nhật ký
+
+- 25/10/2026: Chốt TT-01, TT-02 điều chỉnh và TT-03 theo yêu cầu luồng đặt hàng: COD gửi email đặt thành công và lập hóa đơn chưa thu; chuyển khoản tạo mã VietQR có thời hạn, làm mới khi hết hạn, nút giả lập Thanh toán thành công lập hóa đơn + phiếu thu, chặn dùng lại mã đã thanh toán, lưu mã QR và hiển thị trong chi tiết đơn quản trị. Thêm bảng WEB_THANH_TOAN_QR vào database.sql; database đang dùng cần thêm bảng này (chạy lại database.sql hoặc tạo riêng bảng).
 
 - 24/10/2026: Chuyển bốn card thống kê tiền hóa đơn (tổng, đã thu tiền mặt/chuyển khoản, còn nợ phải thu) từ module Hóa đơn sang Công nợ; cách tính giữ nguyên, card vẫn ẩn mặc định theo GD-15.
 

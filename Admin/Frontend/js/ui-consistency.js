@@ -47,7 +47,7 @@
    }
    body.querySelectorAll('hr').forEach(el=>el.remove());body.dataset.detailTemplate='1';
   }
-  body.querySelectorAll('.javi-detail-field').forEach(field=>{const value=field.querySelector('.javi-detail-value,span[id]');if(value)value.classList.add('javi-detail-value');field.hidden=missing(value?.textContent);});
+  body.querySelectorAll('.javi-detail-field').forEach(field=>{const value=field.querySelector('.javi-detail-value,span[id]');if(value)value.classList.add('javi-detail-value');field.hidden=value?.tagName==='IMG'?!value.getAttribute('src'):missing(value?.textContent);});
   body.querySelectorAll('.javi-detail-info:not(#webOrderDelivery)').forEach(info=>{const fields=[...info.querySelectorAll('.javi-detail-field')];if(fields.length)info.hidden=fields.every(el=>el.hidden);});
   body.querySelectorAll('.javi-product-list').forEach(wrapper=>{const rows=[...wrapper.querySelectorAll('tbody tr')],empty=!rows.length||rows.every(row=>row.cells.length===1&&/không có (sản phẩm|dữ liệu)|chưa có sản phẩm/i.test(row.textContent));wrapper.hidden=empty;const title=wrapper.previousElementSibling;if(title?.classList.contains('javi-product-title'))title.hidden=empty;});
  }

@@ -188,6 +188,8 @@ router.get("/don-hang/:id/chi-tiet", async (req, res) => {
     const applied=await pool.request().input('MaDH',sql.Char(8),req.params.id.trim()).query('SELECT MaGiamGia,TienGiam FROM WEB_AP_DUNG_MA WHERE MaDH=@MaDH ORDER BY MaGiamGia');
     donHang.MaGiamGias=applied.recordset.map(c=>c.MaGiamGia);
     donHang.AppliedCoupons=applied.recordset;
+    const paidQr=await pool.request().input('MaDH',sql.Char(8),req.params.id.trim()).query("SELECT TOP 1 MaThamChieu,SoTien,MaNganHang,SoTaiKhoan,ChuTaiKhoan,AnhQR,NgayThanhToan,MaPT FROM WEB_THANH_TOAN_QR WHERE MaDH=@MaDH AND TrangThai=N'Đã thanh toán'");
+    donHang.QRThanhToan=paidQr.recordset[0]||null;
     res.json({ success: true, data: donHang });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });

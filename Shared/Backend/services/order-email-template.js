@@ -22,6 +22,11 @@ function renderOrderEmail(order, items, settings = {}) {
   const bank = order.IsPreview && order.HinhThucTT === 'Chuyển khoản' && settings.SoTaiKhoan
     ? `<p style="margin:12px 0 0;font-size:12px;line-height:1.8;">Ngân hàng: <strong>${display(settings.TenNganHang)}</strong><br>Số tài khoản: <strong>${display(settings.SoTaiKhoan)}</strong><br>Chủ tài khoản: <strong>${display(settings.ChuTaiKhoan)}</strong><br>Nội dung chuyển khoản: <strong>${display(order.MaDH)}</strong></p>` : '';
   const method = order.HinhThucTT === 'Tiền mặt' ? 'Thanh toán khi nhận hàng (COD)' : order.HinhThucTT;
+  const paid = order.TrangThaiThanhToan === 'Đã thanh toán';
+  const statusLabel = order.IsPreview ? 'Đơn mẫu · Không thanh toán' : paid ? 'Đã thanh toán' : 'Chưa thanh toán · Thanh toán khi nhận hàng';
+  const closing = order.IsPreview ? 'Đơn hàng này chỉ dùng để kiểm tra email, không phát sinh giao dịch hoặc giao hàng.'
+    : paid ? 'Đơn hàng đang chờ JAVI kiểm tra và xác nhận giao hàng. Thanh toán đã thành công. JAVI sẽ tiếp tục xử lý giao hàng.'
+    : `Đơn hàng đã được đặt thành công. Vui lòng chuẩn bị ${money(order.TongThanhToan)} để thanh toán khi nhận hàng. JAVI sẽ liên hệ xác nhận giao hàng.`;
   const preview = order.IsPreview ? '<div style="padding:12px 24px;background:#fff6d6;color:#795c00;text-align:center;font-size:12px;font-weight:bold;">EMAIL GỬI THỬ · ĐƠN HÀNG MẪU · KHÔNG CẦN THANH TOÁN</div>' : '';
   return `<!doctype html>
 <html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>JAVI COFFEE · Đơn hàng ${escape(order.MaDH)}</title>
@@ -44,7 +49,7 @@ function renderOrderEmail(order, items, settings = {}) {
 <tr><td class="mail-padding" style="padding:0 32px 24px;">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-size:12px;"><tr>
     <td class="info-column" width="55%" style="width:55%;padding-right:24px;vertical-align:top;"><h2 style="font-size:11px;color:#777;letter-spacing:.6px;margin:0 0 8px;">THÔNG TIN NHẬN HÀNG</h2><p style="margin:0;font-size:13px;line-height:1.8;"><strong>${display(order.NguoiNhan)}</strong><br>${display(order.SoDT)}<br><span style="overflow-wrap:anywhere;">${display(order.Email)}</span><br>${display(order.DiaChi)}</p></td>
-    <td class="info-column" width="45%" style="width:45%;vertical-align:top;"><h2 style="font-size:11px;color:#777;letter-spacing:.6px;margin:0 0 8px;">THANH TOÁN</h2><p style="margin:0;font-size:13px;"><strong>${display(method)}</strong><br><span style="display:inline-block;margin-top:7px;padding:3px 9px;background:#fff4cf;border-radius:4px;color:#856300;font-size:11px;">${order.IsPreview ? 'Đơn mẫu · Không thanh toán' : 'Đã thanh toán'}</span></p>${bank}</td>
+    <td class="info-column" width="45%" style="width:45%;vertical-align:top;"><h2 style="font-size:11px;color:#777;letter-spacing:.6px;margin:0 0 8px;">THANH TOÁN</h2><p style="margin:0;font-size:13px;"><strong>${display(method)}</strong><br><span style="display:inline-block;margin-top:7px;padding:3px 9px;background:#fff4cf;border-radius:4px;color:#856300;font-size:11px;">${statusLabel}</span></p>${bank}</td>
   </tr></table>
 </td></tr>
 <tr><td class="mail-padding" style="padding:0 32px;">
@@ -66,7 +71,7 @@ ${Number(order.TienGiam)>0?`<tr><td style="padding:5px 10px;color:#666;">Giảm 
 </td></tr>
 <tr><td class="mail-padding" style="padding:24px 32px 30px;">
   ${order.GhiChu ? `<div style="padding:12px 16px;background:#f7f7f8;border-left:3px solid #d4b344;font-size:12px;white-space:pre-line;"><strong>Ghi chú đơn hàng</strong><br>${escape(order.GhiChu)}</div>` : ''}
-  <p style="margin:18px 0 0;font-size:12px;color:#777;">${order.IsPreview ? 'Đơn hàng này chỉ dùng để kiểm tra email, không phát sinh giao dịch hoặc giao hàng.' : 'Đơn hàng đang chờ JAVI kiểm tra và xác nhận giao hàng. Thanh toán đã thành công. JAVI sẽ tiếp tục xử lý giao hàng.'}</p>
+  <p style="margin:18px 0 0;font-size:12px;color:#777;">${closing}</p>
   <p style="margin:12px 0 0;font-size:12px;color:#777;">Cần hỗ trợ hoặc thay đổi thông tin? Hãy phản hồi email này và ghi kèm mã đơn hàng.</p>
 </td></tr>
 <tr><td class="mail-padding" style="padding:20px 32px;background:#fafafa;border-top:1px solid #e7e7e9;text-align:center;"><strong style="font-size:12px;letter-spacing:1px;color:#333;">JAVI COFFEE</strong><br><span style="font-size:11px;color:#888;">Trân trọng từng lựa chọn. Hẹn gặp ở một tách cà phê.</span></td></tr>
@@ -87,7 +92,7 @@ function renderOrderText(order, items) {
     `TỔNG THANH TOÁN: ${money(order.TongThanhToan)}`,
     `Phương thức: ${order.HinhThucTT}`,
     order.GhiChu ? `Ghi chú: ${order.GhiChu}` : '',
-    order.IsPreview ? 'Không phát sinh giao dịch hoặc giao hàng.' : 'Đơn hàng đang chờ JAVI xác nhận. Thanh toán đã thành công.',
+    order.IsPreview ? 'Không phát sinh giao dịch hoặc giao hàng.' : order.TrangThaiThanhToan === 'Đã thanh toán' ? 'Đơn hàng đang chờ JAVI xác nhận. Thanh toán đã thành công.' : `Đặt hàng thành công. Thanh toán ${money(order.TongThanhToan)} khi nhận hàng.`,
   ].filter(Boolean).join('\n');
 }
 

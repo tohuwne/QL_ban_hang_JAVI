@@ -549,7 +549,7 @@
     const returnParam = typeof entryParams !== 'undefined' ? entryParams.get('return') : (new URLSearchParams(window.location.search).get('return'));
     const dest = returnParam || '';
     const safe = /^\/san-pham\/[a-zA-Z0-9_-]{1,10}\.html$/.test(dest)
-      || /^\/landing_page\/(mua-hang|gio-hang|thanh-toan|blog|bai-viet|don-hang-thanh-cong|tai-khoan)\.html(?:[?#].*)?$/.test(dest);
+      || /^\/landing_page\/(mua-hang|gio-hang|thanh-toan|thanh-toan-qr|blog|bai-viet|don-hang-thanh-cong|tai-khoan)\.html(?:[?#].*)?$/.test(dest);
     window.location.href = safe ? dest : '/landing_page/mua-hang.html';
   };
   const showMessage = async (msg, type = 'error') => window.javiAlert ? javiAlert(msg, type) : alert(msg);

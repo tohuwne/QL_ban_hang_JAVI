@@ -544,6 +544,29 @@ CREATE TABLE WEB_UU_DAI_DON_HANG (
     FOREIGN KEY (MaGiamGia) REFERENCES WEB_MA_GIAM_GIA(MaGiamGia),
     FOREIGN KEY (MaTinhThanh, MaPhuongXa) REFERENCES WEB_PHUONG_XA(MaTinhThanh, MaPhuongXa)
 );
+
+-- 32. BẢNG MÃ VIETQR THANH TOÁN ĐƠN WEBSITE: mỗi lần tạo/làm mới là một mã; mã đã thanh toán không dùng lại.
+CREATE TABLE WEB_THANH_TOAN_QR (
+    MaQR INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    MaDH CHAR(8) NOT NULL,
+    MaThamChieu VARCHAR(25) NOT NULL UNIQUE,       -- Nội dung chuyển khoản (addInfo) duy nhất của mã
+    SoTien DECIMAL(19,3) NOT NULL CHECK (SoTien > 0),
+    MaNganHang VARCHAR(10) NOT NULL,                -- BIN ngân hàng nhận theo VietQR (acqId)
+    SoTaiKhoan VARCHAR(50) NOT NULL,
+    ChuTaiKhoan NVARCHAR(100) NOT NULL,
+    NoiDungQR VARCHAR(1000) NOT NULL,               -- Chuỗi EMVCo do VietQR trả về
+    AnhQR VARCHAR(MAX) NOT NULL,                    -- Ảnh data:image/png;base64 do VietQR trả về
+    TrangThai NVARCHAR(20) NOT NULL DEFAULT N'Chờ thanh toán' CHECK (TrangThai IN (N'Chờ thanh toán',N'Đã thanh toán',N'Hết hạn')),
+    NgayTao DATETIME2 NOT NULL DEFAULT SYSDATETIME(),
+    HetHan DATETIME2 NOT NULL,
+    NgayThanhToan DATETIME2 NULL,
+    MaPT CHAR(8) NULL,                              -- Phiếu thu tự động lập khi thanh toán thành công
+    FOREIGN KEY (MaDH) REFERENCES WEB_DON_HANG(MaDH),
+    FOREIGN KEY (MaPT) REFERENCES PHIEU_THU(MaPT),
+    CONSTRAINT CHK_WEB_THANH_TOAN_QR_Paid CHECK ((TrangThai=N'Đã thanh toán' AND NgayThanhToan IS NOT NULL AND MaPT IS NOT NULL) OR (TrangThai<>N'Đã thanh toán' AND NgayThanhToan IS NULL AND MaPT IS NULL))
+);
+CREATE UNIQUE INDEX UQ_WEB_THANH_TOAN_QR_DaThanhToan ON WEB_THANH_TOAN_QR(MaDH) WHERE TrangThai=N'Đã thanh toán';
+CREATE INDEX IX_WEB_THANH_TOAN_QR_Don ON WEB_THANH_TOAN_QR(MaDH,MaQR DESC);
 GO
 
 CREATE OR ALTER VIEW v_MaGiamGiaLuotDung AS

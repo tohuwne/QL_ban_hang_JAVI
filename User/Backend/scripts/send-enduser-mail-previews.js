@@ -10,10 +10,9 @@ const logo=path.resolve(__dirname,'../../../Shared/Frontend/images/logo-javi-aut
 const items=[{MaSP:'MAU-CF01',TenSP:'Cà phê Đậm mạnh',TrongLuongGram:200,LoaiXay:'Nguyên hạt',GiaBan:79000,SoLuong:2},{MaSP:'MAU-CF01',TenSP:'Cà phê Đậm mạnh',TrongLuongGram:500,LoaiXay:'Xay sẵn pha phin',GiaBan:197500,SoLuong:1}];
 const samples=[{id:'01-otp',subject:'[GỬI THỬ 1/3] JAVI COFFEE · OTP đăng ký enduser',html:banner+renderRegistrationEmail({fullName:'Khách hàng enduser',otp:'123456'}),text:'GỬI THỬ giao diện đăng ký enduser_demo. OTP minh họa 123456 không có hiệu lực.'}];
 for(const [i,method] of ['Chuyển khoản','Tiền mặt'].entries()){
- const order={MaDH:i?'TEST-COD-20261022':'TEST-CK-20261022',NgayTao:new Date(),NguoiNhan:'Khách hàng enduser',SoDT:'Số điện thoại mẫu',Email:recipient,DiaChi:'Địa chỉ giao hàng minh họa',HinhThucTT:method,PhiVanChuyen:25000,TienGiam:30000,MaGiamGia:'MAU30000',TongThanhToan:350500,GhiChu:'Email thử giao diện. Không có giao dịch thực tế.'};
- let html=renderOrderEmail(order,items).replace(/(<body[^>]*>)/,'$1'+banner);
- if(i)html=html.replace('Đơn hàng đang chờ JAVI kiểm tra và xác nhận giao hàng. Thanh toán đã thành công. JAVI sẽ tiếp tục xử lý giao hàng.','Minh họa đơn COD đã giao và thu đủ tiền. Thanh toán đã thành công.');
- samples.push({id:i?'03-cod':'02-ck',subject:`[GỬI THỬ ${i+2}/3] JAVI COFFEE · ${i?'COD đã thu đủ':'Chuyển khoản thành công'}`,html,text:'GỬI THỬ, không phát sinh giao dịch.\n'+renderOrderText(order,items),attachments:[{filename:'javi-logo.png',path:logo,cid:'javi-logo'}]});
+ const order={MaDH:i?'TEST-COD-20261022':'TEST-CK-20261022',NgayTao:new Date(),NguoiNhan:'Khách hàng enduser',SoDT:'Số điện thoại mẫu',Email:recipient,DiaChi:'Địa chỉ giao hàng minh họa',HinhThucTT:method,TrangThaiThanhToan:i?'Chưa thanh toán':'Đã thanh toán',PhiVanChuyen:25000,TienGiam:30000,MaGiamGia:'MAU30000',TongThanhToan:350500,GhiChu:'Email thử giao diện. Không có giao dịch thực tế.'};
+ const html=renderOrderEmail(order,items).replace(/(<body[^>]*>)/,'$1'+banner);
+ samples.push({id:i?'03-cod':'02-ck',subject:`[GỬI THỬ ${i+2}/3] JAVI COFFEE · ${i?'COD đặt hàng thành công':'Chuyển khoản thành công'}`,html,text:'GỬI THỬ, không phát sinh giao dịch.\n'+renderOrderText(order,items),attachments:[{filename:'javi-logo.png',path:logo,cid:'javi-logo'}]});
 }
 (async()=>{fs.mkdirSync(out,{recursive:true});for(const m of samples)fs.writeFileSync(path.join(out,m.id+'.html'),m.html.replaceAll('cid:javi-logo','data:image/png;base64,'+fs.readFileSync(logo).toString('base64')));
  if(!process.argv.includes('--send'))return console.log('Đã tạo 3 preview');

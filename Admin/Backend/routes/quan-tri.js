@@ -100,7 +100,7 @@ router.post("/backup/create", async (req, res) => {
       "CONG_NO",
       "PHIEU_THU",
       "PHIEU_CHI",
-      "WEB_TINH_THANH", "WEB_PHUONG_XA", "WEB_DIA_CHI", "WEB_PHI_VAN_CHUYEN", "WEB_MA_GIAM_GIA", "WEB_MA_KHACH_HANG", "WEB_AP_DUNG_MA", "WEB_UU_DAI_DON_HANG", "GIO_HANG", "WEB_SAN_PHAM", "WEB_BAI_VIET", "WEB_CAU_HINH", "WEB_DON_HANG", "WEB_CT_DON_HANG", "WEB_EMAIL",
+      "WEB_TINH_THANH", "WEB_PHUONG_XA", "WEB_DIA_CHI", "WEB_PHI_VAN_CHUYEN", "WEB_MA_GIAM_GIA", "WEB_MA_KHACH_HANG", "WEB_AP_DUNG_MA", "WEB_UU_DAI_DON_HANG", "GIO_HANG", "WEB_SAN_PHAM", "WEB_BAI_VIET", "WEB_CAU_HINH", "WEB_DON_HANG", "WEB_CT_DON_HANG", "WEB_EMAIL", "WEB_THANH_TOAN_QR",
     ];
 
     const backupData = {
@@ -220,6 +220,7 @@ router.post("/backup/restore", async (req, res) => {
 
     const tablesInReverse = [
       "LOAI_SP_LOAI_XAY", "LOAI_SP_TRONG_LUONG", "LOAI_XAY", "TRONG_LUONG",
+      "WEB_THANH_TOAN_QR",
       "WEB_MA_KHACH_HANG",
       "WEB_UU_DAI_DON_HANG",
       "WEB_AP_DUNG_MA",
@@ -278,14 +279,14 @@ router.post("/backup/restore", async (req, res) => {
         "NgayThu",
         "NgayGhiNhan",
         "NgayXuat",
-        "HanThanhToan", "NgayThem", "NgayDang", "NgayCapNhat", "NgayTao", "NgayGui", "NgayLuu", "BatDau", "KetThuc",
+        "HanThanhToan", "NgayThem", "NgayDang", "NgayCapNhat", "NgayTao", "NgayGui", "NgayLuu", "BatDau", "KetThuc", "HetHan", "NgayThanhToan",
       ];
 
       for (let tbl of tablesInDirect) {
         const rows = backupData.tables[tbl];
         if (rows && rows.length > 0) {
           logs.push(`[DB] Khôi phục bảng: ${tbl} (${rows.length} dòng)...`);
-          const hasIdentity = ["CT_DON_HANG","WEB_CT_DON_HANG","LOAI_XAY","TRONG_LUONG","GIO_HANG", "WEB_BAI_VIET", "WEB_EMAIL", "WEB_DIA_CHI", "WEB_PHI_VAN_CHUYEN"].includes(tbl);
+          const hasIdentity = ["CT_DON_HANG","WEB_CT_DON_HANG","LOAI_XAY","TRONG_LUONG","GIO_HANG", "WEB_BAI_VIET", "WEB_EMAIL", "WEB_DIA_CHI", "WEB_PHI_VAN_CHUYEN", "WEB_THANH_TOAN_QR"].includes(tbl);
           if (hasIdentity) await transaction.request().query(`SET IDENTITY_INSERT ${tbl} ON`);
           try {
           for (let row of rows) {

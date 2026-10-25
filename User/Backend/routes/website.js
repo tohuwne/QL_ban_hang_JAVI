@@ -1,7 +1,7 @@
 const express = require('express');
 const {sql, poolPromise} = require('../../../Shared/Backend/config/database');
 const {authenticate, authorizeApi} = require('../../../Shared/Backend/middleware/auth');
-const {renderOrderEmail, deliverOrderEmail, emailConfigured, emailPreviewHtml} = require('../../../Shared/Backend/services/order-email');
+const {renderOrderEmail, orderEmailSubject, deliverOrderEmail, emailPreviewHtml} = require('../../../Shared/Backend/services/order-email');
 const {saveAppliedCoupon} = require('../../../Shared/Backend/services/pos-pricing');
 const {divisions, resolveAddress, databaseLocations,resolveDatabaseAddress, priceOrder, couponUnavailableReason, discountAmount, eligibleSubtotal} = require('../../../Shared/Backend/services/checkout-pricing');
 const router = express.Router();
@@ -47,7 +47,7 @@ router.get('/website/account',wrap(async(req,res)=>{
 router.get('/website/account/orders',wrap(async(req,res)=>{
  if(req.user.vaiTro!=='KHACH_HANG')fail('Vui lòng dùng tài khoản khách hàng.',403);
  const page=Number(req.query.page||1);if(!Number.isInteger(page)||page<1||page>100000)fail('Trang không hợp lệ.');
- const r=await (await poolPromise).request().input('User',sql.VarChar(50),req.user.sub).input('Offset',sql.Int,(page-1)*10).query(`SELECT dh.MaDH,dh.NgayDat,dh.TongTienDonHang,dh.TongGiamGiaSP,dh.TongTienSauGiam,dh.TrangThaiDonHang,CASE WHEN w.MaDH IS NULL THEN 0 ELSE 1 END AS DonWebsite FROM DON_HANG dh JOIN TAI_KHOAN tk ON tk.MaKH=dh.MaKH LEFT JOIN WEB_DON_HANG w ON w.MaDH=dh.MaDH WHERE tk.TenDangNhap=@User ORDER BY dh.NgayDat DESC,dh.MaDH DESC OFFSET @Offset ROWS FETCH NEXT 10 ROWS ONLY`);
+ const r=await (await poolPromise).request().input('User',sql.VarChar(50),req.user.sub).input('Offset',sql.Int,(page-1)*10).query(`SELECT dh.MaDH,dh.NgayDat,dh.TongTienDonHang,dh.TongGiamGiaSP,dh.TongTienSauGiam,dh.TrangThaiDonHang,CASE WHEN w.MaDH IS NULL THEN 0 ELSE 1 END AS DonWebsite,CASE WHEN w.HinhThucTT=N'Chuyển khoản' AND dh.TrangThaiDonHang=N'Chờ giao' AND NOT EXISTS(SELECT 1 FROM HOA_DON h WHERE h.MaDH=dh.MaDH) THEN 1 ELSE 0 END AS ChoThanhToanQR FROM DON_HANG dh JOIN TAI_KHOAN tk ON tk.MaKH=dh.MaKH LEFT JOIN WEB_DON_HANG w ON w.MaDH=dh.MaDH WHERE tk.TenDangNhap=@User ORDER BY dh.NgayDat DESC,dh.MaDH DESC OFFSET @Offset ROWS FETCH NEXT 10 ROWS ONLY`);
  res.json({success:true,data:r.recordset});
 }));
 router.post('/website/account/coupons',wrap(async(req,res)=>{
@@ -80,8 +80,8 @@ router.post('/website/checkout',wrap(async(req,res)=>{
  const ids=b.maGioHang;
  const pool=await poolPromise;const tx=new sql.Transaction(pool);await tx.begin(sql.ISOLATION_LEVEL.SERIALIZABLE);let order;
  try{
-  const lock=await tx.request().input('Key',sql.VarChar(64),key).query("SELECT MaDH,TenDangNhap FROM WEB_DON_HANG WITH(UPDLOCK,HOLDLOCK) WHERE MaYeuCau=@Key");
-  if(lock.recordset[0]){if(lock.recordset[0].TenDangNhap!==req.user.sub)fail('Mã yêu cầu không hợp lệ.',409);await tx.commit();return res.json({success:true,data:{maDH:lock.recordset[0].MaDH,duplicate:true}});}
+  const lock=await tx.request().input('Key',sql.VarChar(64),key).query("SELECT MaDH,TenDangNhap,HinhThucTT FROM WEB_DON_HANG WITH(UPDLOCK,HOLDLOCK) WHERE MaYeuCau=@Key");
+  if(lock.recordset[0]){if(lock.recordset[0].TenDangNhap!==req.user.sub)fail('Mã yêu cầu không hợp lệ.',409);await tx.commit();return res.json({success:true,data:{maDH:lock.recordset[0].MaDH,hinhThucTT:lock.recordset[0].HinhThucTT,duplicate:true}});}
   const maDH=(await tx.request().query("SELECT 'DH'+RIGHT('000000'+CAST(ISNULL(MAX(CAST(SUBSTRING(MaDH,3,6) AS INT)),0)+1 AS VARCHAR(6)),6) AS MaDH FROM DON_HANG WITH(TABLOCKX,HOLDLOCK)")).recordset[0].MaDH;
   const items=await selectedCart(tx,req.user.sub,ids);
   const customer=await tx.request().input('MaKH',sql.Char(8),req.user.maKH).query('SELECT kh.MaKH,kh.MaLoaiKH FROM KHACH_HANG kh WHERE kh.MaKH=@MaKH');if(!customer.recordset.length)fail('Hồ sơ khách hàng không tồn tại.',409);
@@ -100,22 +100,22 @@ router.post('/website/checkout',wrap(async(req,res)=>{
    await tx.request().input('MaDH',sql.Char(8),maDH).input('SP',sql.Char(5),item.MaSP).input('Line',sql.Int,item.MaGH).input('Gram',sql.Int,item.TrongLuongGram).input('Grind',sql.NVarChar(80),item.LoaiXay).input('Qty',sql.Int,item.SoLuong).input('Name',sql.NVarChar(100),item.TenSP).input('Price',sql.Decimal(19,3),item.GiaBan).input('Total',sql.Decimal(19,3),Number(item.GiaBan)*item.SoLuong).input('User',sql.VarChar(50),req.user.sub).query(`INSERT INTO CT_DON_HANG(MaDH,MaSP,SoLuong,GiamGiaSP,TrongLuongGram,LoaiXay,DonGia) VALUES(@MaDH,@SP,@Qty,0,@Gram,@Grind,@Price); INSERT INTO WEB_CT_DON_HANG(MaDH,MaSP,TenSP,GiaBan,SoLuong,ThanhTien,TrongLuongGram,LoaiXay) VALUES(@MaDH,@SP,@Name,@Price,@Qty,@Total,@Gram,@Grind); DELETE FROM GIO_HANG WHERE TenDangNhap=@User AND MaGH=@Line;`);
   }
   await saveAppliedCoupon(tx,maDH,{code:pricing.code,couponDiscount:discount});
-  const paid=b.hinhThucTT==='Chuyển khoản';
-  // Temporary bank-payment simulator, approved 22/10/2026. Replace with verified bank callback later.
-  if(paid)await tx.request().input('MaDH',sql.Char(8),maDH).input('MaNV',sql.Char(8),staff.MaNV)
-    .input('HinhThucThanhToan',sql.NVarChar(50),'Chuyển khoản').input('TrangThaiThanhToan',sql.NVarChar(50),'Đã thanh toán').execute('sp_LapHoaDon');
-  order={MaDH:maDH,NguoiNhan:name,SoDT:phone,Email:email,DiaChi:address,GhiChu:note,HinhThucTT:b.hinhThucTT,PhiVanChuyen:shipping,TienGiam:discount,MaGiamGia:pricing.code,TongThanhToan:total,TrangThaiThanhToan:paid?'Đã thanh toán':'Chưa thanh toán'};
-  const html=paid?renderOrderEmail(order,items,settings):null;
-  if(paid)
-  await tx.request().input('MaDH',sql.Char(8),maDH).input('To',sql.VarChar(100),email).input('Subject',sql.NVarChar(250),`JAVI COFFEE · Xác nhận đơn ${maDH}`).input('Html',sql.NVarChar(sql.MAX),html).query('INSERT INTO WEB_EMAIL(MaDH,NguoiNhan,TieuDe,NoiDung) VALUES(@MaDH,@To,@Subject,@Html)');
+  // COD: unpaid invoice (+ receivable via sp_LapHoaDon) and order email right away.
+  // Bank transfer: no invoice until the VietQR payment is confirmed (routes/thanh-toan-qr.js).
+  const cod=b.hinhThucTT==='Tiền mặt';
+  order={MaDH:maDH,NguoiNhan:name,SoDT:phone,Email:email,DiaChi:address,GhiChu:note,HinhThucTT:b.hinhThucTT,PhiVanChuyen:shipping,TienGiam:discount,MaGiamGia:pricing.code,TongThanhToan:total,TrangThaiThanhToan:'Chưa thanh toán'};
+  if(cod){
+   await tx.request().input('MaDH',sql.Char(8),maDH).input('MaNV',sql.Char(8),staff.MaNV).input('HinhThucThanhToan',sql.NVarChar(50),'Tiền mặt').input('TrangThaiThanhToan',sql.NVarChar(50),'Chưa thanh toán').execute('sp_LapHoaDon');
+   await tx.request().input('MaDH',sql.Char(8),maDH).input('To',sql.VarChar(100),email).input('Subject',sql.NVarChar(250),orderEmailSubject(order)).input('Html',sql.NVarChar(sql.MAX),renderOrderEmail(order,items,settings)).query('INSERT INTO WEB_EMAIL(MaDH,NguoiNhan,TieuDe,NoiDung) VALUES(@MaDH,@To,@Subject,@Html)');
+  }
   await tx.commit();
  }catch(err){try{await tx.rollback();}catch(_){}throw err;}
  // A mail failure must never turn a committed order into a failed checkout.
- if(order.TrangThaiThanhToan==='Đã thanh toán')try{await deliverOrderEmail(order.MaDH);}catch(err){console.error('[WEB EMAIL] Không gửi được email cho',order.MaDH);}
- res.status(201).json({success:true,data:{maDH:order.MaDH}});
+ if(order.HinhThucTT==='Tiền mặt')try{await deliverOrderEmail(order.MaDH);}catch(err){console.error('[WEB EMAIL] Không gửi được email cho',order.MaDH);}
+ res.status(201).json({success:true,data:{maDH:order.MaDH,hinhThucTT:order.HinhThucTT}});
 }));
 router.get('/website/orders/:id',wrap(async(req,res)=>{const pool=await poolPromise;const r=await pool.request().input('ID',sql.Char(8),req.params.id).input('User',sql.VarChar(50),req.user.sub).query(`SELECT w.*,u.TienGiam,u.MaGiamGia,dh.TrangThaiDonHang,(SELECT TOP 1 hd.TrangThaiThanhToan FROM HOA_DON hd WHERE hd.MaDH=w.MaDH ORDER BY hd.MaHD DESC) AS TrangThaiThanhToan,e.TrangThai AS TrangThaiEmail FROM WEB_DON_HANG w LEFT JOIN WEB_UU_DAI_DON_HANG u ON u.MaDH=w.MaDH JOIN DON_HANG dh ON dh.MaDH=w.MaDH LEFT JOIN WEB_EMAIL e ON e.MaDH=w.MaDH WHERE w.MaDH=@ID AND w.TenDangNhap=@User`);if(!r.recordset[0])fail('Không tìm thấy đơn hàng.',404);const items=await pool.request().input('ID',sql.Char(8),req.params.id).query('SELECT * FROM WEB_CT_DON_HANG WHERE MaDH=@ID');res.json({success:true,data:{...r.recordset[0],items:items.recordset}});}));
-router.get('/website/orders/:id/email',wrap(async(req,res)=>{const pool=await poolPromise;const r=await pool.request().input('ID',sql.Char(8),req.params.id).input('User',sql.VarChar(50),req.user.sub).query(`SELECT e.NoiDung FROM WEB_EMAIL e JOIN WEB_DON_HANG w ON w.MaDH=e.MaDH WHERE w.MaDH=@ID AND w.TenDangNhap=@User AND EXISTS(SELECT 1 FROM HOA_DON h WHERE h.MaDH=w.MaDH AND h.TrangThaiThanhToan=N'Đã thanh toán')`);if(!r.recordset[0])fail('Không tìm thấy email.',404);res.set('Content-Security-Policy',"default-src 'none'; style-src 'unsafe-inline'; img-src data:").type('html').send(emailPreviewHtml(r.recordset[0].NoiDung));}));
+router.get('/website/orders/:id/email',wrap(async(req,res)=>{const pool=await poolPromise;const r=await pool.request().input('ID',sql.Char(8),req.params.id).input('User',sql.VarChar(50),req.user.sub).query(`SELECT e.NoiDung FROM WEB_EMAIL e JOIN WEB_DON_HANG w ON w.MaDH=e.MaDH WHERE w.MaDH=@ID AND w.TenDangNhap=@User AND EXISTS(SELECT 1 FROM HOA_DON h WHERE h.MaDH=w.MaDH)`);if(!r.recordset[0])fail('Không tìm thấy email.',404);res.set('Content-Security-Policy',"default-src 'none'; style-src 'unsafe-inline'; img-src data:").type('html').send(emailPreviewHtml(r.recordset[0].NoiDung));}));
 module.exports=router;
 
 
